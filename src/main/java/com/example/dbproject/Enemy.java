@@ -1,8 +1,8 @@
 package com.example.dbproject;
 
-public class Bomber extends Mover {
+public class Enemy extends Mover{
 
-    public Bomber(double x, double y, double speed) {
+    public Enemy(double x, double y, double speed) {
         super(x, y, speed);
     }
 
@@ -13,5 +13,4 @@ public class Bomber extends Mover {
 
     @Override
     public void render() {}
-    public void putBomb() {}
 }

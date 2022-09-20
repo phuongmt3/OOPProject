@@ -8,30 +8,25 @@ public abstract class Entity {
         this.x = x;
         this.y = y;
     }
-
     public double getX() {
         return x;
     }
-
     public void setX(double x) {
         this.x = x;
     }
-
     public double getY() {
         return y;
     }
-
     public void setY(double y) {
         this.y = y;
     }
-
     public double getWidth() {
         return width;
     }
-
     public double getHeight() {
         return height;
     }
-
-
+    public boolean checkCollision(Entity other) {
+        return false;
+    }
 }

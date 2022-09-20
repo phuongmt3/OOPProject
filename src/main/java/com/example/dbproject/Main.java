@@ -20,17 +20,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Main extends Application {
     static public SpriteSheet renderer;
+    private ArrayList<ArrayList<Entity>> map = new ArrayList<ArrayList<Entity>>();
     private Bomber bomber;
+    private BombManager bombManager;
+    private EnemyManager enemyManager;
     private Scene scene;
     private Group root;
 
     @Override
     public void init() {
-        bomber = new Bomber(50, 50);
+        bomber = new Bomber(50, 50, 20);
+        //init all managers
+        //read file input -> init map
+
     }
 
     @Override
@@ -61,6 +68,7 @@ public class Main extends Application {
         primaryStage.show();
     }
     public void update() throws Exception {
+        //below is just example of handling keyboards
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -78,7 +86,7 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-
+        //release resources
     }
 
     public static void main(String[] args) {
