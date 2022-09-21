@@ -2,7 +2,7 @@ package com.example.dbproject;
 
 public class SpeedItem extends Brick {
     public SpeedItem(double x, double y) {
-        super(x, y);
+        super(x, y, true);
     }
 
     @Override
@@ -15,5 +15,10 @@ public class SpeedItem extends Brick {
     public void update() {
         //update isExposed
         //update if bomber go there
+    }
+
+    @Override
+    public String getClassName() {
+        return "SpeedItem";
     }
 }

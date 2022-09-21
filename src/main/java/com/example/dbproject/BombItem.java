@@ -2,7 +2,7 @@ package com.example.dbproject;
 
 public class BombItem extends Brick {
     public BombItem(double x, double y) {
-        super(x, y);
+        super(x, y, true);
     }
 
     @Override
@@ -17,4 +17,8 @@ public class BombItem extends Brick {
         //update if bomber go there
     }
 
+    @Override
+    public String getClassName() {
+        return "BombItem";
+    }
 }

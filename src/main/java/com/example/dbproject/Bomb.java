@@ -16,4 +16,9 @@ public class Bomb extends Entity{
     public boolean isExploded() {
         return timer >= timeLimit;
     }
+
+    @Override
+    public String getClassName() {
+        return "Bomb";
+    }
 }

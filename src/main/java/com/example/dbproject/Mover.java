@@ -26,4 +26,9 @@ public class Mover extends Entity {
     public boolean isDead() {
         return isDead;
     }
+
+    @Override
+    public String getClassName() {
+        return "Mover";
+    }
 }

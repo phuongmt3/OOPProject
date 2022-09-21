@@ -14,4 +14,9 @@ public class Bomber extends Mover {
     @Override
     public void render() {}
     public void putBomb() {}
+
+    @Override
+    public String getClassName() {
+        return "Bomber";
+    }
 }

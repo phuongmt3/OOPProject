@@ -6,4 +6,9 @@ public class Map extends Entity{
     }
 
     public void render() {}
+
+    @Override
+    public String getClassName() {
+        return "Map";
+    }
 }

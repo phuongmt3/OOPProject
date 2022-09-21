@@ -7,4 +7,9 @@ public class Grass extends Map{
 
     @Override
     public void render() {}
+
+    @Override
+    public String getClassName() {
+        return "Grass";
+    }
 }
