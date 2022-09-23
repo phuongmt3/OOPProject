@@ -29,12 +29,13 @@ public class Main extends Application {
     private EnemyManager enemyManager;
     private Scene scene;
     private Group root;
-    static public int level, rows, cols;
-    static public double winWidth = 800, winHeight = 600;
+    public static Group rootMap, rootMover;
+    public static int level, rows, cols;
+    public static final double winWidth = 800, winHeight = 600;
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        bomber = new Bomber(0, 0, 20);
+        bomber = new Bomber(0, 0, 5);
         bombManager = new BombManager();
         enemyManager = new EnemyManager();
         //read file input -> init map
@@ -43,13 +44,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        root = new Group();
+        rootMap = new Group();
+        rootMover = new Group();
+        root = new Group(rootMap, rootMover);
         scene = new Scene(root, winWidth, winHeight, Color.DARKGRAY);
         primaryStage.setScene(scene);
         init(primaryStage);
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
-            private final long timePerFrame =  10_000_000;
+            private final long timePerFrame =  1_000;
             @Override
             public void handle(long now) {
                 if (now - lastTime > timePerFrame) {
@@ -143,20 +146,8 @@ public class Main extends Application {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-        System.out.printf("%d %d %d \n", level, rows, cols);
-        for (int i = 0; i < rows; i++) {
-            System.out.println(i + "  " + map.get(i).size());
-            for (int j = 0; j < cols; j++) {
-                String name = map.get(i).get(j).getClassName();
-                System.out.printf("%s ", name);
-            }
-            System.out.println();
-        }
-        System.out.println("Endingoooooooooooooooooooooooooooooooooo\n");
     }
 }
 
 //github
-//render character with animation
 //handle end game
