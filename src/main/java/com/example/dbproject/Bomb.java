@@ -11,6 +11,7 @@ public class Bomb extends Entity{
         //update timer
     }
 
+    @Override
     public void render() {}
 
     public boolean isExploded() {

@@ -22,17 +22,21 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Main extends Application {
-    static public SpriteSheet renderer;
+    static public Stage stage;
     private ArrayList<ArrayList<Entity>> map = new ArrayList<ArrayList<Entity>>();
-    private Bomber bomber = new Bomber(0, 0, 20);
-    private BombManager bombManager = new BombManager();
-    private EnemyManager enemyManager = new EnemyManager();
+    private Bomber bomber;
+    private BombManager bombManager;
+    private EnemyManager enemyManager;
     private Scene scene;
     private Group root;
-    private int level, rows, cols;
+    static public int level, rows, cols;
+    static public double winWidth = 800, winHeight = 600;
 
-    @Override
-    public void init() throws Exception {
+    public void init(Stage primaryStage) throws Exception {
+        stage = primaryStage;
+        bomber = new Bomber(0, 0, 20);
+        bombManager = new BombManager();
+        enemyManager = new EnemyManager();
         //read file input -> init map
         readFile("src/main/java/res/levels/Level1.txt");
     }
@@ -40,15 +44,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         root = new Group();
-        scene = new Scene(root, 800, 600, Color.DARKGRAY);
+        scene = new Scene(root, winWidth, winHeight, Color.DARKGRAY);
         primaryStage.setScene(scene);
-        renderer = new SpriteSheet(primaryStage);
-        init();
-        System.out.println(bomber.getX());
-        renderer.renderBomber(bomber);
+        init(primaryStage);
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
-            final private long timePerFrame =  10_000_000;
+            private final long timePerFrame =  10_000_000;
             @Override
             public void handle(long now) {
                 if (now - lastTime > timePerFrame) {
@@ -64,8 +65,8 @@ public class Main extends Application {
         };
         timer.start();
 
-        primaryStage.setTitle("Bomberman");
-        primaryStage.show();
+        stage.setTitle("Bomberman");
+        stage.show();
     }
     public void update() throws Exception {
         //below is just example of handling keyboards
@@ -81,7 +82,7 @@ public class Main extends Application {
                 }
             }
         });
-        renderer.renderBomber(bomber);
+        bomber.render();
     }
 
     @Override
@@ -155,3 +156,7 @@ public class Main extends Application {
         System.out.println("Endingoooooooooooooooooooooooooooooooooo\n");
     }
 }
+
+//github
+//render character with animation
+//handle end game

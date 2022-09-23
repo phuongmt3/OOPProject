@@ -1,12 +1,18 @@
 package com.example.dbproject;
 
 public abstract class Entity {
-    private double x, y; //by pixel coordinates
-    private final double width = 32, height = 32;
+    protected double x, y; //by pixel coordinates
+    protected Renderer renderer;
+    protected final double width = 32, height = 32;
 
     public Entity(double x, double y) {
+        if (x < 0 || y < 0 || x > Main.winWidth || y > Main.winHeight){
+            System.out.println("Invalid coordinates");
+            return;
+        }
         this.x = x * width;
         this.y = y * height;
+        renderer = new Renderer(this);
     }
     public double getX() {
         return x;
@@ -32,4 +38,5 @@ public abstract class Entity {
     public boolean checkCollision(Entity other) {
         return false;
     }
+    abstract public void render() throws Exception;
 }

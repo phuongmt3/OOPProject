@@ -12,7 +12,9 @@ public class Bomber extends Mover {
     }
 
     @Override
-    public void render() {}
+    public void render() throws Exception {
+        renderer.renderBomber(x, y);
+    }
     public void putBomb() {}
 
     @Override

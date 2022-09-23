@@ -1,6 +1,6 @@
 package com.example.dbproject;
 
-public class Mover extends Entity {
+abstract public class Mover extends Entity {
     protected boolean isDead = false;
     protected final double speed;
     enum MovementType {
@@ -17,10 +17,14 @@ public class Mover extends Entity {
         this.speed = speed;
     }
     public void update() {}
-    public void render() {}
+
     public void move(MovementType type) {
-        setX(getX() + type.x * speed);
-        setY(getY() + type.y * speed);
+        double newX = x + type.x * speed;
+        double newY = y + type.y * speed;
+        newX = Math.max(0, Math.min(newX, (Main.cols - 1) * width));
+        newY = Math.max(0, Math.min(newY, (Main.rows - 1) * height));
+        setX(newX);
+        setY(newY);
     }
 
     public boolean isDead() {
