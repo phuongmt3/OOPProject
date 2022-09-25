@@ -36,7 +36,16 @@ public abstract class Entity {
         return "Entity";
     }
     public boolean checkCollision(Entity other) {
-        return false;
+        int conditions = 0;
+        if (other.getX() > x && other.getX() < x + width)
+            conditions++;
+        else if (other.getX() + other.getWidth() > x && other.getX() + other.getWidth() < x + width)
+            conditions++;
+        if (other.getY() > y && other.getY() < y + height)
+            conditions++;
+        else if (other.getY() + other.getHeight() > y && other.getY() + other.getHeight() < y + height)
+            conditions++;
+        return conditions == 2;
     }
     abstract public void render() throws Exception;
 }

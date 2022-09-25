@@ -20,51 +20,49 @@ import java.util.Set;
 public class Renderer {
     private static Image sheet;
     private boolean firstTime = true;
-    private static ImageView bomberdown1, bomberdown2, bomberdown3;
+    private ImageView bomberdown1, bomberdown2, bomberdown3;
 
     public Renderer(Entity entity) {
         if (sheet == null) {
             try (InputStream stream = Files.newInputStream(Path.of("src/main/java/res/textures/SpriteSheet.png"))) {
                 sheet = new Image(stream, 512, 512, true, false); //add sizeMultiplier
-                bomberdown1 = new ImageView(sheet);
-                bomberdown2 = new ImageView(sheet);
-                bomberdown3 = new ImageView(sheet);
-                bomberdown1.setViewport(new Rectangle2D(entity.width * 2, entity.height * 0, entity.width, entity.height));
-                bomberdown2.setViewport(new Rectangle2D(entity.width * 2, entity.height * 1, entity.width, entity.height));
-                bomberdown3.setViewport(new Rectangle2D(entity.width * 2, entity.height * 2, entity.width, entity.height));
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
+        if (entity instanceof Bomber) {
+            bomberdown1 = new ImageView(sheet);
+            bomberdown2 = new ImageView(sheet);
+            bomberdown3 = new ImageView(sheet);
+            bomberdown1.setViewport(new Rectangle2D(entity.width * 2, entity.height * 0, entity.width, entity.height));
+            bomberdown2.setViewport(new Rectangle2D(entity.width * 2, entity.height * 1, entity.width, entity.height));
+            bomberdown3.setViewport(new Rectangle2D(entity.width * 2, entity.height * 2, entity.width, entity.height));
+        }
     }
 
-    private void init(boolean isMover) {
+    private void initBomber() {
         if (firstTime) {
-            if (isMover) {
-                Main.rootMover.getChildren().add(bomberdown1);
-                Timeline t = new Timeline();
-                t.setCycleCount(Timeline.INDEFINITE);
-                t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
-                                    (ActionEvent event) -> {
-                                        Main.rootMover.getChildren().remove(bomberdown1);
-                                        Main.rootMover.getChildren().add(bomberdown2);
-                                    }));
-                t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
-                        (ActionEvent event) -> {
-                            Main.rootMover.getChildren().remove(bomberdown2);
-                            Main.rootMover.getChildren().add(bomberdown3);
-                        }));
-                t.getKeyFrames().add(new KeyFrame(Duration.millis(600),
-                        (ActionEvent event) -> {
-                            Main.rootMover.getChildren().remove(bomberdown3);
-                            Main.rootMover.getChildren().add(bomberdown1);
-                        }));
-                t.play();
-            }
-            else    // need to change content
-                Main.rootMap.getChildren().add(bomberdown1);
-            firstTime = false;
+            Main.rootMover.getChildren().add(bomberdown1);
+            Timeline t = new Timeline();
+            t.setCycleCount(Timeline.INDEFINITE);
+            t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
+                                (ActionEvent event) -> {
+                                    Main.rootMover.getChildren().remove(bomberdown1);
+                                    Main.rootMover.getChildren().add(bomberdown2);
+                                }));
+            t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
+                    (ActionEvent event) -> {
+                        Main.rootMover.getChildren().remove(bomberdown2);
+                        Main.rootMover.getChildren().add(bomberdown3);
+                    }));
+            t.getKeyFrames().add(new KeyFrame(Duration.millis(600),
+                    (ActionEvent event) -> {
+                        Main.rootMover.getChildren().remove(bomberdown3);
+                        Main.rootMover.getChildren().add(bomberdown1);
+                    }));
+            t.play();
         }
+        firstTime = false;
     }
     public void renderBomber(double x, double y) throws Exception {
         bomberdown1.setX(x);
@@ -73,7 +71,7 @@ public class Renderer {
         bomberdown1.setY(y);
         bomberdown2.setY(y);
         bomberdown3.setY(y);
-        init(true);
+        initBomber();
     }
 
 }
