@@ -21,6 +21,7 @@ public class Renderer {
     private static Image sheet;
     private boolean firstTime = true;
     private ImageView bomberdown1, bomberdown2, bomberdown3;
+    private ImageView grass, wall, brick, bombitem, flameitem, speeditem, portal;
 
     public Renderer(Entity entity) {
         if (sheet == null) {
@@ -37,6 +38,22 @@ public class Renderer {
             bomberdown1.setViewport(new Rectangle2D(entity.width * 2, entity.height * 0, entity.width, entity.height));
             bomberdown2.setViewport(new Rectangle2D(entity.width * 2, entity.height * 1, entity.width, entity.height));
             bomberdown3.setViewport(new Rectangle2D(entity.width * 2, entity.height * 2, entity.width, entity.height));
+        }
+        else if (entity instanceof Grass) {
+            grass = new ImageView(sheet);
+            grass.setViewport(new Rectangle2D(entity.width * 6, entity.height * 0, entity.width, entity.height));
+        }
+        else if (entity instanceof Wall) {
+            wall = new ImageView(sheet);
+            wall.setViewport(new Rectangle2D(entity.width * 5, entity.height * 0, entity.width, entity.height));
+        }
+        else if (entity instanceof Brick) {
+            brick = new ImageView(sheet);
+            bombitem = new ImageView(sheet);
+            flameitem = new ImageView(sheet);
+            speeditem = new ImageView(sheet);
+            portal = new ImageView(sheet);
+            brick.setViewport(new Rectangle2D(entity.width * 7, entity.height * 1, entity.width, entity.height));
         }
     }
 
@@ -73,5 +90,12 @@ public class Renderer {
         bomberdown3.setY(y);
         initBomber();
     }
+
+    public void renderGrass(double x, double y) throws Exception {
+        grass.setX(x);
+        grass.setY(y);
+        Main.rootMap.getChildren().add(grass);
+    }
+    //code renderWall, brick, item, portal
 
 }

@@ -31,7 +31,7 @@ public class Main extends Application {
     private Group root;
     public static Group rootMap, rootMover;
     public static int level, rows, cols;
-    public static final double winWidth = 800, winHeight = 600;
+    public static final double winWidth = 1000, winHeight = 600;
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -50,6 +50,11 @@ public class Main extends Application {
         scene = new Scene(root, winWidth, winHeight, Color.DARKGRAY);
         primaryStage.setScene(scene);
         init(primaryStage);
+
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                map.get(i).get(j).render();
+
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
             private final long timePerFrame =  1_000;
@@ -116,26 +121,26 @@ public class Main extends Application {
                     for (int i = 0; i < cols; i++) {
                         char c = line.charAt(i);
                         switch (c) {
-                            case '#' -> map.get(cntLines - 1).add(new Wall(cntLines - 1, i));
-                            case '*' -> map.get(cntLines - 1).add(new Brick(cntLines - 1, i, false));
-                            case 'x' -> map.get(cntLines - 1).add(new Portal(cntLines - 1, i));
-                            case ' ' -> map.get(cntLines - 1).add(new Grass(cntLines - 1, i));
+                            case '#' -> map.get(cntLines - 1).add(new Wall(i, cntLines - 1));
+                            case '*' -> map.get(cntLines - 1).add(new Brick(i, cntLines - 1, false));
+                            case 'x' -> map.get(cntLines - 1).add(new Portal(i, cntLines - 1));
+                            case ' ' -> map.get(cntLines - 1).add(new Grass(i, cntLines - 1));
                             case 'p' -> {
-                                bomber.setX((cntLines - 1) * bomber.getWidth());
-                                bomber.setY(i * bomber.getHeight());
-                                map.get(cntLines - 1).add(new Grass(cntLines - 1, i));
+                                bomber.setX(i * bomber.getWidth());
+                                bomber.setY((cntLines - 1) * bomber.getHeight());
+                                map.get(cntLines - 1).add(new Grass(i, cntLines - 1));
                             }
                             case '1' -> {
-                                enemyManager.addEnemy(new Enemy(cntLines - 1, i, 0.2, 1));
-                                map.get(cntLines - 1).add(new Grass(cntLines - 1, i));
+                                enemyManager.addEnemy(new Enemy(i, cntLines - 1, 0.2, 1));
+                                map.get(cntLines - 1).add(new Grass(i, cntLines - 1));
                             }
                             case '2' -> {
-                                enemyManager.addEnemy(new Enemy(cntLines - 1, i, 10, 2));
-                                map.get(cntLines - 1).add(new Grass(cntLines - 1, i));
+                                enemyManager.addEnemy(new Enemy(i, cntLines - 1, 10, 2));
+                                map.get(cntLines - 1).add(new Grass(i, cntLines - 1));
                             }
-                            case 'b' -> map.get(cntLines - 1).add(new BombItem(cntLines - 1, i));
-                            case 'f' -> map.get(cntLines - 1).add(new FlameItem(cntLines - 1, i));
-                            case 's' -> map.get(cntLines - 1).add(new SpeedItem(cntLines - 1, i));
+                            case 'b' -> map.get(cntLines - 1).add(new BombItem(i, cntLines - 1));
+                            case 'f' -> map.get(cntLines - 1).add(new FlameItem(i, cntLines - 1));
+                            case 's' -> map.get(cntLines - 1).add(new SpeedItem(i, cntLines - 1));
                         }
                     }
                 }
@@ -149,5 +154,4 @@ public class Main extends Application {
     }
 }
 
-//github
 //handle end game
