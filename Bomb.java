@@ -1,52 +1,57 @@
 package com.example.dbproject;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
-public class Bomb extends Entity{
+abstract public class Bomb extends Entity{
     private long timer = 0;
-    private Entity entity;
+    protected int _animate = 0;
+    protected double _timeToExplode = 120;
+
+    protected static int damage = 1;
     private long timeLimit = 2_000_000_000;
+
+    protected Image img;
     public Bomb(double x, double y) {
         super(x, y);
     }
-    private static ImageView bombdown1, bombdown2, bombdown3;
-    private static Image sheet;
+
+    public void animate() {
+        if (_animate > 90) _animate = 0;
+        else _animate++;
+        _timeToExplode--;
+    }
+    public void loadAnimated(Sprite sprite1, Sprite sprite2, Sprite sprite3) {
+        img = Sprite.movingSprite(sprite1.getFxImage(), sprite2.getFxImage(), sprite3.getFxImage(), _animate, 30);
+    }
     public void update() {
         //update timer
-            while(true){
-                Bomb bomb = new Bomb(10,15);
-                bomb.render();
-            }
-
-    }
-
-    @Override
-    public void render() {
-        if (sheet == null) {
-            try (InputStream stream = Files.newInputStream(Path.of("src/main/java/res/textures/SpriteSheet.png"))) {
-                sheet = new Image(stream, 512, 512, true, false); //add sizeMultiplier
-                bombdown1 = new ImageView(sheet);
-                bombdown2 = new ImageView(sheet);
-                bombdown3 = new ImageView(sheet);
-                bombdown1.setViewport(new Rectangle2D(entity.width * 0, entity.height * 3, entity.width, entity.height));
-                bombdown2.setViewport(new Rectangle2D(entity.width * 1, entity.height * 3, entity.width, entity.height));
-                bombdown3.setViewport(new Rectangle2D(entity.width * 2, entity.height * 3, entity.width, entity.height));
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+        animate();
+        if (_timeToExplode < 0) {
+           // GameSound.playMusic(GameSound.BONG_BANG);
+            // bombExplode();
+            return;
         }
+        loadAnimated(Sprite.bomb_0, Sprite.bomb_1, Sprite.bomb_2);
     }
+
+
+ /*   public void render() {}
 
     public boolean isExploded() {
         return timer >= timeLimit;
+    }*/
+ /*protected void bombExplode() {
+     BombermanGame.setFlame(new FlameItem(tile, damage));
+     BombermanGame.removeBomb();
+ }*/
+
+    public static int getDamage() {
+        return damage;
+    }
+
+    public static void setDamage(int damage) {
+        Bomb.damage = damage;
     }
 
     @Override
