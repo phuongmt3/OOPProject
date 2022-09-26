@@ -22,6 +22,7 @@ public class Renderer {
     private boolean firstTime = true;
     private ImageView bomberdown1, bomberdown2, bomberdown3;
     private ImageView grass, wall, brick, bombitem, flameitem, speeditem, portal;
+    private ImageView bomb;
 
     public Renderer(Entity entity) {
         if (sheet == null) {
@@ -47,13 +48,33 @@ public class Renderer {
             wall = new ImageView(sheet);
             wall.setViewport(new Rectangle2D(entity.width * 5, entity.height * 0, entity.width, entity.height));
         }
-        else if (entity instanceof Brick) {
+        else if (entity instanceof BombItem) {
             brick = new ImageView(sheet);
             bombitem = new ImageView(sheet);
-            flameitem = new ImageView(sheet);
+            brick.setViewport(new Rectangle2D(entity.width * 7, entity.height * 1, entity.width, entity.height));
+            //setViewport for bomb item
+        }
+        else if (entity instanceof SpeedItem) {
+            brick = new ImageView(sheet);
             speeditem = new ImageView(sheet);
+            brick.setViewport(new Rectangle2D(entity.width * 7, entity.height * 1, entity.width, entity.height));
+            //setViewport for brick
+        }
+        else if (entity instanceof Portal) {
+            brick = new ImageView(sheet);
             portal = new ImageView(sheet);
             brick.setViewport(new Rectangle2D(entity.width * 7, entity.height * 1, entity.width, entity.height));
+            //setViewport for portal
+        }
+        else if (entity instanceof FlameItem) {
+            brick = new ImageView(sheet);
+            flameitem = new ImageView(sheet);
+            brick.setViewport(new Rectangle2D(entity.width * 7, entity.height * 1, entity.width, entity.height));
+            //setViewport for flame item
+        }
+        else if (entity instanceof Bomb) {
+            bomb = new ImageView(sheet);
+            bomb.setViewport(new Rectangle2D(entity.width * 0, entity.height * 3, entity.width, entity.height));
         }
     }
 
