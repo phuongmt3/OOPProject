@@ -33,6 +33,7 @@ public class Main extends Application {
     public static int level, rows, cols;
     public static final double winWidth = 1000, winHeight = 600;
     public static final double defaultSide = 32.0;
+    public static final long timePerFrame = 100;
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -59,7 +60,6 @@ public class Main extends Application {
 
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
-            private final long timePerFrame = 100;
             @Override
             public void handle(long now) {
                 if (now - lastTime > timePerFrame) {
@@ -88,11 +88,12 @@ public class Main extends Application {
                     case DOWN -> bomber.move(Bomber.MovementType.DOWN, map);
                     case RIGHT -> bomber.move(Bomber.MovementType.RIGHT, map);
                     case LEFT -> bomber.move(Bomber.MovementType.LEFT, map);
-                    case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY()));
+                    case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY(), bombManager));
                     case ESCAPE -> System.exit(0);
                 }
             }
         });
+        bombManager.update();
         bomber.render();
         bombManager.render();
     }

@@ -28,7 +28,7 @@ public class Renderer {
 
     public Renderer(Entity entity) {
         if (sheet == null) {
-            try (InputStream stream = Files.newInputStream(Path.of("src/main/java/res/textures/classic.png"))) {
+            try (InputStream stream = Files.newInputStream(Path.of("src/main/java/res/textures/SpriteSheet.png"))) {
                 sheet = new Image(stream, 256 * scale, 256 * scale, true, false);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -42,8 +42,6 @@ public class Renderer {
             bomberdown1 = new ImageView(sheet);
             bomberdown2 = new ImageView(sheet);
             bomberdown3 = new ImageView(sheet);
-            double width = ((Bomber) entity).width;
-            double height = ((Bomber) entity).height;
             bomberdown1.setViewport(new Rectangle2D(side * 2, side * 0, side, side));
             bomberdown2.setViewport(new Rectangle2D(side * 2, side * 1, side, side));
             bomberdown3.setViewport(new Rectangle2D(side * 2, side * 2, side, side));
@@ -132,6 +130,10 @@ public class Renderer {
         bomb.setX(x);
         bomb.setY(y);
         initBomb();
+    }
+
+    public void deleteBomb() throws Exception {
+        Main.rootBomb.getChildren().remove(bomb);
     }
     //code renderWall, brick, item, portal
 
