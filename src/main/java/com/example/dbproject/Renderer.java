@@ -24,7 +24,7 @@ public class Renderer {
     private final double side = 16 * scale;
     private ImageView bomberdown1, bomberdown2, bomberdown3;
     private ImageView grass, wall, brick, bombitem, flameitem, speeditem, portal;
-    private ImageView bomb;
+    private ImageView bomb, flamecenter, flameleft, flameright, flameup, flamedown, flamemiddle;
 
     public Renderer(Entity entity) {
         if (sheet == null) {
@@ -77,6 +77,21 @@ public class Renderer {
         else if (entity instanceof Bomb) {
             bomb = new ImageView(sheet);
             bomb.setViewport(new Rectangle2D(side * 0, side * 3, side, side));
+        }
+        else if (entity instanceof Flame) {
+            flamecenter = new ImageView(sheet);
+            flameleft = new ImageView(sheet);
+            flameright = new ImageView(sheet);
+            flameup = new ImageView(sheet);
+            flamedown = new ImageView(sheet);
+            flamemiddle = new ImageView(sheet);
+            flamecenter.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
+            flameleft.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
+            flameright.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
+            flameup.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
+            flamedown.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
+            flamemiddle.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
+            //setViewport những flame còn lại
         }
     }
 
@@ -134,6 +149,21 @@ public class Renderer {
 
     public void deleteBomb() throws Exception {
         Main.rootBomb.getChildren().remove(bomb);
+    }
+
+    public void renderFlame(Flame flame) throws Exception {
+        flamecenter.setX(flame.getX());
+        flamecenter.setY(flame.getY());
+        Main.rootBomb.getChildren().add(flamecenter);
+        Timeline t = new Timeline();
+        t.setCycleCount(1);
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
+                (ActionEvent event) -> {
+                    Main.rootMover.getChildren().remove(bomberdown1);
+                    Main.rootMover.getChildren().add(bomberdown2);
+                }));
+        t.play();
+        Main.rootBomb.getChildren().remove(flamecenter);
     }
     //code renderWall, brick, item, portal
 

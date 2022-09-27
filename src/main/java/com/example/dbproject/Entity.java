@@ -17,7 +17,7 @@ public abstract class Entity {
         return x;
     }
     public void setX(double x) {
-        if (x < 0 || x > (Main.cols - 1) * Main.defaultSide) {
+        if (!validCoordination(x, this.y)) {
             System.out.println("Invalid coordinates");
             return;
         }
@@ -27,7 +27,7 @@ public abstract class Entity {
         return y;
     }
     public void setY(double y) {
-        if (y < 0 || y > (Main.rows - 1) * Main.defaultSide) {
+        if (!validCoordination(this.x, y)) {
             System.out.println("Invalid coordinates");
             return;
         }
@@ -61,4 +61,8 @@ public abstract class Entity {
         return conditions == 2;
     }
     abstract public void render() throws Exception;
+    public static boolean validCoordination(double x, double y) {
+        return x >= 0 && x <= (Main.cols - 1) * Main.defaultSide
+                && y >= 0 && y <= (Main.rows - 1) * Main.defaultSide;
+    }
 }
