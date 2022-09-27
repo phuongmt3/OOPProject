@@ -1,7 +1,7 @@
 package com.example.dbproject;
 
 public class Bomber extends Mover {
-
+    public final double width = 20, height = 20;
     public Bomber(double x, double y, double speed) {
         super(x, y, speed);
     }
@@ -15,7 +15,6 @@ public class Bomber extends Mover {
     public void render() throws Exception {
         renderer.renderBomber(x, y);
     }
-    public void putBomb() {}
 
     @Override
     public String getClassName() {

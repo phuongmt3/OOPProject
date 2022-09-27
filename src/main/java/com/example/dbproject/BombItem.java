@@ -7,6 +7,9 @@ public class BombItem extends Brick {
 
     @Override
     public void render() {
+        super.render();
+        //if (isExposed)
+        //    renderer.renderBombItem(x, y);
         //if isExposed render SpeedItem image
         //else render Brick image
     }

@@ -11,14 +11,18 @@ public class Brick extends Map {
     @Override
     public void render() {}
 
-    public void update() {
-        if (!hasItem && isExposed); //render grass
-        //else render brick
-
+    public void update() throws Exception {
+        if (!hasItem && isExposed)
+            renderer.renderGrass(x, y);
+        //else renderer.renderBrick(x, y);
     }
 
     @Override
     public String getClassName() {
         return "Brick";
+    }
+
+    public boolean isExposed() {
+        return isExposed;
     }
 }

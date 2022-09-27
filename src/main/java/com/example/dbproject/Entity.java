@@ -1,49 +1,62 @@
 package com.example.dbproject;
 
 public abstract class Entity {
-    protected double x, y; //by pixel coordinates
+    protected double x, y, w = Main.defaultSide, h = Main.defaultSide; //by pixel coordinates
     protected Renderer renderer;
-    protected final double width = 32, height = 32;
 
     public Entity(double x, double y) {
         if (x < 0 || y < 0 || x > Main.winWidth || y > Main.winHeight){
             System.out.println("Invalid coordinates");
             return;
         }
-        this.x = x * width;
-        this.y = y * height;
+        this.x = x;
+        this.y = y;
         renderer = new Renderer(this);
     }
     public double getX() {
         return x;
     }
     public void setX(double x) {
+        if (x < 0 || x > (Main.cols - 1) * Main.defaultSide) {
+            System.out.println("Invalid coordinates");
+            return;
+        }
         this.x = x;
     }
     public double getY() {
         return y;
     }
     public void setY(double y) {
+        if (y < 0 || y > (Main.rows - 1) * Main.defaultSide) {
+            System.out.println("Invalid coordinates");
+            return;
+        }
         this.y = y;
     }
-    public double getWidth() {
-        return width;
+    public double getW() {
+        return w;
     }
-    public double getHeight() {
-        return height;
+    public void setW(double w) {
+        this.w = w;
+    }
+    public double getH() {
+        return h;
+    }
+    public void setH(double h) {
+        this.h = h;
     }
     public String getClassName() {
         return "Entity";
     }
     public boolean checkCollision(Entity other) {
         int conditions = 0;
-        if (other.getX() > x && other.getX() < x + width)
+        if (other.getX() > x && other.getX() < x + w)
             conditions++;
-        else if (other.getX() + other.getWidth() > x && other.getX() + other.getWidth() < x + width)
+        else if (other.getX() + other.getW() > x && other.getX() + other.getW() < x + w)
             conditions++;
-        if (other.getY() > y && other.getY() < y + height)
+        if (other.getY() > y && other.getY() < y + h)
             conditions++;
-        else if (other.getY() + other.getHeight() > y && other.getY() + other.getHeight() < y + height)
+        else if (other.getY() + other.getH() > y && other.getY() + other.getH() < y + h)
             conditions++;
         return conditions == 2;
     }
