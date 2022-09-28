@@ -2,28 +2,44 @@ package com.example.dbproject;
 
 import java.util.ArrayList;
 
-import static com.example.dbproject.Sprite.*;
-
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private int cntlimit = 1;
 
-    public void addBomb(Bomb bomb) {}
-    public void removeBomb(Bomb bomb) {}
-
-    public void update() {
-        for (Bomb bomb : bombs) {
-            bomb.update();
+    public void addBomb(Bomb bomb) {
+        if (bombs.size() == cntlimit)
+            return;
+        bombs.add(bomb);
+    }
+    public void removeBomb(Bomb bomb) {
+        for (int i = 0; i < bombs.size(); i++) {
+            if (bombs.get(i).equals(bomb)) {
+                bombs.remove(i);
+                return;
+            }
         }
     }
 
-    public void render() {
+    public void update() throws Exception {
+        int oldBombsCount = bombs.size();
+        for (int i = 0; i < bombs.size(); i++) {
+            bombs.get(i).update();
+            if (oldBombsCount != bombs.size())
+                i--;
+        }
+    }
+
+    public void render() throws Exception {
         for (Bomb bomb : bombs) {
-            bomb.loadAnimated(bomb_0, bomb_1, bomb_2);
+            bomb.render();
         }
     }
 
     public void increaseCntLimit() {
         cntlimit += 1;
+    }
+
+    public int countBomb() {
+        return bombs.size();
     }
 }
