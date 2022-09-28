@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class Renderer {
@@ -24,7 +25,11 @@ public class Renderer {
     private final double side = 16 * scale;
     private ImageView bomberdown1, bomberdown2, bomberdown3;
     private ImageView grass, wall, brick, bombitem, flameitem, speeditem, portal;
-    private ImageView bomb, flamecenter, flameleft, flameright, flameup, flamedown, flamemiddle;
+    private ImageView bomb;
+    private ArrayList<ArrayList<ImageView>> flame = new ArrayList<ArrayList<ImageView>>();
+    public static enum Direction {
+        center, left, right, up, down, middlerow, middlecol
+    };
 
     public Renderer(Entity entity) {
         if (sheet == null) {
@@ -79,19 +84,20 @@ public class Renderer {
             bomb.setViewport(new Rectangle2D(side * 0, side * 3, side, side));
         }
         else if (entity instanceof Flame) {
-            flamecenter = new ImageView(sheet);
-            flameleft = new ImageView(sheet);
-            flameright = new ImageView(sheet);
-            flameup = new ImageView(sheet);
-            flamedown = new ImageView(sheet);
-            flamemiddle = new ImageView(sheet);
-            flamecenter.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
-            flameleft.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
-            flameright.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
-            flameup.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
-            flamedown.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
-            flamemiddle.setViewport(new Rectangle2D(side * 0, side * 4, side, side));
-            //setViewport những flame còn lại
+            for (int i = 0; i < 7; i++) {
+                flame.add(new ArrayList<ImageView>());
+                flame.get(i).add(new ImageView(sheet));
+                flame.get(i).add(new ImageView(sheet));
+                flame.get(i).add(new ImageView(sheet));
+            }
+            //add 2 remainding frames
+            flame.get(Direction.center.ordinal()).get(0).setViewport(new Rectangle2D(side * 0, side * 4, side, side));
+            flame.get(Direction.left.ordinal()).get(0).setViewport(new Rectangle2D(side * 0, side * 7, side, side));
+            flame.get(Direction.right.ordinal()).get(0).setViewport(new Rectangle2D(side * 2, side * 7, side, side));
+            flame.get(Direction.up.ordinal()).get(0).setViewport(new Rectangle2D(side * 1, side * 4, side, side));
+            flame.get(Direction.down.ordinal()).get(0).setViewport(new Rectangle2D(side * 1, side * 6, side, side));
+            flame.get(Direction.middlecol.ordinal()).get(0).setViewport(new Rectangle2D(side * 1, side * 5, side, side));
+            flame.get(Direction.middlerow.ordinal()).get(0).setViewport(new Rectangle2D(side * 1, side * 7, side, side));
         }
     }
 
@@ -151,38 +157,26 @@ public class Renderer {
         Main.rootBomb.getChildren().remove(bomb);
     }
 
-    public void renderFlame(Flame flame) throws Exception {
-        flamecenter.setX(flame.getX());
-        flamecenter.setY(flame.getY());
-        flameleft.setX(flame.getXleft());
-        flameleft.setY(flame.getY());
-        flameright.setX(flame.getXright());
-        flameright.setY(flame.getY());
-        flameup.setX(flame.getX());
-        flameup.setY(flame.getYup());
-        flamedown.setX(flame.getX());
-        flamedown.setY(flame.getYdown());
-        System.out.println(flameleft.getX() + " " +flameleft.getY());
+    public void renderFlame(double x, double y, Direction dir) throws Exception {
+        flame.get(dir.ordinal()).get(0).setX(x);
+        //flame.get(dir.ordinal()).get(1).setX(x);
+        //flame.get(dir.ordinal()).get(2).setX(x);
+        flame.get(dir.ordinal()).get(0).setY(y);
+        //flame.get(dir.ordinal()).get(1).setY(y);
+        //flame.get(dir.ordinal()).get(2).setY(y);
         Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),
                 (ActionEvent event) -> {
-                    Main.rootBomb.getChildren().add(flamecenter);
-                    Main.rootBomb.getChildren().add(flameleft);
-                    Main.rootBomb.getChildren().add(flameright);
-                    Main.rootBomb.getChildren().add(flameup);
-                    Main.rootBomb.getChildren().add(flamedown);
+                    Main.rootBomb.getChildren().add(flame.get(dir.ordinal()).get(0));
                 }));
         t.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
                 (ActionEvent event) -> {
-                    Main.rootBomb.getChildren().remove(flamecenter);
-                    Main.rootBomb.getChildren().remove(flameleft);
-                    Main.rootBomb.getChildren().remove(flameright);
-                    Main.rootBomb.getChildren().remove(flameup);
-                    Main.rootBomb.getChildren().remove(flamedown);
+                    Main.rootBomb.getChildren().remove(flame.get(dir.ordinal()).get(0));
                 }));
         t.play();
     }
+
     //code renderWall, brick, item, portal
 
 }

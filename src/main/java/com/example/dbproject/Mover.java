@@ -28,12 +28,11 @@ abstract public class Mover extends Entity {
             int newidYmap = (int) (y / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
+            setX(newX);
             if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
                 setX(tile0.getX() + tile0.getW());
             else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
                 setX(tile1.getX() + tile1.getW());
-            else
-                setX(newX);
         }
         else if (type == MovementType.RIGHT) {
             double newX = x + type.x * speed;
@@ -42,12 +41,11 @@ abstract public class Mover extends Entity {
             int newidYmap = (int) (y / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
+            setX(newX);
             if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
                 setX(tile0.getX() - tile0.getW());
             else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
                 setX(tile1.getX() - tile1.getW());
-            else
-                setX(newX);
         }
         else if (type == MovementType.UP) {
             double newY = y + type.y * speed;
@@ -56,12 +54,11 @@ abstract public class Mover extends Entity {
             int newidYmap = (int) (newY / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
+            setY(newY);
             if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
                 setY(tile0.getY() + tile0.getH());
             else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
                 setY(tile1.getY() + tile1.getH());
-            else
-                setY(newY);
         }
         else {
             double newY = y + type.y * speed;
@@ -70,12 +67,11 @@ abstract public class Mover extends Entity {
             int newidYmap = (int) (newY / Main.defaultSide) + 1;
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
+            setY(newY);
             if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
                 setY(tile0.getY() - tile0.getH());
             else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
                 setY(tile1.getY() - tile1.getH());
-            else
-                setY(newY);
         }
     }
 
