@@ -5,7 +5,7 @@ import java.util.ArrayList;
 abstract public class Mover extends Entity {
     protected boolean isDead = false;
     protected final double speed;
-    enum MovementType {
+    public static enum MovementType {
         LEFT(-1, 0), RIGHT(1, 0),
         UP(0, -1), DOWN(0, 1);
         public final int x, y;

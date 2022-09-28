@@ -101,10 +101,10 @@ public class Renderer {
             Timeline t = new Timeline();
             t.setCycleCount(Timeline.INDEFINITE);
             t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
-                                (ActionEvent event) -> {
-                                    Main.rootMover.getChildren().remove(bomberdown1);
-                                    Main.rootMover.getChildren().add(bomberdown2);
-                                }));
+                    (ActionEvent event) -> {
+                        Main.rootMover.getChildren().remove(bomberdown1);
+                        Main.rootMover.getChildren().add(bomberdown2);
+                    }));
             t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
                     (ActionEvent event) -> {
                         Main.rootMover.getChildren().remove(bomberdown2);
@@ -154,16 +154,34 @@ public class Renderer {
     public void renderFlame(Flame flame) throws Exception {
         flamecenter.setX(flame.getX());
         flamecenter.setY(flame.getY());
-        Main.rootBomb.getChildren().add(flamecenter);
+        flameleft.setX(flame.getXleft());
+        flameleft.setY(flame.getY());
+        flameright.setX(flame.getXright());
+        flameright.setY(flame.getY());
+        flameup.setX(flame.getX());
+        flameup.setY(flame.getYup());
+        flamedown.setX(flame.getX());
+        flamedown.setY(flame.getYdown());
+        System.out.println(flameleft.getX() + " " +flameleft.getY());
         Timeline t = new Timeline();
         t.setCycleCount(1);
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(0),
+                (ActionEvent event) -> {
+                    Main.rootBomb.getChildren().add(flamecenter);
+                    Main.rootBomb.getChildren().add(flameleft);
+                    Main.rootBomb.getChildren().add(flameright);
+                    Main.rootBomb.getChildren().add(flameup);
+                    Main.rootBomb.getChildren().add(flamedown);
+                }));
         t.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
                 (ActionEvent event) -> {
-                    Main.rootMover.getChildren().remove(bomberdown1);
-                    Main.rootMover.getChildren().add(bomberdown2);
+                    Main.rootBomb.getChildren().remove(flamecenter);
+                    Main.rootBomb.getChildren().remove(flameleft);
+                    Main.rootBomb.getChildren().remove(flameright);
+                    Main.rootBomb.getChildren().remove(flameup);
+                    Main.rootBomb.getChildren().remove(flamedown);
                 }));
         t.play();
-        Main.rootBomb.getChildren().remove(flamecenter);
     }
     //code renderWall, brick, item, portal
 

@@ -33,13 +33,13 @@ public class Main extends Application {
     public static int level, rows, cols;
     public static final double winWidth = 1000, winHeight = 600;
     public static final double defaultSide = 32.0;
-    public static final long timePerFrame = 100;
+    public static final long timePerFrame = 10000;
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
-        bomber = new Bomber(0, 0, 2);
-        bombManager = new BombManager();
+        bomber = new Bomber(0, 0, 8);
         enemyManager = new EnemyManager();
+        bombManager = new BombManager();
         //read file input -> init map
         readFile("src/main/java/res/levels/Level1.txt");
     }
@@ -88,7 +88,7 @@ public class Main extends Application {
                     case DOWN -> bomber.move(Bomber.MovementType.DOWN, map);
                     case RIGHT -> bomber.move(Bomber.MovementType.RIGHT, map);
                     case LEFT -> bomber.move(Bomber.MovementType.LEFT, map);
-                    case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY(), bombManager));
+                    case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY(), bombManager, bomber, enemyManager, map));
                     case ESCAPE -> System.exit(0);
                 }
             }
@@ -96,6 +96,8 @@ public class Main extends Application {
         bombManager.update();
         bomber.render();
         bombManager.render();
+        if (bomber.isDead())
+            System.exit(0);
     }
 
     @Override
@@ -160,3 +162,4 @@ public class Main extends Application {
 }
 
 //handle end game
+//update map, brick

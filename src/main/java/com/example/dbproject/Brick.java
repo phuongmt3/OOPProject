@@ -25,4 +25,8 @@ public class Brick extends Map {
     public boolean isExposed() {
         return isExposed;
     }
+
+    public void setExposed(boolean b) {
+        isExposed = b;
+    }
 }

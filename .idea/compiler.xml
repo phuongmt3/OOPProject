@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="OOPProject" options="--add-exports jdk.hotspot.agent/sun.jvm.hotspot.runtime=com.example.dbproject" />
+      <module name="OOPProject" options="" />
     </option>
   </component>
 </project>

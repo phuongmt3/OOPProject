@@ -60,6 +60,19 @@ public abstract class Entity {
             conditions++;
         return conditions == 2;
     }
+
+    public boolean checkCollision(double otherx, double othery) {
+        int conditions = 0;
+        if (otherx > x && otherx < x + w)
+            conditions++;
+        else if (otherx + Main.defaultSide > x && otherx + Main.defaultSide < x + w)
+            conditions++;
+        if (othery > y && othery < y + h)
+            conditions++;
+        else if (othery + Main.defaultSide > y && othery + Main.defaultSide < y + h)
+            conditions++;
+        return conditions == 2;
+    }
     abstract public void render() throws Exception;
     public static boolean validCoordination(double x, double y) {
         return x >= 0 && x <= (Main.cols - 1) * Main.defaultSide
