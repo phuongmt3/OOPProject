@@ -66,7 +66,6 @@ public class Main extends Application {
                     lastTime = now;
                     try {
                         update();
-                        //handle endgame
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

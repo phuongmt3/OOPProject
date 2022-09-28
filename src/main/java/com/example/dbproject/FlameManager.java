@@ -3,21 +3,30 @@ package com.example.dbproject;
 import java.util.ArrayList;
 
 public class FlameManager extends Entity {
-    private double xleft, xright;    //update those values
+    private double xleft, xright;
     private double yup, ydown;
     private final int flameLength = 2;
     private ArrayList<Flame> flames = new ArrayList<Flame>();
-    public FlameManager(double x, double y) {
+    private Bomber bomber;
+    private EnemyManager enemyManager;
+    private ArrayList<ArrayList<Entity>> map;
+    private BombManager bombManager;
+
+    public FlameManager(double x, double y, Bomber bomber, EnemyManager enemyManager,
+                        ArrayList<ArrayList<Entity>> map, BombManager bombManager) {
         super(((int) (x / Main.defaultSide)) * Main.defaultSide, ((int) (y / Main.defaultSide)) * Main.defaultSide);
         if (x - this.x > Main.defaultSide * 0.5)
             this.x += Main.defaultSide;
         if (y - this.y > Main.defaultSide * 0.5)
             this.y += Main.defaultSide;
+        this.bomber = bomber;
+        this.enemyManager = enemyManager;
+        this.map = map;
+        this.bombManager = bombManager;
     }
 
     @Override
     public void render() throws Exception {
-        //add to flames
         flames.add(new Flame(x, y, Renderer.Direction.center));
         if (xleft > 0) {
             for (double i = x - Main.defaultSide; i > xleft; i -= Main.defaultSide)
@@ -41,24 +50,13 @@ public class FlameManager extends Entity {
         }
         for (Map flame : flames)
             flame.render();
+
+        killBomber(bomber);
+        killEnemy(enemyManager);
+        continuousExplosion(bombManager);
     }
 
-    public double getXleft() {
-        return xleft;
-    }
-    public double getXright() {
-        return xright;
-    }
-    public double getYup() {
-        return yup;
-    }
-    public double getYdown() {
-        return ydown;
-    }
-
-    public void updateInfluence(Bomber bomber, EnemyManager enemyManager, ArrayList<ArrayList<Entity>> map) {
-        //handle kill bomber, enemy
-        //bomb nổ liên hoàn
+    public void updateInfluence() {
         xleft = xright = -100;
         yup = ydown = -100;
         int posxInMap = (int) (x / Main.defaultSide);
@@ -88,6 +86,26 @@ public class FlameManager extends Entity {
                 }
             }
         }
+
     }
 
+    private void killBomber(Bomber bomber) {
+        for (Flame flame : flames)
+            if (bomber.checkCollision(flame)) {
+                bomber.setDead(true);
+                break;
+            }
+    }
+
+    private void killEnemy(EnemyManager enemyManager) {
+
+    }
+
+    private void continuousExplosion(BombManager bombManager) {
+        for (Flame flame : flames)
+            for (int i = 0; i < bombManager.countBomb(); i++)
+                if (flame.checkCollision(bombManager.getBomb(i))) {
+                    bombManager.getBomb(i).explode();
+                }
+    }
 }

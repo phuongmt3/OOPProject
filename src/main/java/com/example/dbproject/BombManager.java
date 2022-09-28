@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
-    private int cntlimit = 1;
+    private int cntlimit = 3;
 
     public void addBomb(Bomb bomb) {
         if (bombs.size() == cntlimit)
@@ -12,20 +12,17 @@ public class BombManager {
         bombs.add(bomb);
     }
     public void removeBomb(Bomb bomb) {
-        for (int i = 0; i < bombs.size(); i++) {
-            if (bombs.get(i).equals(bomb)) {
-                bombs.remove(i);
-                return;
-            }
-        }
+        bombs.remove(bomb);
     }
 
     public void update() throws Exception {
         int oldBombsCount = bombs.size();
         for (int i = 0; i < bombs.size(); i++) {
             bombs.get(i).update();
-            if (oldBombsCount != bombs.size())
+            if (oldBombsCount != bombs.size()) {
                 i--;
+                oldBombsCount = bombs.size();
+            }
         }
     }
 
@@ -41,5 +38,9 @@ public class BombManager {
 
     public int countBomb() {
         return bombs.size();
+    }
+
+    public Bomb getBomb(int id) {
+        return bombs.get(id);
     }
 }

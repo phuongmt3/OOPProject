@@ -79,6 +79,10 @@ abstract public class Mover extends Entity {
         return isDead;
     }
 
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
     @Override
     public String getClassName() {
         return "Mover";

@@ -50,13 +50,13 @@ public abstract class Entity {
     }
     public boolean checkCollision(Entity other) {
         int conditions = 0;
-        if (other.getX() > x && other.getX() < x + w)
+        if (other.getX() >= x && other.getX() < x + w)
             conditions++;
-        else if (other.getX() + other.getW() > x && other.getX() + other.getW() < x + w)
+        else if (other.getX() + other.getW() > x && other.getX() + other.getW() <= x + w)
             conditions++;
-        if (other.getY() > y && other.getY() < y + h)
+        if (other.getY() >= y && other.getY() < y + h)
             conditions++;
-        else if (other.getY() + other.getH() > y && other.getY() + other.getH() < y + h)
+        else if (other.getY() + other.getH() > y && other.getY() + other.getH() <= y + h)
             conditions++;
         return conditions == 2;
     }
