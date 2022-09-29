@@ -6,7 +6,9 @@ public class Wall extends Map {
     }
 
     @Override
-    public void render() {}
+    public void render() throws Exception {
+        renderer.renderWall(x, y);
+    }
 
     @Override
     public String getClassName() {

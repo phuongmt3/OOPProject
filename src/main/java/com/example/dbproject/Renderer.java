@@ -25,8 +25,11 @@ public class Renderer {
     private final double side = 16 * scale;
     private ImageView bomberdown1, bomberdown2, bomberdown3;
     private ImageView grass, wall, brick, bombitem, flameitem, speeditem, portal;
-    private ImageView bomb;
+    private ImageView bomb, bomb2, bomb3;
+    private ImageView balloom;
+    private ImageView oneal;
     private ArrayList<ArrayList<ImageView>> flame = new ArrayList<ArrayList<ImageView>>();
+    Timeline t = new Timeline();
     public static enum Direction {
         center, left, right, up, down, middlerow, middlecol
     };
@@ -82,6 +85,10 @@ public class Renderer {
         else if (entity instanceof Bomb) {
             bomb = new ImageView(sheet);
             bomb.setViewport(new Rectangle2D(side * 0, side * 3, side, side));
+            bomb2 = new ImageView(sheet);
+            bomb2.setViewport(new Rectangle2D(side * 1, side * 3, side, side));
+            bomb3 = new ImageView(sheet);
+            bomb3.setViewport(new Rectangle2D(side * 2, side * 3, side, side));
         }
         else if (entity instanceof Flame) {
             for (int i = 0; i < 7; i++) {
@@ -99,31 +106,35 @@ public class Renderer {
             flame.get(Direction.middlecol.ordinal()).get(0).setViewport(new Rectangle2D(side * 1, side * 5, side, side));
             flame.get(Direction.middlerow.ordinal()).get(0).setViewport(new Rectangle2D(side * 1, side * 7, side, side));
         }
+        else if (entity instanceof Balloom) {
+            balloom = new ImageView(sheet);
+            balloom.setViewport(new Rectangle2D(side * 9, side * 0, side, side));
+        }
+        else if (entity instanceof Oneal) {
+            oneal = new ImageView(sheet);
+            oneal.setViewport(new Rectangle2D(side * 11, side * 0, side, side));
+        }
     }
 
     private void initBomber() {
-        if (firstTime) {
-            Main.rootMover.getChildren().add(bomberdown1);
-            Timeline t = new Timeline();
-            t.setCycleCount(Timeline.INDEFINITE);
-            t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
-                    (ActionEvent event) -> {
-                        Main.rootMover.getChildren().remove(bomberdown1);
-                        Main.rootMover.getChildren().add(bomberdown2);
-                    }));
-            t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
-                    (ActionEvent event) -> {
-                        Main.rootMover.getChildren().remove(bomberdown2);
-                        Main.rootMover.getChildren().add(bomberdown3);
-                    }));
-            t.getKeyFrames().add(new KeyFrame(Duration.millis(600),
-                    (ActionEvent event) -> {
-                        Main.rootMover.getChildren().remove(bomberdown3);
-                        Main.rootMover.getChildren().add(bomberdown1);
-                    }));
-            t.play();
-        }
-        firstTime = false;
+        Main.rootMover.getChildren().add(bomberdown1);
+        t.setCycleCount(Timeline.INDEFINITE);
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
+                (ActionEvent event) -> {
+                    Main.rootMover.getChildren().remove(bomberdown1);
+                    Main.rootMover.getChildren().add(bomberdown2);
+                }));
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
+                (ActionEvent event) -> {
+                    Main.rootMover.getChildren().remove(bomberdown2);
+                    Main.rootMover.getChildren().add(bomberdown3);
+                }));
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(600),
+                (ActionEvent event) -> {
+                    Main.rootMover.getChildren().remove(bomberdown3);
+                    Main.rootMover.getChildren().add(bomberdown1);
+                }));
+        t.play();
     }
     public void renderBomber(double x, double y) throws Exception {
         bomberdown1.setX(x);
@@ -132,7 +143,10 @@ public class Renderer {
         bomberdown1.setY(y);
         bomberdown2.setY(y);
         bomberdown3.setY(y);
-        initBomber();
+        if (firstTime) {
+            initBomber();
+            firstTime = false;
+        }
     }
 
     public void renderGrass(double x, double y) throws Exception {
@@ -141,20 +155,44 @@ public class Renderer {
         Main.rootMap.getChildren().add(grass);
     }
 
-    private void initBomb() {   // làm hiệu ứng cho bomb tương tự như bomber
-        if (firstTime) {
-            Main.rootBomb.getChildren().add(bomb);
-        }
-        firstTime = false;
+    private void initBomb() {
+        Main.rootBomb.getChildren().add(bomb);
+        t.setCycleCount(Timeline.INDEFINITE);
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(500),
+                (ActionEvent event) -> {
+                    Main.rootBomb.getChildren().remove(bomb);
+                    Main.rootBomb.getChildren().add(bomb2);
+                }));
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
+                (ActionEvent event) -> {
+                    Main.rootBomb.getChildren().remove(bomb2);
+                    Main.rootBomb.getChildren().add(bomb3);
+                }));
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(1500),
+                (ActionEvent event) -> {
+                    Main.rootBomb.getChildren().remove(bomb3);
+                    Main.rootBomb.getChildren().add(bomb);
+                }));
+        t.play();
     }
     public void renderBomb(double x, double y) throws Exception {
         bomb.setX(x);
         bomb.setY(y);
-        initBomb();
+        bomb2.setX(x);
+        bomb2.setY(y);
+        bomb3.setX(x);
+        bomb3.setY(y);
+        if (firstTime) {
+            initBomb();
+            firstTime = false;
+        }
     }
 
     public void deleteBomb() throws Exception {
+        t.stop();
         Main.rootBomb.getChildren().remove(bomb);
+        Main.rootBomb.getChildren().remove(bomb2);
+        Main.rootBomb.getChildren().remove(bomb3);
     }
 
     public void renderFlame(double x, double y, Direction dir) throws Exception {
@@ -164,7 +202,6 @@ public class Renderer {
         flame.get(dir.ordinal()).get(0).setY(y);
         //flame.get(dir.ordinal()).get(1).setY(y);
         //flame.get(dir.ordinal()).get(2).setY(y);
-        Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),
                 (ActionEvent event) -> {
@@ -177,6 +214,36 @@ public class Renderer {
         t.play();
     }
 
-    //code renderWall, brick, item, portal
+    private void initBallom() { //add animation
+        Main.rootMover.getChildren().add(balloom);
+    }
 
+    public void renderBallom(double x, double y) throws Exception {
+        balloom.setX(x);
+        balloom.setY(y);
+        if (firstTime) {
+            initBallom();
+            firstTime = false;
+        }
+    }
+
+    private void initOneal() {  //add animation
+        Main.rootMover.getChildren().add(oneal);
+    }
+
+    public void renderOneal(double x, double y) throws Exception {
+        oneal.setX(x);
+        oneal.setY(y);
+        if (firstTime) {
+            initOneal();
+            firstTime = false;
+        }
+    }
+
+    //code renderWall, brick, item, portal
+    public void renderWall(double x, double y) throws Exception {
+        wall.setX(x);
+        wall.setY(y);
+        Main.rootMap.getChildren().add(wall);
+    }
 }

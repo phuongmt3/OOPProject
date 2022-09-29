@@ -5,6 +5,8 @@ import java.util.ArrayList;
 abstract public class Mover extends Entity {
     protected boolean isDead = false;
     protected final double speed;
+    protected ArrayList<ArrayList<Entity>> map;
+    protected BombManager bombManager;
     public static enum MovementType {
         LEFT(-1, 0), RIGHT(1, 0),
         UP(0, -1), DOWN(0, 1);
@@ -14,13 +16,24 @@ abstract public class Mover extends Entity {
             this.y = y;
         }
     }
-    public Mover(double x, double y, double speed) {
+    public Mover(double x, double y, double speed, ArrayList<ArrayList<Entity>> map, BombManager bombManager) {
         super(x, y);
         this.speed = speed;
+        this.bombManager = bombManager;
+        this.map = map;
     }
     public void update() {}
 
-    public void move(MovementType type, ArrayList<ArrayList<Entity>> map) {
+    private boolean collideBomb(Entity other, BombManager bombManager) {
+        for (int i = 0; i < bombManager.countBomb(); i++) {
+            if (other.checkCollision(bombManager.getBomb(i)))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean canMoveAndMove(MovementType type) {
+        boolean inBombPosition = collideBomb(this, bombManager);
         if (type == MovementType.LEFT) {
             double newX = x + type.x * speed;
             newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
@@ -29,10 +42,18 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
+            if (!inBombPosition && collideBomb(this, bombManager)) {
+                setX(x - type.x * speed);
+                return false;
+            }
+            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
                 setX(tile0.getX() + tile0.getW());
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
+                return false;
+            }
+            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
                 setX(tile1.getX() + tile1.getW());
+                return false;
+            }
         }
         else if (type == MovementType.RIGHT) {
             double newX = x + type.x * speed;
@@ -42,10 +63,18 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
+            if (!inBombPosition && collideBomb(this, bombManager)) {
+                setX(x - type.x * speed);
+                return false;
+            }
+            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
                 setX(tile0.getX() - tile0.getW());
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
+                return false;
+            }
+            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
                 setX(tile1.getX() - tile1.getW());
+                return false;
+            }
         }
         else if (type == MovementType.UP) {
             double newY = y + type.y * speed;
@@ -55,10 +84,18 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
+            if (!inBombPosition && collideBomb(this, bombManager)) {
+                setY(y - type.y * speed);
+                return false;
+            }
+            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
                 setY(tile0.getY() + tile0.getH());
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
+                return false;
+            }
+            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
                 setY(tile1.getY() + tile1.getH());
+                return false;
+            }
         }
         else {
             double newY = y + type.y * speed;
@@ -68,11 +105,20 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed()))
+            if (!inBombPosition && collideBomb(this, bombManager)) {
+                setY(y - type.y * speed);
+                return false;
+            }
+            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
                 setY(tile0.getY() - tile0.getH());
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed())))
+                return false;
+            }
+            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
                 setY(tile1.getY() - tile1.getH());
+                return false;
+            }
         }
+        return true;
     }
 
     public boolean isDead() {

@@ -1,8 +1,10 @@
 package com.example.dbproject;
 
+import java.util.ArrayList;
+
 public class Bomber extends Mover {
-    public Bomber(double x, double y, double speed) {
-        super(x, y, speed);
+    public Bomber(double x, double y, double speed, ArrayList<ArrayList<Entity>> map, BombManager bombManager) {
+        super(x, y, speed, map, bombManager);
     }
 
     @Override

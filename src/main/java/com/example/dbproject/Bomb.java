@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Bomb extends Entity{
     private long timer = 0;//handle increase time
-    private long timeLimit = Main.timePerFrame * 500;
+    private long timeLimit = Main.timePerFrame * 200;
     private BombManager manager;
     private FlameManager flame;
 
