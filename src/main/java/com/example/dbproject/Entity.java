@@ -2,7 +2,6 @@ package com.example.dbproject;
 
 public abstract class Entity {
     protected double x, y, w = Main.defaultSide, h = Main.defaultSide; //by pixel coordinates
-    protected Renderer renderer;
 
     public Entity(double x, double y) {
         if (x < 0 || y < 0 || x > Main.winWidth || y > Main.winHeight){
@@ -11,7 +10,6 @@ public abstract class Entity {
         }
         this.x = x;
         this.y = y;
-        renderer = new Renderer(this);
     }
     public double getX() {
         return x;

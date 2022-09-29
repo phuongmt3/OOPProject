@@ -19,12 +19,25 @@ public class EnemyManager {
     }
 
     public void update() {
-        for (Enemy enemy : enemies) {
-            enemy.update();
+        int oldEnemyCount = enemies.size();
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).update();
+            if (oldEnemyCount != enemies.size()) {
+                oldEnemyCount = enemies.size();
+                i--;
+            }
         }
     }
 
     public boolean allDead() {
         return enemies.isEmpty();
+    }
+
+    public int countEnemies() {
+        return enemies.size();
+    }
+
+    public Enemy getEnemy(int index) {
+        return enemies.get(index);
     }
 }

@@ -7,6 +7,7 @@ abstract public class Mover extends Entity {
     protected final double speed;
     protected ArrayList<ArrayList<Entity>> map;
     protected BombManager bombManager;
+    protected EnemyManager enemyManager;
     public static enum MovementType {
         LEFT(-1, 0), RIGHT(1, 0),
         UP(0, -1), DOWN(0, 1);
@@ -16,24 +17,36 @@ abstract public class Mover extends Entity {
             this.y = y;
         }
     }
-    public Mover(double x, double y, double speed, ArrayList<ArrayList<Entity>> map, BombManager bombManager) {
+    public Mover(double x, double y, double speed, ArrayList<ArrayList<Entity>> map, BombManager bombManager, EnemyManager enemyManager) {
         super(x, y);
         this.speed = speed;
         this.bombManager = bombManager;
         this.map = map;
+        this.enemyManager = enemyManager;
     }
-    public void update() {}
+    abstract public void update();
 
-    private boolean collideBomb(Entity other, BombManager bombManager) {
+    private boolean collideBomb() {
         for (int i = 0; i < bombManager.countBomb(); i++) {
-            if (other.checkCollision(bombManager.getBomb(i)))
+            if (checkCollision(bombManager.getBomb(i)))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean colllideOtherEnemy() {
+        for (int i = 0; i < enemyManager.countEnemies(); i++) {
+            Enemy x = enemyManager.getEnemy(i);
+            if (x.getX() == this.x && x.getY() == this.y)
+                continue;
+            if (checkCollision(x))
                 return true;
         }
         return false;
     }
 
     public boolean canMoveAndMove(MovementType type) {
-        boolean inBombPosition = collideBomb(this, bombManager);
+        boolean inBombPosition = collideBomb();
         if (type == MovementType.LEFT) {
             double newX = x + type.x * speed;
             newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
@@ -42,7 +55,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if (!inBombPosition && collideBomb(this, bombManager)) {
+            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
                 setX(x - type.x * speed);
                 return false;
             }
@@ -63,7 +76,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if (!inBombPosition && collideBomb(this, bombManager)) {
+            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
                 setX(x - type.x * speed);
                 return false;
             }
@@ -84,7 +97,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if (!inBombPosition && collideBomb(this, bombManager)) {
+            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
                 setY(y - type.y * speed);
                 return false;
             }
@@ -105,7 +118,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if (!inBombPosition && collideBomb(this, bombManager)) {
+            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
                 setY(y - type.y * speed);
                 return false;
             }

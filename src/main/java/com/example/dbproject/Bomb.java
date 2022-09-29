@@ -5,8 +5,9 @@ import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
 
 public class Bomb extends Entity{
-    private long timer = 0;//handle increase time
-    private long timeLimit = Main.timePerFrame * 200;
+    private RendererBomb renderer = new RendererBomb();
+    private long timer = 0;
+    private long timeLimit = Main.timePerFrame * 150;
     private BombManager manager;
     private FlameManager flame;
 
@@ -18,7 +19,6 @@ public class Bomb extends Entity{
     }
 
     public void update() throws Exception {
-        //update timer
         timer += Main.timePerFrame;
         if (isExploded()) {
             renderer.deleteBomb();
@@ -38,7 +38,7 @@ public class Bomb extends Entity{
     }
 
     public void explode() {
-        timer = timeLimit;
+        timer = timeLimit - Main.timePerFrame * 15;
     }
 
     @Override

@@ -77,10 +77,14 @@ public class Main extends Application {
         stage.show();
     }
     public void update() throws Exception {
-        //below is just example of handling keyboards
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+                if (bomber.isDead()) {
+                    if (event.getCode() == KeyCode.ESCAPE)
+                        System.exit(0);
+                    return;
+                }
                 switch (event.getCode()) {
                     case UP -> bomber.canMoveAndMove(Bomber.MovementType.UP);
                     case DOWN -> bomber.canMoveAndMove(Bomber.MovementType.DOWN);
@@ -93,11 +97,10 @@ public class Main extends Application {
         });
         bombManager.update();
         enemyManager.update();
+        bomber.update();
         bombManager.render();
         bomber.render();
         enemyManager.render();
-        if (bomber.isDead())
-            System.exit(0);
     }
 
     @Override
@@ -133,15 +136,15 @@ public class Main extends Application {
                             case 'x' -> map.get(cntLines - 1).add(new Portal(i * defaultSide, (cntLines - 1) * defaultSide));
                             case ' ' -> map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             case 'p' -> {
-                                bomber = new Bomber(i * defaultSide, (cntLines - 1) * defaultSide, 8, map, bombManager);
+                                bomber = new Bomber(i * defaultSide, (cntLines - 1) * defaultSide, 8, map, bombManager, enemyManager);
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '1' -> {
-                                enemyManager.addEnemy(new Balloom(i * defaultSide, (cntLines - 1) * defaultSide, 1, map, bombManager));
+                                enemyManager.addEnemy(new Balloom(i * defaultSide, (cntLines - 1) * defaultSide, 1, map, bombManager, enemyManager));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '2' -> {
-                                enemyManager.addEnemy(new Oneal(i * defaultSide, (cntLines - 1) * defaultSide, 2, map, bombManager));
+                                enemyManager.addEnemy(new Oneal(i * defaultSide, (cntLines - 1) * defaultSide, 2, map, bombManager, enemyManager));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case 'b' -> map.get(cntLines - 1).add(new BombItem(i * defaultSide, (cntLines - 1) * defaultSide));
@@ -159,6 +162,3 @@ public class Main extends Application {
         }
     }
 }
-
-//handle end game
-//update map, brick

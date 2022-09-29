@@ -98,7 +98,11 @@ public class FlameManager extends Entity {
     }
 
     private void killEnemy(EnemyManager enemyManager) {
-
+        for (int i = 0; i < enemyManager.countEnemies(); i++)
+            for (Flame flame : flames)
+                if (enemyManager.getEnemy(i).checkCollision(flame)) {
+                    enemyManager.getEnemy(i).setDead(true);
+                }
     }
 
     private void continuousExplosion(BombManager bombManager) {

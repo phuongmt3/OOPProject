@@ -1,11 +1,14 @@
 package com.example.dbproject;
 
 public class Brick extends Map {
+    private RendererMap renderer;
     protected boolean isExposed = false;
     protected boolean hasItem;
+
     public Brick(double x, double y, boolean hasItem) {
         super(x, y);
         this.hasItem = hasItem;
+        renderer = new RendererMap(this);
     }
 
     @Override

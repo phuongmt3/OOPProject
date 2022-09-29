@@ -1,8 +1,10 @@
 package com.example.dbproject;
 
 public class Wall extends Map {
+    private RendererMap renderer;
     public Wall(double x, double y) {
         super(x, y);
+        renderer = new RendererMap(this);
     }
 
     @Override
