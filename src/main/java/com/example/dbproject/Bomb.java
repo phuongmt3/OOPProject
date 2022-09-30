@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Bomb extends Entity{
     private RendererBomb renderer = new RendererBomb();
     private long timer = 0;
-    private long timeLimit = Main.timePerFrame * 150;
+    private long timeLimit = 150;
     private BombManager manager;
     private FlameManager flame;
 
@@ -19,7 +19,7 @@ public class Bomb extends Entity{
     }
 
     public void update() throws Exception {
-        timer += Main.timePerFrame;
+        timer++;
         if (isExploded()) {
             renderer.deleteBomb();
             manager.removeBomb(this);
@@ -38,7 +38,7 @@ public class Bomb extends Entity{
     }
 
     public void explode() {
-        timer = timeLimit - Main.timePerFrame * 15;
+        timer = timeLimit - 15;
     }
 
     @Override
