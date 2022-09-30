@@ -12,7 +12,9 @@ public class Brick extends Map {
     }
 
     @Override
-    public void render() {}
+    public void render() throws Exception {
+        renderer.renderBrick(x, y);
+    }
 
     public void update() throws Exception {
         if (!hasItem && isExposed)
