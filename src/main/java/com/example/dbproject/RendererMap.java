@@ -38,6 +38,11 @@ public class RendererMap extends Renderer {
             brick.setViewport(new Rectangle2D(side * 7, side * 1, side, side));
             //setViewport for flame item
         }
+        else if (entity instanceof Brick) {
+            brick = new ImageView(sheet);
+            brick.setViewport(new Rectangle2D(side * 7, side * 0, side, side));
+            // deal with rendering brick when hits bombs.
+        }
     }
 
     public void renderGrass(double x, double y) throws Exception {
@@ -51,4 +56,12 @@ public class RendererMap extends Renderer {
         wall.setY(y);
         Main.rootMap.getChildren().add(wall);
     }
+
+    public void renderBrick(double x, double y) throws Exception {
+        brick.setX(x);
+        brick.setY(y);
+        Main.rootMap.getChildren().add(brick);
+    }
+
+
 }
