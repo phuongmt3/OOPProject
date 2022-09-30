@@ -39,8 +39,8 @@ public class RendererBalloom extends Renderer {
         Main.rootMover.getChildren().remove(balloom);
 
         enemydead.setX(x);
-        enemydead.setY(x);
-        balloomdead.setX(y);
+        enemydead.setY(y);
+        balloomdead.setX(x);
         balloomdead.setY(y);
         Timeline t = new Timeline();
         t.setCycleCount(1);
