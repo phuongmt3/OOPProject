@@ -20,9 +20,8 @@ public class RendererMap extends Renderer {
             bombitem = new ImageView(sheet);
             brick.setViewport(new Rectangle2D(side * 7, side * 0, side, side));
             //setViewport for bomb item
-            brick1.setViewport(new Rectangle2D(side * 7, side * 1, side, side));
-            brick2.setViewport(new Rectangle2D(side * 7, side * 2, side, side));
-            brick3.setViewport(new Rectangle2D(side * 7, side * 3, side, side));
+            bombitem.setViewport(new Rectangle2D(side * 10, side * 0, side, side));
+
 
         }
         else if (entity instanceof SpeedItem) {
@@ -30,11 +29,8 @@ public class RendererMap extends Renderer {
             speeditem = new ImageView(sheet);
             brick.setViewport(new Rectangle2D(side * 7, side * 0, side, side));
 
-
-            //setViewport for brick
-            brick1.setViewport(new Rectangle2D(side * 7, side * 1, side, side));
-            brick2.setViewport(new Rectangle2D(side * 7, side * 2, side, side));
-            brick3.setViewport(new Rectangle2D(side * 7, side * 3, side, side));
+            // setViewpoint for SpeedItem
+            speeditem.setViewport(new Rectangle2D(side * 10, side * 2, side, side));
         }
         else if (entity instanceof Portal) {
             brick = new ImageView(sheet);
@@ -42,6 +38,7 @@ public class RendererMap extends Renderer {
             brick.setViewport(new Rectangle2D(side * 7, side * 0, side, side));
 
             //setViewport for portal
+            portal.setViewport(new Rectangle2D(side * 4, side * 0, side, side));
 
         }
         else if (entity instanceof FlameItem) {
@@ -49,12 +46,20 @@ public class RendererMap extends Renderer {
             flameitem = new ImageView(sheet);
             brick.setViewport(new Rectangle2D(side * 7, side * 0, side, side));
             //setViewport for flame item
+            flameitem.setViewport(new Rectangle2D(side * 10, side * 1, side, side));
 
         }
         else if (entity instanceof Brick) {
             brick = new ImageView(sheet);
             brick.setViewport(new Rectangle2D(side * 7, side * 0, side, side));
             // deal with rendering brick when hits bombs.
+            brick1 = new ImageView(sheet);
+            brick1.setViewport(new Rectangle2D(side * 7, side * 1, side, side));
+            brick2 = new ImageView(sheet);
+            brick2.setViewport(new Rectangle2D(side * 7, side * 2, side, side));
+            brick3 = new ImageView(sheet);
+            brick3.setViewport(new Rectangle2D(side * 7, side * 3, side, side));
+
         }
     }
 
@@ -74,6 +79,8 @@ public class RendererMap extends Renderer {
         brick.setX(x);
         brick.setY(y);
         Main.rootMap.getChildren().add(brick);
+
     }
+
 
 }
