@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
-    private int cntlimit = 3;
+    private int cntlimit = 1;
 
     public void addBomb(Bomb bomb) {
         if (bombs.size() == cntlimit)

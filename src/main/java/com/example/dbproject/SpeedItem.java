@@ -1,20 +1,24 @@
 package com.example.dbproject;
 
 public class SpeedItem extends Brick {
+    private boolean used = false;
     public SpeedItem(double x, double y) {
         super(x, y, true);
     }
 
     @Override
-    public void render() {
-        //if isExposed render SpeedItem image
-        //else render Brick image
+    public void setExposed(boolean b) throws Exception {
+        super.setExposed(b);
+        renderer.renderSpeedItem(x, y);
     }
 
-    @Override
-    public void update() {
-        //update isExposed
-        //update if bomber go there
+    public void useItem() {
+        renderer.deleteSpeedItem();
+        used = true;
+    }
+
+    public boolean isUsed() {
+        return used;
     }
 
     @Override

@@ -136,7 +136,7 @@ public class Main extends Application {
                             case 'x' -> map.get(cntLines - 1).add(new Portal(i * defaultSide, (cntLines - 1) * defaultSide));
                             case ' ' -> map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             case 'p' -> {
-                                bomber = new Bomber(i * defaultSide, (cntLines - 1) * defaultSide, 8, map, bombManager, enemyManager);
+                                bomber = new Bomber(i * defaultSide, (cntLines - 1) * defaultSide, defaultSide / 5, map, bombManager, enemyManager);
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '1' -> {
