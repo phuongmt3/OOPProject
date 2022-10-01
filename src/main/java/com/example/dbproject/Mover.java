@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 abstract public class Mover extends Entity {
     protected boolean isDead = false;
-    protected final double speed;
+    protected double speed;
     protected ArrayList<ArrayList<Entity>> map;
     protected BombManager bombManager;
     protected EnemyManager enemyManager;
@@ -45,18 +45,25 @@ abstract public class Mover extends Entity {
         return false;
     }
 
+    private double roundCoordinate(double x) {
+        double newx = Math.round(x);
+        if (Math.abs(x - newx) < 0.1)
+            return newx;
+        return x;
+    }
+
     public boolean canMoveAndMove(MovementType type) {
         boolean inBombPosition = collideBomb();
         if (type == MovementType.LEFT) {
-            double newX = x + type.x * speed;
+            double newX = roundCoordinate(x + type.x * speed);
             newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
             int newidXmap = (int) (newX / Main.defaultSide);
             int newidYmap = (int) (y / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
-                setX(x - type.x * speed);
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+                setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
             else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
@@ -69,15 +76,15 @@ abstract public class Mover extends Entity {
             }
         }
         else if (type == MovementType.RIGHT) {
-            double newX = x + type.x * speed;
+            double newX = roundCoordinate(x + type.x * speed);
             newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
             int newidXmap = (int) (newX / Main.defaultSide) + 1;
             int newidYmap = (int) (y / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
-                setX(x - type.x * speed);
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+                setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
             else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
@@ -90,15 +97,15 @@ abstract public class Mover extends Entity {
             }
         }
         else if (type == MovementType.UP) {
-            double newY = y + type.y * speed;
+            double newY = roundCoordinate(y + type.y * speed);
             newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
             int newidXmap = (int) (x / Main.defaultSide);
             int newidYmap = (int) (newY / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
-                setY(y - type.y * speed);
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+                setY(roundCoordinate(y - type.y * speed));
                 return false;
             }
             else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
@@ -110,16 +117,16 @@ abstract public class Mover extends Entity {
                 return false;
             }
         }
-        else {
-            double newY = y + type.y * speed;
+        else if (type == MovementType.DOWN) {
+            double newY = roundCoordinate(y + type.y * speed);
             newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
             int newidXmap = (int) (x / Main.defaultSide);
             int newidYmap = (int) (newY / Main.defaultSide) + 1;
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
-                setY(y - type.y * speed);
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+                setY(roundCoordinate(y - type.y * speed));
                 return false;
             }
             else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {

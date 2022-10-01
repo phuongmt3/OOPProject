@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class FlameManager extends Entity {
     private double xleft, xright;
     private double yup, ydown;
-    private final int flameLength = 2;
+    private static int flameLength = 1;
     private ArrayList<Flame> flames = new ArrayList<Flame>();
     private Bomber bomber;
     private EnemyManager enemyManager;
@@ -56,7 +56,7 @@ public class FlameManager extends Entity {
         continuousExplosion(bombManager);
     }
 
-    public void updateInfluence() {
+    public void updateInfluence() throws Exception {
         xleft = xright = -100;
         yup = ydown = -100;
         int posxInMap = (int) (x / Main.defaultSide);
@@ -111,5 +111,9 @@ public class FlameManager extends Entity {
                 if (flame.checkCollision(bombManager.getBomb(i))) {
                     bombManager.getBomb(i).explode();
                 }
+    }
+
+    public static void increaseFlameLength() {
+        flameLength += 1;
     }
 }

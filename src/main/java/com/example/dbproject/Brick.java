@@ -1,7 +1,7 @@
 package com.example.dbproject;
 
 public class Brick extends Map {
-    private RendererMap renderer;
+    protected RendererMap renderer;
     protected boolean isExposed = false;
     protected boolean hasItem;
 
@@ -16,12 +16,6 @@ public class Brick extends Map {
         renderer.renderBrick(x, y);
     }
 
-    public void update() throws Exception {
-        if (!hasItem && isExposed)
-            renderer.renderGrass(x, y);
-        else renderer.renderBrick(x, y);
-    }
-
     @Override
     public String getClassName() {
         return "Brick";
@@ -31,7 +25,13 @@ public class Brick extends Map {
         return isExposed;
     }
 
-    public void setExposed(boolean b) {
+    public boolean isHasItem() {
+        return hasItem;
+    }
+
+    public void setExposed(boolean b) throws Exception {
         isExposed = b;
+        renderer.deleteBrick(x, y);
+        renderer.renderGrass(x, y);
     }
 }
