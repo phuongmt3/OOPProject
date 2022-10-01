@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class RendererBalloom extends Renderer {
-    private ImageView balloom, balloomdead, enemydead;
+    private ImageView balloom, balloomdead, enemydead, balloom2;
 
     public RendererBalloom() {
         super();
@@ -16,8 +16,19 @@ public class RendererBalloom extends Renderer {
         balloomdead = new ImageView(sheet);
         enemydead = new ImageView(sheet);
         balloom.setViewport(new Rectangle2D(side * 9, side * 0, side, side));
+        balloom.setViewport(new Rectangle2D(side * 9, side * 1, side, side));
+        balloom.setViewport(new Rectangle2D(side * 9, side * 2, side, side));
+
+        balloom2.setViewport(new Rectangle2D(side * 10, side * 0, side, side));
+        balloom2.setViewport(new Rectangle2D(side * 10, side * 1, side, side));
+        balloom2.setViewport(new Rectangle2D(side * 10, side * 2, side, side));
+
+
         balloomdead.setViewport(new Rectangle2D(side * 9, side * 3, side, side));
         enemydead.setViewport(new Rectangle2D(side * 15, side * 0, side, side));
+        enemydead.setViewport(new Rectangle2D(side * 15, side * 1, side, side));
+        enemydead.setViewport(new Rectangle2D(side * 15, side * 2, side, side));
+
     }
 
     private void initBallom() {
