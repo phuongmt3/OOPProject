@@ -1,4 +1,4 @@
-module com.example.dbproject {
+module com {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -6,6 +6,6 @@ module com.example.dbproject {
     requires com.dlsc.formsfx;
     requires com.almasb.fxgl.all;
 
-    opens com.example.dbproject to javafx.fxml;
-    exports com.example.dbproject;
+    opens com to javafx.fxml;
+    exports com;
 }
