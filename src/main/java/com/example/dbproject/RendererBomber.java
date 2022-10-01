@@ -7,142 +7,128 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import static com.example.dbproject.Mover.MovementType.DOWN;
-import static com.example.dbproject.Mover.MovementType.UP;
+import java.util.ArrayList;
 
 public class RendererBomber extends Renderer {
-    private ImageView bomberdown1, bomberdown2, bomberdown3, bomberdead;
-    private ImageView bomberdead2, bomberdead3;
-
-    private ImageView bomberup1, bomberup2, bomberup3;
-
-    private ImageView bomberleft1, bomberleft2, bomberleft3;
-
-    private ImageView bomberright1, bomberright2, bomberright3;
-
-
-
-    public RendererBomber() {
+    private ArrayList<ArrayList<ImageView>> bomberviews = new ArrayList<ArrayList<ImageView>>();
+    private ImageView bomberdefault;
+    Timeline[] t = new Timeline[4];
+    public RendererBomber(double x, double y) {
         super();
-        bomberdown1 = new ImageView(sheet);
-        bomberdown2 = new ImageView(sheet);
-        bomberdown3 = new ImageView(sheet);
-        bomberdead = new ImageView(sheet);
-        bomberdead2 = new ImageView(sheet);
-        bomberdead3 = new ImageView(sheet);
-        bomberup1 = new ImageView(sheet);
-        bomberup2 = new ImageView(sheet);
-        bomberup3 = new ImageView(sheet);
-        bomberleft1 = new ImageView(sheet);
-        bomberleft2 = new ImageView(sheet);
-        bomberleft3 = new ImageView(sheet);
-        bomberright1 = new ImageView(sheet);
-        bomberright2 = new ImageView(sheet);
-        bomberright3 = new ImageView(sheet);
+        for (int i = 0; i < 5; i++)
+            bomberviews.add(new ArrayList<ImageView>());
+        for (int i = 0; i < 5; i++)
+            for (int j = 0; j < 3; j++)
+                bomberviews.get(i).add(new ImageView(sheet));
 
-        bomberdown1.setViewport(new Rectangle2D(side * 2, side * 0, side, side));
-        bomberdown2.setViewport(new Rectangle2D(side * 2, side * 1, side, side));
-        bomberdown3.setViewport(new Rectangle2D(side * 2, side * 2, side, side));
-        bomberdead.setViewport(new Rectangle2D(side * 4, side * 2, side, side));
-        bomberdead2.setViewport(new Rectangle2D(side * 5, side * 2, side, side));
-        bomberdead3.setViewport(new Rectangle2D(side * 6, side * 2, side, side));
-        bomberup1.setViewport(new Rectangle2D(side * 0, side * 0, side, side));
-        bomberup2.setViewport(new Rectangle2D(side * 1, side * 0, side, side));
-        bomberup2.setViewport(new Rectangle2D(side * 2, side * 0, side, side));
-        bomberleft1.setViewport(new Rectangle2D(side * 0, side * 3, side, side));
-        bomberleft2.setViewport(new Rectangle2D(side * 1, side * 3, side, side));
-        bomberleft3.setViewport(new Rectangle2D(side * 2, side * 3, side, side));
-        bomberright1.setViewport(new Rectangle2D(side * 1, side * 0, side, side));
-        bomberright2.setViewport(new Rectangle2D(side * 1, side * 1, side, side));
-        bomberright3.setViewport(new Rectangle2D(side * 1, side * 2, side, side));
+        bomberdefault = new ImageView(sheet);
+        bomberdefault.setViewport(new Rectangle2D(side * 2, side * 0, side, side));
+        bomberviews.get(Mover.MovementType.DOWN.ordinal()).get(0).setViewport(new Rectangle2D(side * 2, side * 0, side, side));
+        bomberviews.get(Mover.MovementType.DOWN.ordinal()).get(1).setViewport(new Rectangle2D(side * 2, side * 1, side, side));
+        bomberviews.get(Mover.MovementType.DOWN.ordinal()).get(2).setViewport(new Rectangle2D(side * 2, side * 2, side, side));
+        bomberviews.get(4).get(0).setViewport(new Rectangle2D(side * 4, side * 2, side, side));
+        bomberviews.get(4).get(1).setViewport(new Rectangle2D(side * 5, side * 2, side, side));
+        bomberviews.get(4).get(2).setViewport(new Rectangle2D(side * 6, side * 2, side, side));
+        bomberviews.get(Mover.MovementType.UP.ordinal()).get(0).setViewport(new Rectangle2D(side * 0, side * 0, side, side));
+        bomberviews.get(Mover.MovementType.UP.ordinal()).get(1).setViewport(new Rectangle2D(side * 0, side * 1, side, side));
+        bomberviews.get(Mover.MovementType.UP.ordinal()).get(2).setViewport(new Rectangle2D(side * 0, side * 2, side, side));
+        bomberviews.get(Mover.MovementType.LEFT.ordinal()).get(0).setViewport(new Rectangle2D(side * 3, side * 0, side, side));
+        bomberviews.get(Mover.MovementType.LEFT.ordinal()).get(1).setViewport(new Rectangle2D(side * 3, side * 1, side, side));
+        bomberviews.get(Mover.MovementType.LEFT.ordinal()).get(2).setViewport(new Rectangle2D(side * 3, side * 2, side, side));
+        bomberviews.get(Mover.MovementType.RIGHT.ordinal()).get(0).setViewport(new Rectangle2D(side * 1, side * 0, side, side));
+        bomberviews.get(Mover.MovementType.RIGHT.ordinal()).get(1).setViewport(new Rectangle2D(side * 1, side * 1, side, side));
+        bomberviews.get(Mover.MovementType.RIGHT.ordinal()).get(2).setViewport(new Rectangle2D(side * 1, side * 2, side, side));
 
+        renderBomberDefault(x, y);
+        initAnimation(Mover.MovementType.DOWN);
+        initAnimation(Mover.MovementType.UP);
+        initAnimation(Mover.MovementType.LEFT);
+        initAnimation(Mover.MovementType.RIGHT);
     }
 
-    private void initBomber() {
-        Main.rootMover.getChildren().add(bomberdown1);
-        t.setCycleCount(Timeline.INDEFINITE);
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
+    public void renderBomberDefault(double x, double y) {
+        bomberdefault.setX(x);
+        bomberdefault.setY(y);
+        Main.rootMover.getChildren().add(bomberdefault);
+    }
+
+    private void initAnimation(Mover.MovementType dir) {
+        t[dir.ordinal()] = new Timeline();
+        t[dir.ordinal()].setCycleCount(1);
+        t[dir.ordinal()].getCycleDuration();
+        t[dir.ordinal()].getKeyFrames().add(new KeyFrame(Duration.millis(0),
                 (ActionEvent event) -> {
-                    Main.rootMover.getChildren().remove(bomberdown1);
-                    Main.rootMover.getChildren().add(bomberdown2);
+                    Main.rootMover.getChildren().remove(bomberviews.get(dir.ordinal()).get(0));
+                    Main.rootMover.getChildren().add(bomberviews.get(dir.ordinal()).get(0));
                 }));
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
+        t[dir.ordinal()].getKeyFrames().add(new KeyFrame(Duration.millis(90),
                 (ActionEvent event) -> {
-                    Main.rootMover.getChildren().remove(bomberdown2);
-                    Main.rootMover.getChildren().add(bomberdown3);
+                    Main.rootMover.getChildren().remove(bomberviews.get(dir.ordinal()).get(0));
+                    Main.rootMover.getChildren().add(bomberviews.get(dir.ordinal()).get(1));
                 }));
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(600),
+        t[dir.ordinal()].getKeyFrames().add(new KeyFrame(Duration.millis(180),
                 (ActionEvent event) -> {
-                    Main.rootMover.getChildren().remove(bomberdown3);
-                    Main.rootMover.getChildren().add(bomberdown1);
+                    Main.rootMover.getChildren().remove(bomberviews.get(dir.ordinal()).get(1));
+                    Main.rootMover.getChildren().add(bomberviews.get(dir.ordinal()).get(2));
                 }));
-        t.play();
+        t[dir.ordinal()].getKeyFrames().add(new KeyFrame(Duration.millis(270),
+                (ActionEvent event) -> {
+                    Main.rootMover.getChildren().remove(bomberviews.get(dir.ordinal()).get(2));
+                    Main.rootMover.getChildren().add(bomberviews.get(dir.ordinal()).get(0));
+                }));
+    }
+
+    public void stopAnimation(Mover.MovementType dir) {
+        Main.rootMover.getChildren().remove(bomberdefault);
+        int id = 0;
+        if (dir == null)
+            id = -1;
+        else id = dir.ordinal();
+        for (int i = 0; i < 4; i++)
+            if (id != i) {
+                Main.rootMover.getChildren().remove(bomberviews.get(i).get(0));
+                Main.rootMover.getChildren().remove(bomberviews.get(i).get(1));
+                Main.rootMover.getChildren().remove(bomberviews.get(i).get(2));
+                t[i].stop();
+            }
+    }
+
+    public void startAnimation(Mover.MovementType dir) {
+        stopAnimation(dir);
+        t[dir.ordinal()].play();
     }
     public void renderBomber(double x, double y) throws Exception {
-        //if key down
-        bomberdown1.setX(x);
-        bomberdown2.setX(x);
-        bomberdown3.setX(x);
-        bomberdown1.setY(y);
-        bomberdown2.setY(y);
-        bomberdown3.setY(y);
-        //if key up
-        bomberup1.setX(x);
-        bomberup2.setX(x);
-        bomberup3.setX(x);
-        bomberup1.setY(y);
-        bomberup2.setY(y);
-        bomberup3.setY(y);
-        //if key left
-        bomberleft1.setX(x);
-        bomberleft2.setX(x);
-        bomberleft3.setX(x);
-        bomberleft1.setY(y);
-        bomberleft2.setY(y);
-        bomberleft3.setY(y);
-        //if key right
-        bomberright1.setX(x);
-        bomberright2.setX(x);
-        bomberright3.setX(x);
-        bomberright1.setY(y);
-        bomberright2.setY(y);
-        bomberright3.setY(y);
-
-        if (firstTime) {
-            initBomber();
-            firstTime = false;
-        }
+        bomberdefault.setX(x);
+        bomberdefault.setY(y);
+        for (int i = 0; i < 5; i++)
+            for (int j = 0; j < 3; j++) {
+                bomberviews.get(i).get(j).setX(x);
+                bomberviews.get(i).get(j).setY(y);
+            }
     }
 
-    public void deleteBomber(double x, double y) {  //animation for bomber die
-        t.getKeyFrames().removeAll();
-        t.stop();
-        Main.rootMover.getChildren().remove(bomberdown1);
-        Main.rootMover.getChildren().remove(bomberdown2);
-        Main.rootMover.getChildren().remove(bomberdown3);
-        Main.rootMover.getChildren().remove(bomberup1);
-        Main.rootMover.getChildren().remove(bomberup2);
-        Main.rootMover.getChildren().remove(bomberup3);
-        Main.rootMover.getChildren().remove(bomberleft1);
-        Main.rootMover.getChildren().remove(bomberleft2);
-        Main.rootMover.getChildren().remove(bomberleft3);
-        Main.rootMover.getChildren().remove(bomberright1);
-        Main.rootMover.getChildren().remove(bomberright2);
-        Main.rootMover.getChildren().remove(bomberright3);
-
-        bomberdead.setX(x);
-        bomberdead.setY(y);
+    public void deleteBomber(double x, double y) {
+        stopAnimation(null);
         Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),
                 (ActionEvent event) -> {
-                    Main.rootMover.getChildren().add(bomberdead);
+                    Main.rootMover.getChildren().add(bomberviews.get(4).get(0));
                 }));
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(2000),
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
                 (ActionEvent event) -> {
-                    Main.rootMover.getChildren().remove(bomberdead);
+                    Main.rootMover.getChildren().remove(bomberviews.get(4).get(0));
+                    Main.rootMover.getChildren().add(bomberviews.get(4).get(1));
                 }));
-        //add more keyframes
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
+                (ActionEvent event) -> {
+                    Main.rootMover.getChildren().remove(bomberviews.get(4).get(1));
+                    Main.rootMover.getChildren().add(bomberviews.get(4).get(2));
+                }));
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(600),
+                (ActionEvent event) -> {
+                    Main.rootMover.getChildren().remove(bomberviews.get(4).get(2));
+                }));
         t.play();
     }
 }

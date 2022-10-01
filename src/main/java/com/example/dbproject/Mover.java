@@ -46,7 +46,10 @@ abstract public class Mover extends Entity {
     }
 
     private double roundCoordinate(double x) {
-        return Math.round(x * 100) / 100f;
+        double newx = Math.round(x);
+        if (Math.abs(x - newx) < 0.1)
+            return newx;
+        return x;
     }
 
     public boolean canMoveAndMove(MovementType type) {
@@ -59,7 +62,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
                 setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
@@ -80,7 +83,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
                 setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
@@ -101,7 +104,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
                 setY(roundCoordinate(y - type.y * speed));
                 return false;
             }
@@ -114,7 +117,7 @@ abstract public class Mover extends Entity {
                 return false;
             }
         }
-        else {
+        else if (type == MovementType.DOWN) {
             double newY = roundCoordinate(y + type.y * speed);
             newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
             int newidXmap = (int) (x / Main.defaultSide);
@@ -122,7 +125,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if ((!inBombPosition && collideBomb()) || colllideOtherEnemy()) {
+            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
                 setY(roundCoordinate(y - type.y * speed));
                 return false;
             }

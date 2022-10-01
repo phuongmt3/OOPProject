@@ -2,24 +2,17 @@ package com.example.dbproject;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Main extends Application {
     static public Stage stage;
@@ -76,6 +69,16 @@ public class Main extends Application {
         stage.setTitle("Bomberman");
         stage.show();
     }
+
+    private void updateBomber(Mover.MovementType dir) {
+        bomber.canMoveAndMove(dir);
+        try {
+            bomber.render(dir);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void update() throws Exception {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -86,10 +89,10 @@ public class Main extends Application {
                     return;
                 }
                 switch (event.getCode()) {
-                    case UP -> bomber.canMoveAndMove(Bomber.MovementType.UP);
-                    case DOWN -> bomber.canMoveAndMove(Bomber.MovementType.DOWN);
-                    case RIGHT -> bomber.canMoveAndMove(Bomber.MovementType.RIGHT);
-                    case LEFT -> bomber.canMoveAndMove(Bomber.MovementType.LEFT);
+                    case UP -> updateBomber(Bomber.MovementType.UP);
+                    case DOWN -> updateBomber(Bomber.MovementType.DOWN);
+                    case RIGHT -> updateBomber(Bomber.MovementType.RIGHT);
+                    case LEFT -> updateBomber(Bomber.MovementType.LEFT);
                     case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY(), bombManager, bomber, enemyManager, map));
                     case ESCAPE -> System.exit(0);
                 }
