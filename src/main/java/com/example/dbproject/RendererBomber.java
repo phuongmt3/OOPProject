@@ -12,14 +12,15 @@ import java.util.ArrayList;
 public class RendererBomber extends Renderer {
     private ArrayList<ArrayList<ImageView>> bomberviews = new ArrayList<ArrayList<ImageView>>();
     private ImageView bomberdefault;
-    Timeline[] t = new Timeline[4];
+    private Timeline[] t = new Timeline[4];
     public RendererBomber(double x, double y) {
         super();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++) {
             bomberviews.add(new ArrayList<ImageView>());
-        for (int i = 0; i < 5; i++)
-            for (int j = 0; j < 3; j++)
-                bomberviews.get(i).add(new ImageView(sheet));
+            bomberviews.get(i).add(new ImageView(sheet));
+            bomberviews.get(i).add(new ImageView(sheet));
+            bomberviews.get(i).add(new ImageView(sheet));
+        }
 
         bomberdefault = new ImageView(sheet);
         bomberdefault.setViewport(new Rectangle2D(side * 2, side * 0, side, side));
@@ -39,23 +40,18 @@ public class RendererBomber extends Renderer {
         bomberviews.get(Mover.MovementType.RIGHT.ordinal()).get(1).setViewport(new Rectangle2D(side * 1, side * 1, side, side));
         bomberviews.get(Mover.MovementType.RIGHT.ordinal()).get(2).setViewport(new Rectangle2D(side * 1, side * 2, side, side));
 
-        renderBomberDefault(x, y);
+        bomberdefault.setX(x);
+        bomberdefault.setY(y);
+        Main.rootMover.getChildren().add(bomberdefault);
         initAnimation(Mover.MovementType.DOWN);
         initAnimation(Mover.MovementType.UP);
         initAnimation(Mover.MovementType.LEFT);
         initAnimation(Mover.MovementType.RIGHT);
     }
 
-    public void renderBomberDefault(double x, double y) {
-        bomberdefault.setX(x);
-        bomberdefault.setY(y);
-        Main.rootMover.getChildren().add(bomberdefault);
-    }
-
     private void initAnimation(Mover.MovementType dir) {
         t[dir.ordinal()] = new Timeline();
         t[dir.ordinal()].setCycleCount(1);
-        t[dir.ordinal()].getCycleDuration();
         t[dir.ordinal()].getKeyFrames().add(new KeyFrame(Duration.millis(0),
                 (ActionEvent event) -> {
                     Main.rootMover.getChildren().remove(bomberviews.get(dir.ordinal()).get(0));
@@ -78,7 +74,7 @@ public class RendererBomber extends Renderer {
                 }));
     }
 
-    public void stopAnimation(Mover.MovementType dir) {
+    private void stopAnimation(Mover.MovementType dir) {
         Main.rootMover.getChildren().remove(bomberdefault);
         int id = 0;
         if (dir == null)
@@ -98,8 +94,6 @@ public class RendererBomber extends Renderer {
         t[dir.ordinal()].play();
     }
     public void renderBomber(double x, double y) throws Exception {
-        bomberdefault.setX(x);
-        bomberdefault.setY(y);
         for (int i = 0; i < 5; i++)
             for (int j = 0; j < 3; j++) {
                 bomberviews.get(i).get(j).setX(x);
@@ -107,7 +101,7 @@ public class RendererBomber extends Renderer {
             }
     }
 
-    public void deleteBomber(double x, double y) {
+    public void deleteBomber() {
         stopAnimation(null);
         Timeline t = new Timeline();
         t.setCycleCount(1);

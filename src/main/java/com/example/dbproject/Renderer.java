@@ -20,10 +20,8 @@ import java.util.Set;
 
 public abstract class Renderer {
     protected static Image sheet;
-    protected boolean firstTime = true;
     protected final double scale = 2.0;
     protected final double side = 16 * scale;
-    Timeline t = new Timeline();
     public static enum Direction {
         center, left, right, up, down, middlerow, middlecol
     };

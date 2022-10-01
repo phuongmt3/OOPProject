@@ -13,9 +13,8 @@ public class Balloom extends Enemy {
 
     @Override
     public void update() {
-        //auto move
         if (isDead()) {
-            renderer.deleteBalloom(x, y);
+            renderer.deleteBalloom();
             enemyManager.removeEnemy(this);
         }
         if (direction == MovementType.RIGHT && !canMoveAndMove(MovementType.RIGHT)) {
@@ -26,6 +25,8 @@ public class Balloom extends Enemy {
             canMoveAndMove(MovementType.RIGHT);
             direction = MovementType.RIGHT;
         }
+        if (!isDead)
+            renderer.startAnimation(direction);
     }
 
     @Override

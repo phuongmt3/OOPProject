@@ -9,6 +9,8 @@ import javafx.util.Duration;
 
 public class RendererBomb extends Renderer {
     private ImageView bomb, bomb2, bomb3;
+    private Timeline t = new Timeline();
+    private boolean firstTime = true;
 
     public RendererBomb() {
         super();

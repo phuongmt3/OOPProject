@@ -18,7 +18,7 @@ public class Oneal extends Enemy {
     @Override
     public void update() {
         if (isDead()) {
-            renderer.deleteOneal(x, y);
+            renderer.deleteOneal();
             enemyManager.removeEnemy(this);
         }
         if (direction == MovementType.UP && !canMoveAndMove(MovementType.UP)) {
@@ -29,5 +29,7 @@ public class Oneal extends Enemy {
             canMoveAndMove(MovementType.UP);
             direction = MovementType.UP;
         }
+        if (!isDead)
+            renderer.startAnimation(direction);
     }
 }

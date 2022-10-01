@@ -56,7 +56,7 @@ public class Bomber extends Mover {
     @Override
     public void render() throws Exception {
         if (isDead() && !renderDead) {
-            renderer.deleteBomber(x, y);
+            renderer.deleteBomber();
             renderDead = true;
         }
         else if (!isDead())

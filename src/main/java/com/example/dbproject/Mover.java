@@ -9,8 +9,7 @@ abstract public class Mover extends Entity {
     protected BombManager bombManager;
     protected EnemyManager enemyManager;
     public static enum MovementType {
-        LEFT(-1, 0), RIGHT(1, 0),
-        UP(0, -1), DOWN(0, 1);
+        LEFT(-1, 0), UP(0, -1), RIGHT(1, 0), DOWN(0, 1);
         public final int x, y;
         MovementType(int x, int y) {
             this.x = x;

@@ -73,22 +73,23 @@ public class RendererMap extends Renderer {
         brick2.setY(y);
         brick3.setX(x);
         brick3.setY(y);
+        Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),
                 (ActionEvent event) -> {
                     Main.rootMover.getChildren().add(brick1);
                 }));
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(200),
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(150),
                 (ActionEvent event) -> {
                     Main.rootMover.getChildren().remove(brick1);
                     Main.rootMover.getChildren().add(brick2);
                 }));
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(400),
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(300),
                 (ActionEvent event) -> {
                     Main.rootMover.getChildren().remove(brick2);
                     Main.rootMover.getChildren().add(brick3);
                 }));
-        t.getKeyFrames().add(new KeyFrame(Duration.millis(600),
+        t.getKeyFrames().add(new KeyFrame(Duration.millis(450),
                 (ActionEvent event) -> {
                     Main.rootMover.getChildren().remove(brick3);
                 }));
