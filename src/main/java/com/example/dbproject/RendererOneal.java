@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class RendererOneal extends Renderer {
-    private ImageView oneal, onealdead, enemydead;
+    private ImageView oneal, onealdead, enemydead, oneal2;
 
     public RendererOneal() {
         super();
@@ -16,8 +16,17 @@ public class RendererOneal extends Renderer {
         onealdead = new ImageView(sheet);
         enemydead = new ImageView(sheet);
         oneal.setViewport(new Rectangle2D(side * 11, side * 0, side, side));
+        oneal.setViewport(new Rectangle2D(side * 11, side * 1, side, side));
+        oneal.setViewport(new Rectangle2D(side * 11, side * 2, side, side));
+
+        oneal2.setViewport(new Rectangle2D(side * 12, side * 0, side, side));
+        oneal2.setViewport(new Rectangle2D(side * 12, side * 1, side, side));
+        oneal2.setViewport(new Rectangle2D(side * 12, side * 2, side, side));
+
         onealdead.setViewport(new Rectangle2D(side * 11, side * 3, side, side));
         enemydead.setViewport(new Rectangle2D(side * 15, side * 0, side, side));
+        enemydead.setViewport(new Rectangle2D(side * 15, side * 1, side, side));
+        enemydead.setViewport(new Rectangle2D(side * 15, side * 2, side, side));
     }
 
     private void initOneal() {  //add animation
