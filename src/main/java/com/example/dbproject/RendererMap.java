@@ -52,13 +52,13 @@ public class RendererMap extends Renderer {
         else if (entity instanceof Brick) {
             brick = new ImageView(sheet);
             brick.setViewport(new Rectangle2D(side * 7, side * 0, side, side));
-            // deal with rendering brick when hits bombs.
+            /* deal with rendering brick when hits bombs.
             brick1 = new ImageView(sheet);
             brick1.setViewport(new Rectangle2D(side * 7, side * 1, side, side));
             brick2 = new ImageView(sheet);
             brick2.setViewport(new Rectangle2D(side * 7, side * 2, side, side));
             brick3 = new ImageView(sheet);
-            brick3.setViewport(new Rectangle2D(side * 7, side * 3, side, side));
+            brick3.setViewport(new Rectangle2D(side * 7, side * 3, side, side));*/
 
         }
     }

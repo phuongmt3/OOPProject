@@ -47,11 +47,11 @@ public class RendererBomber extends Renderer {
         bomberdead2.setViewport(new Rectangle2D(side * 5, side * 2, side, side));
         bomberdead3.setViewport(new Rectangle2D(side * 6, side * 2, side, side));
         bomberup1.setViewport(new Rectangle2D(side * 0, side * 0, side, side));
-        bomberup2.setViewport(new Rectangle2D(side * 1, side * 0, side, side));
-        bomberup2.setViewport(new Rectangle2D(side * 2, side * 0, side, side));
-        bomberleft1.setViewport(new Rectangle2D(side * 0, side * 3, side, side));
-        bomberleft2.setViewport(new Rectangle2D(side * 1, side * 3, side, side));
-        bomberleft3.setViewport(new Rectangle2D(side * 2, side * 3, side, side));
+        bomberup2.setViewport(new Rectangle2D(side * 0, side * 1, side, side));
+        bomberup2.setViewport(new Rectangle2D(side * 0, side * 2, side, side));
+        bomberleft1.setViewport(new Rectangle2D(side * 3, side * 0, side, side));
+        bomberleft2.setViewport(new Rectangle2D(side * 3, side * 1, side, side));
+        bomberleft3.setViewport(new Rectangle2D(side * 3, side * 2, side, side));
         bomberright1.setViewport(new Rectangle2D(side * 1, side * 0, side, side));
         bomberright2.setViewport(new Rectangle2D(side * 1, side * 1, side, side));
         bomberright3.setViewport(new Rectangle2D(side * 1, side * 2, side, side));

@@ -19,7 +19,7 @@ public class Brick extends Map {
     public void update() throws Exception {
         if (!hasItem && isExposed)
             renderer.renderGrass(x, y);
-        //else renderer.renderBrick(x, y);
+        else renderer.renderBrick(x, y);
     }
 
     @Override
