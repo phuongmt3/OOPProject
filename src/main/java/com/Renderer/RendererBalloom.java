@@ -87,6 +87,10 @@ public class RendererBalloom extends Renderer {
         }
     }
 
+    public void pauseAnimation(Mover.MovementType dir) {
+        t[dir.ordinal() / 2].pause();
+    }
+
     public void startAnimation(Mover.MovementType dir) {
         stopAnimation(dir);
         t[dir.ordinal() / 2].play();

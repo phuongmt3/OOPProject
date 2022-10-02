@@ -4,7 +4,6 @@ import com.Entities.Entity;
 import com.Entities.Movers.Bomber;
 import com.Entities.Movers.Enemies.EnemyManager;
 import com.Renderer.RendererBomb;
-import javafx.animation.AnimationTimer;
 
 import java.util.ArrayList;
 

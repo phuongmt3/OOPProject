@@ -3,17 +3,10 @@ package com;
 import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
 import com.Entities.Entity;
-import com.Entities.Maps.Brick;
-import com.Entities.Maps.Grass;
-import com.Entities.Maps.Items.BombItem;
-import com.Entities.Maps.Items.FlameItem;
-import com.Entities.Maps.Items.Portal;
-import com.Entities.Maps.Items.SpeedItem;
-import com.Entities.Maps.Wall;
+import com.Entities.Maps.*;
+import com.Entities.Maps.Items.*;
 import com.Entities.Movers.Bomber;
-import com.Entities.Movers.Enemies.Balloom;
-import com.Entities.Movers.Enemies.EnemyManager;
-import com.Entities.Movers.Enemies.Oneal;
+import com.Entities.Movers.Enemies.*;
 import com.Entities.Movers.Mover;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -158,11 +151,11 @@ public class Main extends Application {
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '1' -> {
-                                enemyManager.addEnemy(new Balloom(i * defaultSide, (cntLines - 1) * defaultSide, 1, map, bombManager, enemyManager));
+                                enemyManager.addEnemy(new Balloom(i * defaultSide, (cntLines - 1) * defaultSide, 1, map, bombManager, enemyManager, bomber));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '2' -> {
-                                enemyManager.addEnemy(new Oneal(i * defaultSide, (cntLines - 1) * defaultSide, 2, map, bombManager, enemyManager));
+                                enemyManager.addEnemy(new Oneal(i * defaultSide, (cntLines - 1) * defaultSide, 1.5, map, bombManager, enemyManager, bomber));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case 'b' -> map.get(cntLines - 1).add(new BombItem(i * defaultSide, (cntLines - 1) * defaultSide));

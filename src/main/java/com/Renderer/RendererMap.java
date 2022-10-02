@@ -1,13 +1,9 @@
 package com.Renderer;
 
-import com.*;
+import com.Main;
 import com.Entities.Entity;
-import com.Entities.Maps.Brick;
-import com.Entities.Maps.Items.BombItem;
-import com.Entities.Maps.Items.FlameItem;
-import com.Entities.Maps.Items.Portal;
-import com.Entities.Maps.Items.SpeedItem;
-import com.Entities.Maps.Wall;
+import com.Entities.Maps.*;
+import com.Entities.Maps.Items.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;

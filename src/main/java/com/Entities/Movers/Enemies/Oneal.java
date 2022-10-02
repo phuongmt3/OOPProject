@@ -2,16 +2,21 @@ package com.Entities.Movers.Enemies;
 
 import com.Entities.Bomb.BombManager;
 import com.Entities.Entity;
+import com.Entities.Movers.Bomber;
+import com.Main;
 import com.Renderer.RendererOneal;
 
 import java.util.ArrayList;
 
 public class Oneal extends Enemy {
     private RendererOneal renderer = new RendererOneal();
-    private MovementType direction = MovementType.UP;
+    private final double fastSpeed = 2.5, normSpeed = 1.5;
+    private final int nearLimit = 5;
+    private int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private int steps;
     public Oneal(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
-                 BombManager bombManager, EnemyManager enemyManager) {
-        super(x, y, speed, map, bombManager, enemyManager);
+                 BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
+        super(x, y, speed, map, bombManager, enemyManager, bomber);
     }
 
     @Override
@@ -25,15 +30,30 @@ public class Oneal extends Enemy {
             renderer.deleteOneal();
             enemyManager.removeEnemy(this);
         }
-        if (direction == MovementType.UP && !canMoveAndMove(MovementType.UP)) {
-            canMoveAndMove(MovementType.DOWN);
-            direction = MovementType.DOWN;
+
+        if (steps == 0) {
+            if (Math.abs(x - bomber.getX()) <= nearLimit * Main.defaultSide
+                    && Math.abs(y - bomber.getY()) <= nearLimit * Main.defaultSide) {
+                x = moveToNeareastSquare(x);
+                y = moveToNeareastSquare(y);
+                direction = getMoveDirectionToBomber();
+                speed = fastSpeed;
+                stepsPerSquare = (int) (Main.defaultSide / speed);
+            }
+            else {
+                direction = getRandomMoveDirection();
+                speed = normSpeed;
+                stepsPerSquare = (int) (Main.defaultSide / speed);
+            }
         }
-        else if (direction == MovementType.DOWN && !canMoveAndMove(MovementType.DOWN)) {
-            canMoveAndMove(MovementType.UP);
-            direction = MovementType.UP;
-        }
+        else
+            canMoveAndMove(direction);
+        steps++;
+        steps = steps % stepsPerSquare;
+
         if (!isDead)
             renderer.startAnimation(direction);
+        if (colllideOtherEnemy())
+            renderer.pauseAnimation(direction);
     }
 }

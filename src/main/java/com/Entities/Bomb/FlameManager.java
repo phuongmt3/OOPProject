@@ -1,12 +1,9 @@
 package com.Entities.Bomb;
 
 import com.Entities.Entity;
-import com.Entities.Maps.Brick;
-import com.Entities.Maps.Map;
-import com.Entities.Maps.Wall;
-import com.Entities.Movers.Bomber;
+import com.Entities.Maps.*;
+import com.Entities.Movers.*;
 import com.Entities.Movers.Enemies.EnemyManager;
-import com.Entities.Movers.Mover;
 import com.Main;
 import com.Renderer.Renderer;
 

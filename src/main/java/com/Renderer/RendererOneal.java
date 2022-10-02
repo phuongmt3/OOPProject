@@ -2,7 +2,6 @@ package com.Renderer;
 
 import com.Entities.Movers.Mover;
 import com.Main;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -82,6 +81,10 @@ public class RendererOneal extends Renderer {
             if (!has)
                 Main.rootMover.getChildren().add(onealviews.get(id).get(0));
         }
+    }
+
+    public void pauseAnimation(Mover.MovementType dir) {
+        t[dir.ordinal() / 2].pause();
     }
 
     public void startAnimation(Mover.MovementType dir) {

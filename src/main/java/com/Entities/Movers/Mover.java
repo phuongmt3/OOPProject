@@ -2,14 +2,11 @@ package com.Entities.Movers;
 
 import com.Entities.Bomb.BombManager;
 import com.Entities.Entity;
-import com.Entities.Maps.Brick;
-import com.Entities.Maps.Wall;
-import com.Entities.Movers.Enemies.Enemy;
-import com.Entities.Movers.Enemies.EnemyManager;
+import com.Entities.Maps.*;
+import com.Entities.Movers.Enemies.*;
 import com.Main;
 
 import java.util.ArrayList;
-
 abstract public class Mover extends Entity {
     protected boolean isDead = false;
     protected double speed;
@@ -41,7 +38,7 @@ abstract public class Mover extends Entity {
         return false;
     }
 
-    private boolean colllideOtherEnemy() {
+    protected boolean colllideOtherEnemy() {
         for (int i = 0; i < enemyManager.countEnemies(); i++) {
             Enemy x = enemyManager.getEnemy(i);
             if (x.getX() == this.x && x.getY() == this.y)
@@ -52,9 +49,13 @@ abstract public class Mover extends Entity {
         return false;
     }
 
+    protected double moveToNeareastSquare(double x) {
+        return Math.round(x / Main.defaultSide) * Main.defaultSide;
+    }
+
     private double roundCoordinate(double x) {
-        double newx = Math.round(x);
-        if (Math.abs(x - newx) < 0.1)
+        double newx = moveToNeareastSquare(x);
+        if (Math.abs(x - newx) < 1)
             return newx;
         return x;
     }
@@ -69,7 +70,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+            if (!inBombPosition && collideBomb()) {
                 setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
@@ -90,7 +91,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
-            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+            if (!inBombPosition && collideBomb()) {
                 setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
@@ -111,7 +112,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+            if (!inBombPosition && collideBomb()) {
                 setY(roundCoordinate(y - type.y * speed));
                 return false;
             }
@@ -132,7 +133,7 @@ abstract public class Mover extends Entity {
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
-            if ((!inBombPosition && collideBomb()) || (this instanceof Enemy && colllideOtherEnemy())) {
+            if (!inBombPosition && collideBomb()) {
                 setY(roundCoordinate(y - type.y * speed));
                 return false;
             }
