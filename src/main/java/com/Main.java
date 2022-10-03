@@ -158,6 +158,10 @@ public class Main extends Application {
                                 enemyManager.addEnemy(new Oneal(i * defaultSide, (cntLines - 1) * defaultSide, 1.5, map, bombManager, enemyManager, bomber));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
+                            case '3' -> {
+                                enemyManager.addEnemy(new Dahl(i * defaultSide, (cntLines - 1) * defaultSide, 1.75, map, bombManager, enemyManager, bomber));
+                                map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
+                            }
                             case 'b' -> map.get(cntLines - 1).add(new BombItem(i * defaultSide, (cntLines - 1) * defaultSide));
                             case 'f' -> map.get(cntLines - 1).add(new FlameItem(i * defaultSide, (cntLines - 1) * defaultSide));
                             case 's' -> map.get(cntLines - 1).add(new SpeedItem(i * defaultSide, (cntLines - 1) * defaultSide));

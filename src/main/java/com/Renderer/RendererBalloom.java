@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class RendererBalloom extends Renderer {
     private ArrayList<ArrayList<ImageView>> balloomviews = new ArrayList<ArrayList<ImageView>>();
-    private ImageView balloomdefault;
     private Timeline[] t = new Timeline[2];
 
     public RendererBalloom() {
@@ -26,9 +25,7 @@ public class RendererBalloom extends Renderer {
             balloomviews.get(i).add(new ImageView(sheet));
         }
         balloomviews.get(2).add(new ImageView(sheet));
-        balloomdefault = new ImageView(sheet);
 
-        balloomdefault.setViewport(new Rectangle2D(side * 9, side * 0, side, side));
         balloomviews.get(0).get(0).setViewport(new Rectangle2D(side * 9, side * 0, side, side));
         balloomviews.get(0).get(1).setViewport(new Rectangle2D(side * 9, side * 1, side, side));
         balloomviews.get(0).get(2).setViewport(new Rectangle2D(side * 9, side * 2, side, side));
@@ -102,8 +99,6 @@ public class RendererBalloom extends Renderer {
                 balloomviews.get(i).get(j).setX(x);
                 balloomviews.get(i).get(j).setY(y);
             }
-        balloomdefault.setX(x);
-        balloomdefault.setY(y);
     }
 
     public void deleteBalloom() {

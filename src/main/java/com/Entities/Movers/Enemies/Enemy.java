@@ -54,6 +54,36 @@ public abstract class Enemy extends Mover {
         return getRandomMoveDirection();
     }
 
+    //get bouncy when in the same row/col with bomber
+    protected MovementType getMoveDirectionForDahl() {
+        int overallDirection = random.nextInt(10);
+        Mover.MovementType dir = direction;
+        int changeDirection = random.nextInt(2);
+
+        if (overallDirection == 0) {
+            //up or down direction
+            if (changeDirection == 0)
+                dir = Mover.MovementType.values()[random.nextInt(2) * 2 + 1];
+            else if (dir != MovementType.UP && dir != MovementType.DOWN)
+                dir = Mover.MovementType.values()[random.nextInt(2) * 2 + 1];
+            if (canMoveAndMove(dir))
+                return dir;
+            else if (canMoveAndMove(MovementType.values()[4 - dir.ordinal()]))
+                return MovementType.values()[4 - dir.ordinal()];
+            else return getRandomMoveDirection();
+        }
+        //left or right direction
+        if (changeDirection == 0)
+            dir = Mover.MovementType.values()[random.nextInt(2) * 2];
+        else if (dir != MovementType.LEFT && dir != MovementType.RIGHT)
+            dir = Mover.MovementType.values()[random.nextInt(2) * 2];
+        if (canMoveAndMove(dir))
+            return dir;
+        else if (canMoveAndMove(MovementType.values()[2 - dir.ordinal()]))
+            return MovementType.values()[2 - dir.ordinal()];
+        else return getRandomMoveDirection();
+    }
+
     @Override
     public String getClassName() {
         return "Enemy";
