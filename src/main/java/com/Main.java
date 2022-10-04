@@ -151,15 +151,27 @@ public class Main extends Application {
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '1' -> {
-                                enemyManager.addEnemy(new Balloom(i * defaultSide, (cntLines - 1) * defaultSide, 1, map, bombManager, enemyManager, bomber));
+                                enemyManager.addEnemy(new Balloom(i * defaultSide, (cntLines - 1) * defaultSide, 1.5, map, bombManager, enemyManager, bomber));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '2' -> {
-                                enemyManager.addEnemy(new Oneal(i * defaultSide, (cntLines - 1) * defaultSide, 1.5, map, bombManager, enemyManager, bomber));
+                                enemyManager.addEnemy(new Oneal(i * defaultSide, (cntLines - 1) * defaultSide, 2, map, bombManager, enemyManager, bomber));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '3' -> {
-                                enemyManager.addEnemy(new Dahl(i * defaultSide, (cntLines - 1) * defaultSide, 1.75, map, bombManager, enemyManager, bomber));
+                                enemyManager.addEnemy(new Dahl(i * defaultSide, (cntLines - 1) * defaultSide, 2.25, map, bombManager, enemyManager, bomber));
+                                map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
+                            }
+                            case '4' -> {
+                                enemyManager.addEnemy(new Doria(i * defaultSide, (cntLines - 1) * defaultSide, 1, map, bombManager, enemyManager, bomber));
+                                map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
+                            }
+                            case '5' -> {
+                                enemyManager.addEnemy(new Ovape(i * defaultSide, (cntLines - 1) * defaultSide, 2, map, bombManager, enemyManager, bomber));
+                                map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
+                            }
+                            case '6' -> {
+                                enemyManager.addEnemy(new Pass(i * defaultSide, (cntLines - 1) * defaultSide, 2.4, map, bombManager, enemyManager, bomber));
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case 'b' -> map.get(cntLines - 1).add(new BombItem(i * defaultSide, (cntLines - 1) * defaultSide));

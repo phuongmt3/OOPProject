@@ -44,7 +44,8 @@ public class RendererOneal extends Renderer {
         t[type].setCycleCount(1);
         t[type].getKeyFrames().add(new KeyFrame(Duration.millis(300),
                 (ActionEvent event) -> {
-                    Main.rootMover.getChildren().remove(onealviews.get(type).get(0));
+                    Main.rootMover.getChildren().remove(onealviews.get(0).get(0));
+                    Main.rootMover.getChildren().remove(onealviews.get(1).get(0));
                     Main.rootMover.getChildren().add(onealviews.get(type).get(1));
                 }));
         t[type].getKeyFrames().add(new KeyFrame(Duration.millis(600),
@@ -55,6 +56,7 @@ public class RendererOneal extends Renderer {
         t[type].getKeyFrames().add(new KeyFrame(Duration.millis(900),
                 (ActionEvent event) -> {
                     Main.rootMover.getChildren().remove(onealviews.get(type).get(2));
+                    Main.rootMover.getChildren().add(onealviews.get(type).get(0));
                 }));
     }
 
@@ -66,7 +68,6 @@ public class RendererOneal extends Renderer {
 
         for (int i = 0; i < 2; i++)
             if (id != i) {
-                Main.rootMover.getChildren().remove(onealviews.get(i).get(0));
                 Main.rootMover.getChildren().remove(onealviews.get(i).get(1));
                 Main.rootMover.getChildren().remove(onealviews.get(i).get(2));
                 t[i].stop();
@@ -78,7 +79,7 @@ public class RendererOneal extends Renderer {
                     has = true;
                     break;
                 }
-            if (!has)
+            if (!has && oldDir != dir.ordinal() / 2)
                 Main.rootMover.getChildren().add(onealviews.get(id).get(0));
         }
     }
@@ -90,6 +91,7 @@ public class RendererOneal extends Renderer {
     public void startAnimation(Mover.MovementType dir) {
         stopAnimation(dir);
         t[dir.ordinal() / 2].play();
+        oldDir = dir.ordinal() / 2;
     }
 
     public void renderOneal(double x, double y) throws Exception {
@@ -102,6 +104,8 @@ public class RendererOneal extends Renderer {
 
     public void deleteOneal() {
         stopAnimation(null);
+        Main.rootMover.getChildren().remove(onealviews.get(0).get(0));
+        Main.rootMover.getChildren().remove(onealviews.get(1).get(0));
         Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),

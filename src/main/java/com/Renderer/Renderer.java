@@ -9,6 +9,7 @@ public abstract class Renderer {
     protected static Image sheet;
     protected final double scale = 2.0;
     protected final double side = 16 * scale;
+    protected int oldDir = -1;
     public static enum Direction {
         center, left, right, up, down, middlerow, middlecol
     };

@@ -52,4 +52,18 @@ public class Bomb extends Entity {
     public long getTimer() {
         return timer;
     }
+
+    public Flame getFlame(int id) {
+        if (id >= flame.countFlames())
+            return null;
+        return flame.getFlame(id);
+    }
+
+    public int countFlames() {
+        return flame.countFlames();
+    }
+
+    public int getFlameLength() {
+        return flame.getFlameLength();
+    }
 }
