@@ -47,8 +47,10 @@ public class Oneal extends Enemy {
                 stepsPerSquare = (int) (Main.defaultSide / speed);
             }
         }
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

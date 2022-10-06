@@ -28,8 +28,10 @@ public class Balloom extends Enemy {
 
         if (steps == 0)
             direction = getRandomMoveDirection();
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

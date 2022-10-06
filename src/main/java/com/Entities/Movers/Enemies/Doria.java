@@ -37,8 +37,10 @@ public class Doria extends Enemy {
             else
                 direction = getMoveDirectionFindWay();
         }
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

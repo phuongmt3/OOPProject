@@ -32,7 +32,7 @@ public class Main extends Application {
     private Group root;
     public static Group rootMap, rootMover, rootBomb;
     public static int level, rows, cols;
-    public static final double winWidth = 1000, winHeight = 600;
+    public static final double winWidth = 1000, winHeight = 450;
     public static final double defaultSide = 32.0;
     public static final long timePerFrame = 10000;
 
@@ -75,6 +75,7 @@ public class Main extends Application {
         timer.start();
 
         stage.setTitle("Bomberman");
+        stage.setResizable(false);
         stage.show();
     }
 

@@ -28,35 +28,6 @@ public class Dahl extends Enemy {
         renderer.renderDahl(x, y);
     }
 
-    /*private boolean reachableByX() {
-        int row = (int) (y / Main.defaultSide);
-        int col = (int) (x / Main.defaultSide);
-        if (bomber.getX() < x) {
-            for (int i = 0; i < x - bomber.getX(); i++)
-                if (!(map.get(row).get(col - i) instanceof Grass))
-                    return false;
-            return true;
-        }
-        for (int i = 0; i < bomber.getX() - x; i++)
-            if (!(map.get(row).get(col + i) instanceof Grass))
-                return false;
-        return true;
-    }
-
-    private boolean reachableByY() {
-        int row = (int) (y / Main.defaultSide);
-        int col = (int) (x / Main.defaultSide);
-        if (bomber.getY() < y) {
-            for (int i = 0; i < y - bomber.getY(); i++)
-                if (!(map.get(row - i).get(col) instanceof Grass))
-                    return false;
-            return true;
-        }
-        for (int i = 0; i < bomber.getY() - y; i++)
-            if (!(map.get(row + i).get(col) instanceof Grass))
-                return false;
-        return true;
-    }*/
     @Override
     public void update() {
         if (isDead()) {
@@ -104,8 +75,10 @@ public class Dahl extends Enemy {
                     direction = getMoveDirectionForDahl();
             }
         }
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

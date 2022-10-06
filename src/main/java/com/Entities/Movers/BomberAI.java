@@ -4,17 +4,20 @@ import com.Entities.Bomb.BombManager;
 import com.Entities.Bomb.FlameManager;
 import com.Entities.Entity;
 import com.Entities.Maps.Brick;
-import com.Entities.Maps.Items.*;
+import com.Entities.Maps.Items.BombItem;
+import com.Entities.Maps.Items.FlameItem;
+import com.Entities.Maps.Items.Portal;
+import com.Entities.Maps.Items.SpeedItem;
 import com.Entities.Movers.Enemies.EnemyManager;
 import com.Main;
 import com.Renderer.RendererBomber;
 
 import java.util.ArrayList;
 
-public class Bomber extends Mover {
+public class BomberAI extends Mover {
     private RendererBomber renderer;
     private boolean renderDead = false;
-    public Bomber(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
+    public BomberAI(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                   BombManager bombManager, EnemyManager enemyManager) {
         super(x, y, speed, map, bombManager, enemyManager);
         renderer = new RendererBomber(x, y);
