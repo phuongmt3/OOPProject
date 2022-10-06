@@ -32,6 +32,14 @@ public class FlameManager extends Entity {
         this.bombManager = bombManager;
     }
 
+    public Flame getFlame(int id) {
+        return flames.get(id);
+    }
+
+    public int countFlames() {
+        return flames.size();
+    }
+
     @Override
     public void render() throws Exception {
         flames.add(new Flame(x, y, Renderer.Direction.center));
@@ -122,5 +130,9 @@ public class FlameManager extends Entity {
 
     public static void increaseFlameLength() {
         flameLength += 1;
+    }
+
+    public int getFlameLength() {
+        return flameLength;
     }
 }
