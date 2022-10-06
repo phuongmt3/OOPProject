@@ -1,5 +1,6 @@
 package com.Entities.Movers;
 
+import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
 import com.Entities.Entity;
 import com.Entities.Maps.*;
@@ -60,13 +61,92 @@ abstract public class Mover extends Entity {
         return x;
     }
 
+    public boolean availableArea(int x, int y) {
+        if (this instanceof Doria || this instanceof Pass) {
+            for (int i = 0; i < bombManager.countBomb(); i++) {
+                Bomb curbomb = bombManager.getBomb(i);
+                int idx = (int) (curbomb.getX() / Main.defaultSide);
+                int idy = (int) (curbomb.getY() / Main.defaultSide);
+                for (MovementType type : MovementType.values())
+                    if (y == idy + type.y * curbomb.getFlameLength()
+                        && x == idx + type.x * curbomb.getFlameLength())
+                        return false;
+            }
+        }
+        //normal condition
+        for (int i = 0; i < bombManager.countBomb(); i++) {
+            if (map.get(y).get(x).checkCollision(bombManager.getBomb(i)))
+                return false;
+        }
+        return availableAreaInMap(map.get(y).get(x));
+    }
+
+    private boolean availableAreaInMap(Entity tile) {
+        if (this instanceof Doria || this instanceof Ovape)
+            return tile instanceof Grass || tile instanceof Brick;
+        //other cases
+        if (tile instanceof Grass)
+            return true;
+        return tile instanceof Brick && ((Brick) tile).isExposed();
+    }
+
+    public boolean canMove(MovementType type) {
+        boolean inBombPosition = collideBomb();
+        double newX = roundCoordinate(x + type.x * speed);
+        newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
+        double newY = roundCoordinate(y + type.y * speed);
+        newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
+        Entity tile0 = null, tile1 = null;
+        int newidXmap = (int) (newX / Main.defaultSide);
+        int newidYmap = (int) (newY / Main.defaultSide);
+
+        if (type == MovementType.LEFT) {
+            tile0 = map.get(newidYmap).get(newidXmap);
+            tile1 = map.get(newidYmap + 1).get(newidXmap);
+        }
+        else if (type == MovementType.RIGHT) {
+            newidXmap ++;
+            tile0 = map.get(newidYmap).get(newidXmap);
+            tile1 = map.get(newidYmap + 1).get(newidXmap);
+        }
+        else if (type == MovementType.UP) {
+            tile0 = map.get(newidYmap).get(newidXmap);
+            tile1 = map.get(newidYmap).get(newidXmap + 1);
+        }
+        else if (type == MovementType.DOWN) {
+            newidYmap ++;
+            tile0 = map.get(newidYmap).get(newidXmap);
+            tile1 = map.get(newidYmap).get(newidXmap + 1);
+        }
+
+        double oldX = x, oldY = y;
+        setX(newX); setY(newY);
+        if (!inBombPosition && collideBomb()) {
+            setX(oldX); setY(oldY);
+            return false;
+        }
+        else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
+            setX(oldX); setY(oldY);
+            return false;
+        }
+        else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
+            setX(oldX); setY(oldY);
+            return false;
+        }
+        setX(oldX); setY(oldY);
+        return true;
+    }
+
     public boolean canMoveAndMove(MovementType type) {
         boolean inBombPosition = collideBomb();
+        double newX = roundCoordinate(x + type.x * speed);
+        newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
+        double newY = roundCoordinate(y + type.y * speed);
+        newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
+        int newidXmap = (int) (newX / Main.defaultSide);
+        int newidYmap = (int) (newY / Main.defaultSide);
+
         if (type == MovementType.LEFT) {
-            double newX = roundCoordinate(x + type.x * speed);
-            newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
-            int newidXmap = (int) (newX / Main.defaultSide);
-            int newidYmap = (int) (y / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
@@ -74,20 +154,19 @@ abstract public class Mover extends Entity {
                 setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
-            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
+            else if (!availableAreaInMap(tile0)) {
                 setX(tile0.getX() + tile0.getW());
                 return false;
             }
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
+            else if (checkCollision(tile1) && !availableAreaInMap(tile1)) {
                 setX(tile1.getX() + tile1.getW());
                 return false;
             }
         }
         else if (type == MovementType.RIGHT) {
-            double newX = roundCoordinate(x + type.x * speed);
-            newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
-            int newidXmap = (int) (newX / Main.defaultSide) + 1;
-            int newidYmap = (int) (y / Main.defaultSide);
+            newidXmap ++;
+            if (newidXmap >= Main.cols)
+                return false;
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap + 1).get(newidXmap);
             setX(newX);
@@ -95,20 +174,16 @@ abstract public class Mover extends Entity {
                 setX(roundCoordinate(x - type.x * speed));
                 return false;
             }
-            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
+            else if (!availableAreaInMap(tile0)) {
                 setX(tile0.getX() - tile0.getW());
                 return false;
             }
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
+            else if (checkCollision(tile1) && !availableAreaInMap(tile1)) {
                 setX(tile1.getX() - tile1.getW());
                 return false;
             }
         }
         else if (type == MovementType.UP) {
-            double newY = roundCoordinate(y + type.y * speed);
-            newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
-            int newidXmap = (int) (x / Main.defaultSide);
-            int newidYmap = (int) (newY / Main.defaultSide);
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
@@ -116,20 +191,19 @@ abstract public class Mover extends Entity {
                 setY(roundCoordinate(y - type.y * speed));
                 return false;
             }
-            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
+            else if (!availableAreaInMap(tile0)) {
                 setY(tile0.getY() + tile0.getH());
                 return false;
             }
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
+            else if (checkCollision(tile1) && !availableAreaInMap(tile1)) {
                 setY(tile1.getY() + tile1.getH());
                 return false;
             }
         }
         else if (type == MovementType.DOWN) {
-            double newY = roundCoordinate(y + type.y * speed);
-            newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
-            int newidXmap = (int) (x / Main.defaultSide);
-            int newidYmap = (int) (newY / Main.defaultSide) + 1;
+            newidYmap ++;
+            if (newidYmap >= Main.rows)
+                return false;
             Entity tile0 = map.get(newidYmap).get(newidXmap);
             Entity tile1 = map.get(newidYmap).get(newidXmap + 1);
             setY(newY);
@@ -137,11 +211,11 @@ abstract public class Mover extends Entity {
                 setY(roundCoordinate(y - type.y * speed));
                 return false;
             }
-            else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
+            else if (!availableAreaInMap(tile0)) {
                 setY(tile0.getY() - tile0.getH());
                 return false;
             }
-            else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
+            else if (checkCollision(tile1) && !availableAreaInMap(tile1)) {
                 setY(tile1.getY() - tile1.getH());
                 return false;
             }

@@ -22,7 +22,6 @@ public class Bomber extends Mover {
 
     @Override
     public void update() {
-        System.out.println(x + " " + y);
         for (int i = 0; i < enemyManager.countEnemies(); i++)
             if (enemyManager.getEnemy(i).checkCollision(this))
                 setDead(true);

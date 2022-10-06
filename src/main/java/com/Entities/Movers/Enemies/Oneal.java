@@ -10,13 +10,14 @@ import java.util.ArrayList;
 
 public class Oneal extends Enemy {
     private RendererOneal renderer = new RendererOneal();
-    private final double fastSpeed = 2.5, normSpeed = 1.5;
+    private final double fastSpeed = 2.5, normSpeed;
     private final int nearLimit = 5;
     private int stepsPerSquare = (int) (Main.defaultSide / speed);
     private int steps;
     public Oneal(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
         super(x, y, speed, map, bombManager, enemyManager, bomber);
+        normSpeed = speed;
     }
 
     @Override
