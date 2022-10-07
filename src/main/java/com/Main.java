@@ -83,6 +83,9 @@ public class Main extends Application {
 
 
         stage.show();
+        String filepath = "src//main//java//com//playgame.wav";
+        GameSound musicObject = new GameSound();
+        musicObject.playMusic(filepath);
 
     }
 
