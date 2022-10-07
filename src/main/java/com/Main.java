@@ -3,6 +3,7 @@ package com;
 import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
 import com.Entities.Entity;
+import com.GameSound;
 import com.Entities.Maps.*;
 import com.Entities.Maps.Items.*;
 import com.Entities.Movers.Bomber;
@@ -82,6 +83,7 @@ public class Main extends Application {
 
 
         stage.show();
+
     }
 
     private void updateBomber(Mover.MovementType dir) {
@@ -127,6 +129,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch();
+
     }
 
     private void readFile(String path) throws IOException {
