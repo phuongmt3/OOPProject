@@ -9,8 +9,10 @@ import com.Entities.Maps.Items.BombItem;
 import com.Entities.Maps.Items.FlameItem;
 import com.Entities.Maps.Items.Portal;
 import com.Entities.Maps.Items.SpeedItem;
+import com.Entities.Movers.Enemies.Dahl;
 import com.Entities.Movers.Enemies.Enemy;
 import com.Entities.Movers.Enemies.EnemyManager;
+import com.Entities.Movers.Enemies.Oneal;
 import com.Main;
 import javafx.util.Pair;
 import kotlin.Triple;
@@ -73,8 +75,60 @@ public class BomberAI extends Bomber {
                 }
             }
     }
+    private void moveUpDownAfterLeftRight(int leftcnt, Enemy enemy, int cury, int posx, double enemyspeed) {
+        int remainSteps = stepTime - leftcnt;
+        int remainSteps2 = remainSteps + stepTime * 2;
+        //up
+        double newY = roundCoordinate(enemy.getY() - enemyspeed * remainSteps);
+        double newY2 = roundCoordinate(enemy.getY() - enemyspeed * remainSteps2);
+        int posy = curpos(newY);
+        int posy2 = curpos(newY2);
+        for (int jj = cury - 1; jj >= 0 && jj >= posy2 && mapAI.get(jj).get(posx) != -1; jj--)
+            if (mapAI.get(jj).get(posx) == 0) {
+                if (jj >= posy)
+                    mapAI.get(jj).set(posx, 1);
+                else mapAI.get(jj).set(posx, 2);
+            }
+        //down
+        newY = roundCoordinate(enemy.getY() + enemyspeed * remainSteps);
+        newY2 = roundCoordinate(enemy.getY() + enemyspeed * remainSteps2);
+        posy = nextpos(newY) == -1 ? curpos(newY) : nextpos(newY);
+        posy2 = nextpos(newY2) == -1 ? curpos(newY2) : nextpos(newY2);
+        for (int jj = cury + 1; jj < Main.rows && jj <= posy2 && mapAI.get(jj).get(posx) != -1; jj++)
+            if (mapAI.get(jj).get(posx) == 0) {
+                if (jj <= posy)
+                    mapAI.get(jj).set(posx, 1);
+                else mapAI.get(jj).set(posx, 2);
+            }
+    }
+    private void moveLeftRightAfterUpDown(int upcnt, Enemy enemy, int curx, int posy, double enemyspeed) {
+        int remainSteps = stepTime - upcnt;
+        int remainSteps2 = remainSteps + stepTime * 2;
+        //left
+        double newX = roundCoordinate(enemy.getX() - enemyspeed * remainSteps);
+        double newX2 = roundCoordinate(enemy.getX() - enemyspeed * remainSteps2);
+        int posx = curpos(newX);
+        int posx2 = curpos(newX2);
+        for (int ii = curx - 1; ii >= 0 && ii >= posx2 && mapAI.get(posy).get(ii) != -1; ii--)
+            if (mapAI.get(posy).get(ii) == 0) {
+                if (ii >= posx)
+                    mapAI.get(posy).set(ii, 1);
+                else mapAI.get(posy).set(ii, 2);
+            }
+        //right
+        newX = roundCoordinate(enemy.getX() + enemyspeed * remainSteps);
+        newX2 = roundCoordinate(enemy.getX() + enemyspeed * remainSteps2);
+        posx = nextpos(newX) == -1 ? curpos(newX) : nextpos(newX);
+        posx2 = nextpos(newX2) == -1 ? curpos(newX2) : nextpos(newX2);
+        for (int ii = curx + 1; ii < Main.cols && ii <= posx2 && mapAI.get(posy).get(ii) != -1; ii++)
+            if (mapAI.get(posy).get(ii) == 0) {
+                if (ii <= posx)
+                    mapAI.get(posy).set(ii, 1);
+                else mapAI.get(posy).set(ii, 2);
+            }
+    }
     private void updateMapAI() {
-        //-1 can't go; -2 enemy pos; 0 safe; 1 enemy will come
+        //-1 can't go; -2 enemy pos; 0 safe; 1 enemy will come need to avoid; 2 should put bomb
         System.out.println("in update mapAI");
         for (int y = 0; y < Main.rows; y++)
             for (int x = 0; x < Main.cols; x++) {
@@ -86,6 +140,11 @@ public class BomberAI extends Bomber {
 
         for (int i = 0; i < enemyManager.countEnemies(); i++) {
             Enemy enemy = enemyManager.getEnemy(i);
+            double enemyspeed = enemy.speed;
+            if (enemy instanceof Oneal)
+                enemyspeed = ((Oneal) enemy).fastSpeed;
+            else if (enemy instanceof Dahl)
+                enemyspeed = ((Dahl) enemy).fastSpeed;
             int curx = curpos(enemy.getX());
             int cury = curpos(enemy.getY());
             int nextx = nextpos(enemy.getX());
@@ -101,101 +160,61 @@ public class BomberAI extends Bomber {
             //change based on enemy type (avoid dahl bouncy mode)
             if (enemy.getY() == moveToNeareastSquare(enemy.getY())) {
                 //left then up, down
-                for (int leftcnt = 0; leftcnt <= stepTime; leftcnt++) {
-                    double newX = roundCoordinate(enemy.getX() - enemy.speed * leftcnt);
+                for (int leftcnt = 0; leftcnt <= stepTime * 3; leftcnt++) {
+                    double newX = roundCoordinate(enemy.getX() - enemyspeed * leftcnt);
                     int posx = curpos(newX);
                     if (posx < 0 || mapAI.get(cury).get(posx) == -1)
                         break;
-                    else if (mapAI.get(cury).get(posx) == 0)
-                        mapAI.get(cury).set(posx, 1);
-                    if (newX == moveToNeareastSquare(newX)) {
-                        int remainSteps = stepTime - leftcnt;
-                        //up
-                        double newY = roundCoordinate(enemy.getY() - enemy.speed * remainSteps);
-                        int posy = curpos(newY);
-                        for (int jj = cury - 1; jj >= 0 && jj >= posy && mapAI.get(jj).get(posx) != -1; jj--)
-                            if (mapAI.get(jj).get(posx) == 0)
-                                mapAI.get(jj).set(posx, 1);
-                        //down
-                        newY = roundCoordinate(enemy.getY() + enemy.speed * remainSteps);
-                        posy = nextpos(newY) == -1 ? curpos(newY) : nextpos(newY);
-                        for (int jj = cury + 1; jj < Main.rows && jj <= posy && mapAI.get(jj).get(posx) != -1; jj++)
-                            if (mapAI.get(jj).get(posx) == 0)
-                                mapAI.get(jj).set(posx, 1);
+                    else if (mapAI.get(cury).get(posx) == 0) {
+                        if (leftcnt <= stepTime)
+                            mapAI.get(cury).set(posx, 1);
+                        else mapAI.get(cury).set(posx, 2);
                     }
+                    if (newX == moveToNeareastSquare(newX))
+                        moveUpDownAfterLeftRight(leftcnt, enemy, cury, posx, enemyspeed);
                 }
                 //right then up, down
-                for (int rightcnt = 0; rightcnt <= stepTime; rightcnt++) {
-                    double newX = roundCoordinate(enemy.getX() + enemy.speed * rightcnt);
+                for (int rightcnt = 0; rightcnt <= stepTime * 3; rightcnt++) {
+                    double newX = roundCoordinate(enemy.getX() + enemyspeed * rightcnt);
                     int posx = nextpos(newX) > -1 ? nextpos(newX) : curpos(newX);
                     if (posx >= Main.cols || mapAI.get(cury).get(posx) == -1)
                         break;
-                    else if (mapAI.get(cury).get(posx) == 0)
-                        mapAI.get(cury).set(posx, 1);
-                    if (newX == moveToNeareastSquare(newX)) {
-                        int remainSteps = stepTime - rightcnt;
-                        //up
-                        double newY = roundCoordinate(enemy.getY() - enemy.speed * remainSteps);
-                        int posy = curpos(newY);
-                        for (int jj = cury - 1; jj >= 0 && jj >= posy && mapAI.get(jj).get(posx) != -1; jj--)
-                            if (mapAI.get(jj).get(posx) == 0)
-                                mapAI.get(jj).set(posx, 1);
-                        //down
-                        newY = roundCoordinate(enemy.getY() + enemy.speed * remainSteps);
-                        posy = nextpos(newY) == -1 ? curpos(newY) : nextpos(newY);
-                        for (int jj = cury + 1; jj < Main.rows && jj <= posy && mapAI.get(jj).get(posx) != -1; jj++)
-                            if (mapAI.get(jj).get(posx) == 0)
-                                mapAI.get(jj).set(posx, 1);
+                    else if (mapAI.get(cury).get(posx) == 0) {
+                        if (rightcnt <= stepTime)
+                            mapAI.get(cury).set(posx, 1);
+                        else mapAI.get(cury).set(posx, 2);
                     }
+                    if (newX == moveToNeareastSquare(newX))
+                        moveUpDownAfterLeftRight(rightcnt, enemy, cury, posx, enemyspeed);
                 }
             } else {
                 //up then left, right
-                for (int upcnt = 0; upcnt <= stepTime; upcnt++) {
-                    double newY = roundCoordinate(enemy.getY() - enemy.speed * upcnt);
+                for (int upcnt = 0; upcnt <= stepTime * 3; upcnt++) {
+                    double newY = roundCoordinate(enemy.getY() - enemyspeed * upcnt);
                     int posy = curpos(newY);
                     if (posy < 0 || mapAI.get(posy).get(curx) == -1)
                         break;
-                    else if (mapAI.get(posy).get(curx) == 0)
-                        mapAI.get(posy).set(curx, 1);
-                    if (newY == moveToNeareastSquare(newY)) {
-                        int remainSteps = stepTime - upcnt;
-                        //left
-                        double newX = roundCoordinate(enemy.getX() - enemy.speed * remainSteps);
-                        int posx = curpos(newX);
-                        for (int ii = curx - 1; ii >= 0 && ii >= posx && mapAI.get(posy).get(ii) != -1; ii--)
-                            if (mapAI.get(posy).get(ii) == 0)
-                                mapAI.get(posy).set(ii, 1);
-                        //right
-                        newX = roundCoordinate(enemy.getX() + enemy.speed * remainSteps);
-                        posx = nextpos(newX) == -1 ? curpos(newX) : nextpos(newX);
-                        for (int ii = curx + 1; ii < Main.cols && ii <= posx && mapAI.get(posy).get(ii) != -1; ii++)
-                            if (mapAI.get(posy).get(ii) == 0)
-                                mapAI.get(posy).set(ii, 1);
+                    else if (mapAI.get(posy).get(curx) == 0) {
+                        if (upcnt <= stepTime)
+                            mapAI.get(posy).set(curx, 1);
+                        else mapAI.get(posy).set(curx, 2);
                     }
+                    if (newY == moveToNeareastSquare(newY))
+                        moveLeftRightAfterUpDown(upcnt, enemy, curx, posy, enemyspeed);
                 }
                 //down then left, right
-                for (int downcnt = 0; downcnt <= stepTime; downcnt++) {
-                    double newY = roundCoordinate(enemy.getY() + enemy.speed * downcnt);
+                for (int downcnt = 0; downcnt <= stepTime * 3; downcnt++) {
+                    double newY = roundCoordinate(enemy.getY() + enemyspeed * downcnt);
                     int posy = nextpos(newY) > -1 ? nextpos(newY) : curpos(newY);
                     if (posy >= Main.rows || mapAI.get(posy).get(curx) == -1)
                         break;
-                    else if (mapAI.get(posy).get(curx) == 0)
-                        mapAI.get(posy).set(curx, 1);
-                    if (newY == moveToNeareastSquare(newY)) {
-                        int remainSteps = stepTime - downcnt;
-                        //left
-                        double newX = roundCoordinate(enemy.getX() - enemy.speed * remainSteps);
-                        int posx = curpos(newX);
-                        for (int ii = curx - 1; ii >= 0 && ii >= posx && mapAI.get(posy).get(ii) != -1; ii--)
-                            if (mapAI.get(posy).get(ii) == 0)
-                                mapAI.get(posy).set(ii, 1);
-                        //right
-                        newX = roundCoordinate(enemy.getX() + enemy.speed * remainSteps);
-                        posx = nextpos(newX) == -1 ? curpos(newX) : nextpos(newX);
-                        for (int ii = curx + 1; ii < Main.cols && ii <= posx && mapAI.get(posy).get(ii) != -1; ii++)
-                            if (mapAI.get(posy).get(ii) == 0)
-                                mapAI.get(posy).set(ii, 1);
+                    else if (mapAI.get(posy).get(curx) == 0) {
+                        if (downcnt <= stepTime)
+                            mapAI.get(posy).set(curx, 1);
+                        else mapAI.get(posy).set(curx, 2);
                     }
+                    if (newY == moveToNeareastSquare(newY))
+                        moveLeftRightAfterUpDown(downcnt, enemy, curx, posy, enemyspeed);
                 }
             }
         }
@@ -231,13 +250,13 @@ public class BomberAI extends Bomber {
             return true;
         return false;
     }
-    private ArrayList<MovementType> chooseSafeWay(int curx, int cury) {
+    private ArrayList<MovementType> chooseSafeWay(int curx, int cury, boolean ifInBombPos) {
         ArrayList<MovementType> safeWay = new ArrayList<>();
         ArrayList<Triple<Integer, Integer, MovementType>> loang = new ArrayList<>();
         ArrayList<Pair<Integer, Integer>> tracking = new ArrayList<>();
         for (MovementType type : MovementType.values())
             if (type != MovementType.STILL && validCoordination((curx + type.x) * Main.defaultSide, (cury + type.y) * Main.defaultSide)
-                    && mapAI.get(cury + type.y).get(curx + type.x) == 0) {
+                    && (mapAI.get(cury + type.y).get(curx + type.x) == 0 || mapAI.get(cury + type.y).get(curx + type.x) == 2)) {
                 loang.add(new Triple<>(curx + type.x, cury + type.y, type));
                 tracking.add(new Pair<>(curx + type.x, cury + type.y));
             }
@@ -246,13 +265,16 @@ public class BomberAI extends Bomber {
             loang.remove(0);
             if (safeWay.contains(cur.getThird()))
                 continue;
-            if (!(cur.getSecond() == cury && Math.abs(cur.getFirst() - curx) <= FlameManager.getFlameLength())
+            if (ifInBombPos && !(cur.getSecond() == cury && Math.abs(cur.getFirst() - curx) <= FlameManager.getFlameLength())
                     && !(cur.getFirst() == curx && Math.abs(cur.getSecond() - cury) <= FlameManager.getFlameLength()))
+                safeWay.add(cur.getThird());
+            if (!ifInBombPos)
                 safeWay.add(cur.getThird());
             for (MovementType type : MovementType.values()) {
                 Triple<Integer, Integer, MovementType> next = new Triple<>(cur.getFirst() + type.x, cur.getSecond() + type.y, cur.getThird());
                 if (type != MovementType.STILL && validCoordination(next.getFirst() * Main.defaultSide, next.getSecond() * Main.defaultSide)
-                        && !tracking.contains(new Pair<>(next.getFirst(), next.getSecond())) && mapAI.get(next.getSecond()).get(next.getFirst()) == 0) {
+                        && !tracking.contains(new Pair<>(next.getFirst(), next.getSecond()))
+                        && (mapAI.get(next.getSecond()).get(next.getFirst()) == 0 || mapAI.get(next.getSecond()).get(next.getFirst()) == 2)) {
                     loang.add(next);
                     tracking.add(new Pair<>(next.getFirst(), next.getSecond()));
                 }
@@ -261,9 +283,8 @@ public class BomberAI extends Bomber {
         return safeWay;
     }
     private boolean putBombWhenMeetBrick() {
-        int putOrNot = random.nextInt(4);
-        //try always put bomb
-        if (putOrNot > -1 && bombManager.canPutBomb() && nearBrick(curpos(x), curpos(y)) && !chooseSafeWay(curpos(x), curpos(y)).isEmpty()) {
+        if (bombManager.canPutBomb() && nearBrick(curpos(x), curpos(y))
+                && !chooseSafeWay(curpos(x), curpos(y), true).isEmpty()) {
             System.out.println("in meet brick");
             for (int i = 0; i < bombManager.countBomb(); i++) {
                 Bomb curbomb = bombManager.getBomb(i);
@@ -278,8 +299,6 @@ public class BomberAI extends Bomber {
             }
             bombManager.addBomb(new Bomb(x, y, bombManager, this, enemyManager, map));
             System.out.println(direction);
-            //direction = chooseSafeWay(curpos(x), curpos(y));
-            //canMoveAndMove(direction);
             return true;
         }
         return false;
@@ -291,7 +310,7 @@ public class BomberAI extends Bomber {
             int idx = (int) Math.round(curbomb.getX() / Main.defaultSide);
             int idy = (int) Math.round(curbomb.getY() / Main.defaultSide);
             if (curpos(x) == idx && curpos(y) == idy) {
-                ArrayList<MovementType> safeway = chooseSafeWay(curpos(x), curpos(y));
+                ArrayList<MovementType> safeway = chooseSafeWay(curpos(x), curpos(y), true);
                 if (safeway.isEmpty())
                     direction = MovementType.STILL;
                 else direction = safeway.get(0);
@@ -304,16 +323,15 @@ public class BomberAI extends Bomber {
     }
     private boolean putBombWhenNearEnemy() {
         System.out.println("near enemy");
-        if (mapAI.get(curpos(y)).get(curpos(x)) == 1 && !chooseSafeWay(curpos(x), curpos(y)).isEmpty()) {
+        if (mapAI.get(curpos(y)).get(curpos(x)) > 0 && bombManager.canPutBomb()
+                && !chooseSafeWay(curpos(x), curpos(y), true).isEmpty()) {
             bombManager.addBomb(new Bomb(x, y, bombManager, this, enemyManager, map));
-            //direction = chooseSafeWay(curpos(x), curpos(y));
-            //canMoveAndMove(direction);
             return true;
         }
         return false;
     }
     private MovementType getRandomMoveDirection() {
-        ArrayList<MovementType> safeWay = chooseSafeWay(curpos(x), curpos(y));
+        ArrayList<MovementType> safeWay = chooseSafeWay(curpos(x), curpos(y), false);
         System.out.println(safeWay.size());
         int takeRandom = random.nextInt(3);
         MovementType dir = direction;

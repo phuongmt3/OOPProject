@@ -14,7 +14,7 @@ public class Dahl extends Enemy {
     private RendererDahl renderer = new RendererDahl();
     private int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
-    private final double normSpeed, fastSpeed = 10;
+    public final double normSpeed, fastSpeed = 10;
     private ArrayList<MovementType> moveWaitList = new ArrayList<MovementType>();
 
     public Dahl(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
