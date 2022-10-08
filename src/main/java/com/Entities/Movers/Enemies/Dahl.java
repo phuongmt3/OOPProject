@@ -12,7 +12,7 @@ import java.util.Queue;
 
 public class Dahl extends Enemy {
     private RendererDahl renderer = new RendererDahl();
-    private int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
     private final double normSpeed, fastSpeed = 10;
     private ArrayList<MovementType> moveWaitList = new ArrayList<MovementType>();
@@ -48,7 +48,7 @@ public class Dahl extends Enemy {
                 }
             }
             else {
-                int moveStyle = random.nextInt(50);
+                int moveStyle = random.nextInt(100);
                 if (moveStyle == 20) {
                     //bouncy x
                     moveWaitList.add(MovementType.LEFT);
@@ -60,7 +60,7 @@ public class Dahl extends Enemy {
                     speed = fastSpeed;
                     stepsPerSquare = (int) (Main.defaultSide / speed);
                 }
-                else if (moveStyle == 25) {
+                else if (moveStyle == 80) {
                     //bouncy y
                     moveWaitList.add(MovementType.UP);
                     moveWaitList.add(MovementType.DOWN);

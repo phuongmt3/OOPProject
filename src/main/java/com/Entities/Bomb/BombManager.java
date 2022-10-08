@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+    public static final int timeLimit = 150;
     private int cntlimit = 1;
 
+    public boolean canPutBomb() {
+        return bombs.size() < cntlimit;
+    }
     public void addBomb(Bomb bomb) {
-        if (bombs.size() == cntlimit)
+        if (!canPutBomb())
             return;
         bombs.add(bomb);
     }

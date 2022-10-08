@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Balloom extends Enemy {
     private RendererBalloom renderer = new RendererBalloom();
-    private final int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private final int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
 
     public Balloom(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,

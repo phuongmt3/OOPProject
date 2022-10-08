@@ -91,9 +91,13 @@ public class RendererBomber extends Renderer {
             }
     }
 
+    public void pauseAnimation(Mover.MovementType dir) {
+        t[dir.ordinal() / 2].pause();
+    }
     public void startAnimation(Mover.MovementType dir) {
         stopAnimation(dir);
-        t[dir.ordinal()].play();
+        if (dir != Mover.MovementType.STILL)
+            t[dir.ordinal()].play();
     }
     public void renderBomber(double x, double y) throws Exception {
         for (int i = 0; i < 5; i++)

@@ -2,6 +2,7 @@ package com.Entities.Movers;
 
 import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
+import com.Entities.Bomb.FlameManager;
 import com.Entities.Entity;
 import com.Entities.Maps.*;
 import com.Entities.Movers.Enemies.*;
@@ -15,7 +16,7 @@ abstract public class Mover extends Entity {
     protected BombManager bombManager;
     protected EnemyManager enemyManager;
     public static enum MovementType {
-        LEFT(-1, 0), UP(0, -1), RIGHT(1, 0), DOWN(0, 1);
+        LEFT(-1, 0), UP(0, -1), RIGHT(1, 0), DOWN(0, 1), STILL(0, 0);
         public final int x, y;
         MovementType(int x, int y) {
             this.x = x;
@@ -50,11 +51,23 @@ abstract public class Mover extends Entity {
         return false;
     }
 
-    protected double moveToNeareastSquare(double x) {
-        return Math.round(x / Main.defaultSide) * Main.defaultSide;
+    protected int curpos(double x) {
+        if (x < 0)
+            return 0;
+        return (int) (x / Main.defaultSide);
+    }
+    protected int nextpos(double x) {
+        if (x == moveToNeareastSquare(x))
+            return -1;
+        return curpos(x) + 1;
     }
 
-    private double roundCoordinate(double x) {
+    protected double moveToNeareastSquare(double x) {
+        long pos = Math.round(x / Main.defaultSide);
+        return pos * Main.defaultSide;
+    }
+
+    protected double roundCoordinate(double x) {
         double newx = moveToNeareastSquare(x);
         if (Math.abs(x - newx) < 1)
             return newx;
@@ -65,12 +78,12 @@ abstract public class Mover extends Entity {
         if (this instanceof Doria || this instanceof Pass) {
             for (int i = 0; i < bombManager.countBomb(); i++) {
                 Bomb curbomb = bombManager.getBomb(i);
-                int idx = (int) (curbomb.getX() / Main.defaultSide);
-                int idy = (int) (curbomb.getY() / Main.defaultSide);
-                for (MovementType type : MovementType.values())
-                    if (y == idy + type.y * curbomb.getFlameLength()
-                        && x == idx + type.x * curbomb.getFlameLength())
-                        return false;
+                int idx = (int) Math.round(curbomb.getX() / Main.defaultSide);
+                int idy = (int) Math.round(curbomb.getY() / Main.defaultSide);
+                if (x == idx && y >= idy - FlameManager.getFlameLength() && y <= idy + FlameManager.getFlameLength())
+                    return false;
+                if (y == idy && x >= idx - FlameManager.getFlameLength() && x <= idx + FlameManager.getFlameLength())
+                    return false;
             }
         }
         //normal condition
@@ -229,6 +242,11 @@ abstract public class Mover extends Entity {
 
     public void setDead(boolean dead) {
         isDead = dead;
+        if (this instanceof BomberAI) {
+            BomberAI bomber = (BomberAI) this;
+            bomber.printMapAI();
+            System.out.println(bomber.getX() + " " + bomber.getY());
+        }
     }
 
     @Override

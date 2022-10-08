@@ -56,12 +56,15 @@ public class Bomber extends Mover {
     public void update() {
         checkCollisionEnemy();
         checkTakeItem();
-
     }
 
     public void render(MovementType dir) throws Exception {
-        if (!isDead)
-            renderer.startAnimation(dir);
+        if (!isDead) {
+            if (dir == MovementType.STILL)
+                renderer.pauseAnimation(dir);
+            else
+                renderer.startAnimation(dir);
+        }
     }
 
     @Override
