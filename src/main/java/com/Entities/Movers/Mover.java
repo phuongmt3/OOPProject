@@ -75,6 +75,8 @@ abstract public class Mover extends Entity {
     }
 
     public boolean availableArea(int x, int y) {
+        if (x < 0 || x >= Main.cols || y < 0 || y >= Main.rows)
+            return false;
         if (this instanceof Doria || this instanceof Pass) {
             for (int i = 0; i < bombManager.countBomb(); i++) {
                 Bomb curbomb = bombManager.getBomb(i);
@@ -92,15 +94,6 @@ abstract public class Mover extends Entity {
                 return false;
         }
         return availableAreaInMap(map.get(y).get(x));
-    }
-
-    private boolean availableAreaInMap(Entity tile) {
-        if (this instanceof Doria || this instanceof Ovape)
-            return tile instanceof Grass || tile instanceof Brick;
-        //other cases
-        if (tile instanceof Grass)
-            return true;
-        return tile instanceof Brick && ((Brick) tile).isExposed();
     }
 
     public boolean canMove(MovementType type) {

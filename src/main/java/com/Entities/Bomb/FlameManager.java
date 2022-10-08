@@ -72,7 +72,6 @@ public class FlameManager extends Entity {
 
         killBomber(bomber);
         killEnemy(enemyManager);
-        continuousExplosion(bombManager);
     }
 
     public void updateInfluence() throws Exception {
@@ -123,14 +122,6 @@ public class FlameManager extends Entity {
             for (Flame flame : flames)
                 if (enemyManager.getEnemy(i).checkCollision(flame)) {
                     enemyManager.getEnemy(i).setDead(true);
-                }
-    }
-
-    private void continuousExplosion(BombManager bombManager) {
-        for (Flame flame : flames)
-            for (int i = 0; i < bombManager.countBomb(); i++)
-                if (flame.checkCollision(bombManager.getBomb(i))) {
-                    bombManager.getBomb(i).explode();
                 }
     }
 

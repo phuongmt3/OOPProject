@@ -39,8 +39,11 @@ public class Bomb extends Entity {
         return timer >= BombManager.timeLimit;
     }
 
-    public void explode() {
+    /*public void explode() {
         timer = BombManager.timeLimit - 15;
+    }*/
+    public void setConsecutiveTimer(Bomb otherBomb) {
+        timer = BombManager.timeLimit - otherBomb.countdown() - 15;
     }
 
     @Override

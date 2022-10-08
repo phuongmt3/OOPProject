@@ -37,7 +37,7 @@ public class Main extends Application {
     public static final double winWidth = 1000, winHeight = 450;
     public static final double defaultSide = 32.0;
     public static final long timePerFrame = 10000;
-    private boolean AIPlayer = true;
+    private boolean AIPlayer = false;
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -45,6 +45,7 @@ public class Main extends Application {
         bombManager = new BombManager();
         //read file input -> init map
         readFile("src/main/java/res/levels/Level1.txt");
+        bombManager.setMap(map);
     }
 
     @Override

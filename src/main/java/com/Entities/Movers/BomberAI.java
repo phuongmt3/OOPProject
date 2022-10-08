@@ -157,7 +157,6 @@ public class BomberAI extends Bomber {
 
             System.out.println("Enemy " + curx + " " + cury + ":" + enemy.getX() + " " + enemy.getY());
 
-            //change based on enemy type (avoid dahl bouncy mode)
             if (enemy.getY() == moveToNeareastSquare(enemy.getY())) {
                 //left then up, down
                 for (int leftcnt = 0; leftcnt <= stepTime * 3; leftcnt++) {

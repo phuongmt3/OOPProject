@@ -1,5 +1,9 @@
 package com.Entities;
 
+import com.Entities.Maps.Brick;
+import com.Entities.Maps.Grass;
+import com.Entities.Movers.Enemies.Doria;
+import com.Entities.Movers.Enemies.Ovape;
 import com.Main;
 
 public abstract class Entity {
@@ -65,5 +69,13 @@ public abstract class Entity {
     public static boolean validCoordination(double x, double y) {
         return x >= 0 && x <= (Main.cols - 1) * Main.defaultSide
                 && y >= 0 && y <= (Main.rows - 1) * Main.defaultSide;
+    }
+    public boolean availableAreaInMap(Entity tile) {
+        if (this instanceof Doria || this instanceof Ovape)
+            return tile instanceof Grass || tile instanceof Brick;
+        //other cases
+        if (tile instanceof Grass)
+            return true;
+        return tile instanceof Brick && ((Brick) tile).isExposed();
     }
 }
