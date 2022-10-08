@@ -85,6 +85,8 @@ public class Main extends Application {
 
     private void updateBomber(Mover.MovementType dir) {
         bomber.canMoveAndMove(dir);
+        bomberAi.setX(bomber.getX());
+        bomberAi.setY(bomber.getY());
         try {
             bomber.render(dir);
         } catch (Exception e) {
@@ -108,6 +110,10 @@ public class Main extends Application {
                         case RIGHT -> updateBomber(Bomber.MovementType.RIGHT);
                         case LEFT -> updateBomber(Bomber.MovementType.LEFT);
                         case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY(), bombManager, bomber, enemyManager, map));
+                        case A -> {
+                            AIPlayer = true;
+                            bomber.stopAnimation();
+                        }
                         case ESCAPE -> System.exit(0);
                     }
                 }
@@ -125,12 +131,20 @@ public class Main extends Application {
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ESCAPE)
                         System.exit(0);
+                    else if (t.getCode() == KeyCode.A) {
+                        AIPlayer = false;
+                        bomberAi.stopAnimation();
+                        bomber.showStartAnimation();
+                    }
                 }
             });
             bombManager.update();
             enemyManager.update();
-            if (!bomberAi.isDead())
+            if (!bomberAi.isDead()) {
                 bomberAi.update();
+                bomber.setX(bomberAi.getX());
+                bomber.setY(bomberAi.getY());
+            }
             bombManager.render();
             enemyManager.render();
             bomberAi.render();

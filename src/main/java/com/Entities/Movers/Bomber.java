@@ -67,6 +67,14 @@ public class Bomber extends Mover {
         }
     }
 
+    public void stopAnimation() {
+        renderer.stopAnimation(null);
+    }
+
+    public void showStartAnimation() {
+        renderer.showStartAnimation();
+    }
+
     @Override
     public String getClassName() {
         return "Bomber";

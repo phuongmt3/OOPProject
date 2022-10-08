@@ -220,7 +220,7 @@ public class BomberAI extends Bomber {
 
         for (int i = 0; i < bombManager.countBomb(); i++) {
             Bomb curbomb = bombManager.getBomb(i);
-            if (curbomb.countdown() >= escapeTime)  //handle consecutive explosion (update timer of each bomb when put new one)
+            if (curbomb.countdown() >= escapeTime)
                 continue;
             int idx = (int) Math.round(curbomb.getX() / Main.defaultSide);
             int idy = (int) Math.round(curbomb.getY() / Main.defaultSide);
