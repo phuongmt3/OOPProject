@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Balloom extends Enemy {
     private RendererBalloom renderer = new RendererBalloom();
-    private final int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private final int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
 
     public Balloom(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
@@ -28,8 +28,10 @@ public class Balloom extends Enemy {
 
         if (steps == 0)
             direction = getRandomMoveDirection();
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

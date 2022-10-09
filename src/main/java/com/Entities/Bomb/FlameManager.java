@@ -32,10 +32,12 @@ public class FlameManager extends Entity {
         this.bombManager = bombManager;
     }
 
+    public static int getFlameLength() {
+        return flameLength;
+    }
     public Flame getFlame(int id) {
         return flames.get(id);
     }
-
     public int countFlames() {
         return flames.size();
     }
@@ -68,18 +70,19 @@ public class FlameManager extends Entity {
 
         killBomber(bomber);
         killEnemy(enemyManager);
-        continuousExplosion(bombManager);
     }
 
     public void updateInfluence() throws Exception {
         xleft = xright = -100;
         yup = ydown = -100;
-        int posxInMap = (int) (x / Main.defaultSide);
-        int posyInMap = (int) (y / Main.defaultSide);
+        int posxInMap = (int) Math.round(x / Main.defaultSide);
+        int posyInMap = (int) Math.round(y / Main.defaultSide);
         boolean[] end = new boolean[4];
         end[0] = end[1] = end[2] = end[3] = false;
         for (int i = 1; i <= flameLength; i++) {
             for (Mover.MovementType dir : Mover.MovementType.values()) {
+                if (dir == Mover.MovementType.STILL)
+                    continue;
                 if (end[dir.ordinal()] || !validCoordination(x + Main.defaultSide * dir.x * i, y + Main.defaultSide * dir.y * i))
                     end[dir.ordinal()] = true;
                 else if (map.get(posyInMap + dir.y * i).get(posxInMap + dir.x * i) instanceof Wall)
@@ -101,7 +104,6 @@ public class FlameManager extends Entity {
                 }
             }
         }
-
     }
 
     private void killBomber(Bomber bomber) {
@@ -120,19 +122,7 @@ public class FlameManager extends Entity {
                 }
     }
 
-    private void continuousExplosion(BombManager bombManager) {
-        for (Flame flame : flames)
-            for (int i = 0; i < bombManager.countBomb(); i++)
-                if (flame.checkCollision(bombManager.getBomb(i))) {
-                    bombManager.getBomb(i).explode();
-                }
-    }
-
     public static void increaseFlameLength() {
         flameLength += 1;
-    }
-
-    public int getFlameLength() {
-        return flameLength;
     }
 }

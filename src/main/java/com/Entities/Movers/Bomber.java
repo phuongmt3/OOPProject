@@ -20,16 +20,17 @@ public class Bomber extends Mover {
         renderer = new RendererBomber(x, y);
     }
 
-    @Override
-    public void update() {
+    private void checkCollisionEnemy() {
         for (int i = 0; i < enemyManager.countEnemies(); i++)
             if (enemyManager.getEnemy(i).checkCollision(this))
                 setDead(true);
+    }
+
+    private void checkTakeItem() {
         for (int i = 0; i < Main.rows; i++)
             for (int j = 0; j < Main.cols; j++) {
                 Entity tile = map.get(i).get(j);
                 if (checkCollision(tile) && tile instanceof Brick && ((Brick) tile).isHasItem()) {
-
                     if (tile instanceof BombItem && !((BombItem) tile).isUsed()) {
                         ((BombItem) tile).useItem();
                         bombManager.increaseCntLimit();
@@ -51,9 +52,27 @@ public class Bomber extends Mover {
             }
     }
 
+    @Override
+    public void update() {
+        checkCollisionEnemy();
+        checkTakeItem();
+    }
+
     public void render(MovementType dir) throws Exception {
-        if (!isDead)
-            renderer.startAnimation(dir);
+        if (!isDead) {
+            if (dir == MovementType.STILL)
+                renderer.pauseAnimation(dir);
+            else
+                renderer.startAnimation(dir);
+        }
+    }
+
+    public void stopAnimation() {
+        renderer.stopAnimation(null);
+    }
+
+    public void showStartAnimation() {
+        renderer.showStartAnimation();
     }
 
     @Override

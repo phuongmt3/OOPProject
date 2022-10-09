@@ -89,8 +89,8 @@ public abstract class Enemy extends Mover {
     }
 
     protected void findWay() {
-        ArrayList<Pair<Integer, Integer>> loang = new ArrayList<Pair<Integer, Integer>>();
-        Map<Pair<Integer, Integer>, MovementType> tracking = new HashMap<Pair<Integer, Integer>, MovementType>();
+        ArrayList<Pair<Integer, Integer>> loang = new ArrayList<>();
+        Map<Pair<Integer, Integer>, MovementType> tracking = new HashMap<>();
 
         Pair<Integer, Integer> first = new Pair<>((int) (x / Main.defaultSide), (int) (y / Main.defaultSide));
         loang.add(first);

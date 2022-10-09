@@ -1,14 +1,41 @@
 package com.Entities.Bomb;
 
+import com.Entities.Entity;
+import com.Entities.Movers.Mover;
+import com.Main;
+
 import java.util.ArrayList;
 
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+    private ArrayList<ArrayList<Entity>> map;
+    public static final int timeLimit = 150;
     private int cntlimit = 1;
 
+    public void setMap(ArrayList<ArrayList<Entity>> map) {
+        this.map = map;
+    }
+    public boolean canPutBomb() {
+        return bombs.size() < cntlimit;
+    }
     public void addBomb(Bomb bomb) {
-        if (bombs.size() == cntlimit)
+        if (!canPutBomb())
             return;
+        for (Bomb curbomb : bombs) {
+            int idx = (int) Math.round(curbomb.getX() / Main.defaultSide);
+            int idy = (int) Math.round(curbomb.getY() / Main.defaultSide);
+            for (Mover.MovementType type : Mover.MovementType.values()) {
+                if (type == Mover.MovementType.STILL)
+                    continue;
+                for (int len = 0; len <= FlameManager.getFlameLength(); len++) {
+                    if (!curbomb.availableAreaInMap(map.get(idy + len * type.y).get(idx + len * type.x)))
+                        break;
+                    if (bomb.checkCollision(map.get(idy + len * type.y).get(idx + len * type.x))
+                            && bomb.countdown() > curbomb.countdown())
+                        bomb.setConsecutiveTimer(curbomb);
+                }
+            }
+        }
         bombs.add(bomb);
     }
     public void removeBomb(Bomb bomb) {

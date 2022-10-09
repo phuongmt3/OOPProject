@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Doria extends Enemy {
     private RendererDoria renderer = new RendererDoria();
-    private final int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private final int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
 
     public Doria(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
@@ -37,8 +37,10 @@ public class Doria extends Enemy {
             else
                 direction = getMoveDirectionFindWay();
         }
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

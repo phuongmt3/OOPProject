@@ -12,9 +12,9 @@ import java.util.Queue;
 
 public class Dahl extends Enemy {
     private RendererDahl renderer = new RendererDahl();
-    private int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
-    private final double normSpeed, fastSpeed = 10;
+    public final double normSpeed, fastSpeed = 10;
     private ArrayList<MovementType> moveWaitList = new ArrayList<MovementType>();
 
     public Dahl(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
@@ -28,35 +28,6 @@ public class Dahl extends Enemy {
         renderer.renderDahl(x, y);
     }
 
-    /*private boolean reachableByX() {
-        int row = (int) (y / Main.defaultSide);
-        int col = (int) (x / Main.defaultSide);
-        if (bomber.getX() < x) {
-            for (int i = 0; i < x - bomber.getX(); i++)
-                if (!(map.get(row).get(col - i) instanceof Grass))
-                    return false;
-            return true;
-        }
-        for (int i = 0; i < bomber.getX() - x; i++)
-            if (!(map.get(row).get(col + i) instanceof Grass))
-                return false;
-        return true;
-    }
-
-    private boolean reachableByY() {
-        int row = (int) (y / Main.defaultSide);
-        int col = (int) (x / Main.defaultSide);
-        if (bomber.getY() < y) {
-            for (int i = 0; i < y - bomber.getY(); i++)
-                if (!(map.get(row - i).get(col) instanceof Grass))
-                    return false;
-            return true;
-        }
-        for (int i = 0; i < bomber.getY() - y; i++)
-            if (!(map.get(row + i).get(col) instanceof Grass))
-                return false;
-        return true;
-    }*/
     @Override
     public void update() {
         if (isDead()) {
@@ -77,7 +48,7 @@ public class Dahl extends Enemy {
                 }
             }
             else {
-                int moveStyle = random.nextInt(50);
+                int moveStyle = random.nextInt(100);
                 if (moveStyle == 20) {
                     //bouncy x
                     moveWaitList.add(MovementType.LEFT);
@@ -89,7 +60,7 @@ public class Dahl extends Enemy {
                     speed = fastSpeed;
                     stepsPerSquare = (int) (Main.defaultSide / speed);
                 }
-                else if (moveStyle == 25) {
+                else if (moveStyle == 80) {
                     //bouncy y
                     moveWaitList.add(MovementType.UP);
                     moveWaitList.add(MovementType.DOWN);
@@ -104,8 +75,10 @@ public class Dahl extends Enemy {
                     direction = getMoveDirectionForDahl();
             }
         }
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

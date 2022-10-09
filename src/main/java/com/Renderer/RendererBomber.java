@@ -15,6 +15,7 @@ public class RendererBomber extends Renderer {
     private ArrayList<ArrayList<ImageView>> bomberviews = new ArrayList<ArrayList<ImageView>>();
     private ImageView bomberdefault;
     private Timeline[] t = new Timeline[4];
+    private boolean isFirstTime = true;
     public RendererBomber(double x, double y) {
         super();
         for (int i = 0; i < 5; i++) {
@@ -42,9 +43,6 @@ public class RendererBomber extends Renderer {
         bomberviews.get(Mover.MovementType.RIGHT.ordinal()).get(1).setViewport(new Rectangle2D(side * 1, side * 1, side, side));
         bomberviews.get(Mover.MovementType.RIGHT.ordinal()).get(2).setViewport(new Rectangle2D(side * 1, side * 2, side, side));
 
-        bomberdefault.setX(x);
-        bomberdefault.setY(y);
-        Main.rootMover.getChildren().add(bomberdefault);
         initAnimation(Mover.MovementType.DOWN);
         initAnimation(Mover.MovementType.UP);
         initAnimation(Mover.MovementType.LEFT);
@@ -76,7 +74,7 @@ public class RendererBomber extends Renderer {
                 }));
     }
 
-    private void stopAnimation(Mover.MovementType dir) {
+    public void stopAnimation(Mover.MovementType dir) {
         Main.rootMover.getChildren().remove(bomberdefault);
         int id = 0;
         if (dir == null)
@@ -91,9 +89,16 @@ public class RendererBomber extends Renderer {
             }
     }
 
+    public void pauseAnimation(Mover.MovementType dir) {
+        t[dir.ordinal() / 2].pause();
+    }
     public void startAnimation(Mover.MovementType dir) {
         stopAnimation(dir);
-        t[dir.ordinal()].play();
+        if (dir != Mover.MovementType.STILL)
+            t[dir.ordinal()].play();
+    }
+    public void showStartAnimation() {
+        isFirstTime = true;
     }
     public void renderBomber(double x, double y) throws Exception {
         for (int i = 0; i < 5; i++)
@@ -101,6 +106,12 @@ public class RendererBomber extends Renderer {
                 bomberviews.get(i).get(j).setX(x);
                 bomberviews.get(i).get(j).setY(y);
             }
+        if (isFirstTime) {
+            bomberdefault.setX(x);
+            bomberdefault.setY(y);
+            Main.rootMover.getChildren().add(bomberdefault);
+            isFirstTime = false;
+        }
     }
 
     public void deleteBomber() {

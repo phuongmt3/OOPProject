@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class Oneal extends Enemy {
     private RendererOneal renderer = new RendererOneal();
-    private final double fastSpeed = 2.5, normSpeed;
+    public final double fastSpeed = 2.5, normSpeed;
     private final int nearLimit = 5;
-    private int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
     public Oneal(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
@@ -47,8 +47,10 @@ public class Oneal extends Enemy {
                 stepsPerSquare = (int) (Main.defaultSide / speed);
             }
         }
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

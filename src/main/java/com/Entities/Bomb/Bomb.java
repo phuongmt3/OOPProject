@@ -9,8 +9,7 @@ import java.util.ArrayList;
 
 public class Bomb extends Entity {
     private RendererBomb renderer = new RendererBomb();
-    private long timer = 0;
-    private long timeLimit = 150;
+    private int timer = 0;
     private BombManager manager;
     private FlameManager flame;
 
@@ -37,11 +36,11 @@ public class Bomb extends Entity {
     }
 
     public boolean isExploded() {
-        return timer >= timeLimit;
+        return timer >= BombManager.timeLimit;
     }
 
-    public void explode() {
-        timer = timeLimit - 15;
+    public void setConsecutiveTimer(Bomb otherBomb) {
+        timer = BombManager.timeLimit - otherBomb.countdown() - 15;
     }
 
     @Override
@@ -49,21 +48,8 @@ public class Bomb extends Entity {
         return "Bomb";
     }
 
-    public long getTimer() {
-        return timer;
+    public int countdown() {
+        return BombManager.timeLimit - timer;
     }
 
-    public Flame getFlame(int id) {
-        if (id >= flame.countFlames())
-            return null;
-        return flame.getFlame(id);
-    }
-
-    public int countFlames() {
-        return flame.countFlames();
-    }
-
-    public int getFlameLength() {
-        return flame.getFlameLength();
-    }
 }

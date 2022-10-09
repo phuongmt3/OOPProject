@@ -17,6 +17,7 @@ public class FlameItem extends Brick {
     public void useItem() {
         renderer.deleteFlameItem();
         used = true;
+        hasItem = false;
     }
 
     public boolean isUsed() {

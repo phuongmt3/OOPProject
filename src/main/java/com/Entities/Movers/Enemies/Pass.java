@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Pass extends Enemy {
     private RendererPass renderer = new RendererPass();
-    private final int stepsPerSquare = (int) (Main.defaultSide / speed);
+    private final int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
 
     public Pass(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
@@ -32,8 +32,10 @@ public class Pass extends Enemy {
             else
                 direction = getMoveDirectionFindWay();
         }
-        else
-            canMoveAndMove(direction);
+        else if (!canMoveAndMove(direction)) {
+            direction = getRandomMoveDirection();
+            steps = stepsPerSquare - steps + 1;
+        }
         steps++;
         steps = steps % stepsPerSquare;
 

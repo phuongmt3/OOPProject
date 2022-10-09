@@ -17,6 +17,7 @@ public class BombItem extends Brick {
     public void useItem() {
         renderer.deleteBombItem();
         used = true;
+        hasItem = false;
     }
 
     public boolean isUsed() {

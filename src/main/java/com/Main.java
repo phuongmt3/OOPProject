@@ -7,6 +7,7 @@ import com.GameSound;
 import com.Entities.Maps.*;
 import com.Entities.Maps.Items.*;
 import com.Entities.Movers.Bomber;
+import com.Entities.Movers.BomberAI;
 import com.Entities.Movers.Enemies.*;
 import com.Entities.Movers.Mover;
 import javafx.animation.AnimationTimer;
@@ -28,17 +29,19 @@ import java.util.ArrayList;
 
 public class Main extends Application {
     static public Stage stage;
-    private ArrayList<ArrayList<Entity>> map = new ArrayList<ArrayList<Entity>>();
+    private ArrayList<ArrayList<Entity>> map = new ArrayList<>();
     private Bomber bomber;
+    private BomberAI bomberAi;
     private BombManager bombManager;
     private EnemyManager enemyManager;
     private Scene scene;
     private Group root;
     public static Group rootMap, rootMover, rootBomb;
     public static int level, rows, cols;
-    public static final double winWidth = 1000, winHeight = 600;
+    public static final double winWidth = 1000, winHeight = 450;
     public static final double defaultSide = 32.0;
     public static final long timePerFrame = 10000;
+    private boolean AIPlayer = false;
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -46,6 +49,7 @@ public class Main extends Application {
         bombManager = new BombManager();
         //read file input -> init map
         readFile("src/main/java/res/levels/Level1.txt");
+        bombManager.setMap(map);
     }
 
     @Override
@@ -80,8 +84,6 @@ public class Main extends Application {
         timer.start();
 
         stage.setTitle("Bomberman");
-
-
         stage.show();
         String filepath = "src//main//java//com//playgame.wav";
         GameSound musicObject = new GameSound();
@@ -91,6 +93,8 @@ public class Main extends Application {
 
     private void updateBomber(Mover.MovementType dir) {
         bomber.canMoveAndMove(dir);
+        bomberAi.setX(bomber.getX());
+        bomberAi.setY(bomber.getY());
         try {
             bomber.render(dir);
         } catch (Exception e) {
@@ -99,30 +103,62 @@ public class Main extends Application {
     }
 
     public void update() throws Exception {
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (bomber.isDead()) {
-                    if (event.getCode() == KeyCode.ESCAPE)
+        if (!AIPlayer) {
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (bomber.isDead()) {
+                        if (event.getCode() == KeyCode.ESCAPE)
+                            System.exit(0);
+                        return;
+                    }
+                    switch (event.getCode()) {
+                        case UP -> updateBomber(Bomber.MovementType.UP);
+                        case DOWN -> updateBomber(Bomber.MovementType.DOWN);
+                        case RIGHT -> updateBomber(Bomber.MovementType.RIGHT);
+                        case LEFT -> updateBomber(Bomber.MovementType.LEFT);
+                        case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY(), bombManager, bomber, enemyManager, map));
+                        case A -> {
+                            AIPlayer = true;
+                            bomber.stopAnimation();
+                        }
+                        case ESCAPE -> System.exit(0);
+                    }
+                }
+            });
+            bombManager.update();
+            enemyManager.update();
+            bomber.update();
+            bombManager.render();
+            enemyManager.render();
+            bomber.render();
+        }
+        else {
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent t) {
+                    if (t.getCode() == KeyCode.ESCAPE)
                         System.exit(0);
-                    return;
+                    else if (t.getCode() == KeyCode.A) {
+                        if (bomberAi.isDead())
+                            return;
+                        AIPlayer = false;
+                        bomberAi.stopAnimation();
+                        bomber.showStartAnimation();
+                    }
                 }
-                switch (event.getCode()) {
-                    case UP -> updateBomber(Bomber.MovementType.UP);
-                    case DOWN -> updateBomber(Bomber.MovementType.DOWN);
-                    case RIGHT -> updateBomber(Bomber.MovementType.RIGHT);
-                    case LEFT -> updateBomber(Bomber.MovementType.LEFT);
-                    case SPACE -> bombManager.addBomb(new Bomb(bomber.getX(), bomber.getY(), bombManager, bomber, enemyManager, map));
-                    case ESCAPE -> System.exit(0);
-                }
+            });
+            bombManager.update();
+            enemyManager.update();
+            if (!bomberAi.isDead()) {
+                bomberAi.update();
+                bomber.setX(bomberAi.getX());
+                bomber.setY(bomberAi.getY());
             }
-        });
-        bombManager.update();
-        enemyManager.update();
-        bomber.update();
-        bombManager.render();
-        bomber.render();
-        enemyManager.render();
+            bombManager.render();
+            enemyManager.render();
+            bomberAi.render();
+        }
     }
 
     @Override
@@ -160,6 +196,7 @@ public class Main extends Application {
                             case ' ' -> map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             case 'p' -> {
                                 bomber = new Bomber(i * defaultSide, (cntLines - 1) * defaultSide, defaultSide / 5, map, bombManager, enemyManager);
+                                bomberAi = new BomberAI(i * defaultSide, (cntLines - 1) * defaultSide, 3.2, map, bombManager, enemyManager);
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '1' -> {
@@ -201,3 +238,4 @@ public class Main extends Application {
         }
     }
 }
+//change mode of bomber & bomberAI (relate to aim of other enemies)
