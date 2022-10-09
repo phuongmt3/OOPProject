@@ -3,6 +3,7 @@ package com;
 import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
 import com.Entities.Entity;
+import com.GameSound;
 import com.Entities.Maps.*;
 import com.Entities.Maps.Items.*;
 import com.Entities.Movers.Bomber;
@@ -15,11 +16,14 @@ import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.media.AudioClip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.print.attribute.standard.Media;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -63,6 +67,7 @@ public class Main extends Application {
                 map.get(i).get(j).render();
 
         AnimationTimer timer = new AnimationTimer() {
+
             private long lastTime = 0;
             @Override
             public void handle(long now) {
@@ -79,8 +84,11 @@ public class Main extends Application {
         timer.start();
 
         stage.setTitle("Bomberman");
-        stage.setResizable(false);
         stage.show();
+        String filepath = "src//main//java//com//playgame.wav";
+        GameSound musicObject = new GameSound();
+        musicObject.playMusic(filepath);
+
     }
 
     private void updateBomber(Mover.MovementType dir) {
@@ -160,6 +168,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch();
+
     }
 
     private void readFile(String path) throws IOException {
