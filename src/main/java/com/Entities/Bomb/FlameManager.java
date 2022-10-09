@@ -35,11 +35,9 @@ public class FlameManager extends Entity {
     public static int getFlameLength() {
         return flameLength;
     }
-
     public Flame getFlame(int id) {
         return flames.get(id);
     }
-
     public int countFlames() {
         return flames.size();
     }
@@ -77,8 +75,8 @@ public class FlameManager extends Entity {
     public void updateInfluence() throws Exception {
         xleft = xright = -100;
         yup = ydown = -100;
-        int posxInMap = (int) (x / Main.defaultSide);
-        int posyInMap = (int) (y / Main.defaultSide);
+        int posxInMap = (int) Math.round(x / Main.defaultSide);
+        int posyInMap = (int) Math.round(y / Main.defaultSide);
         boolean[] end = new boolean[4];
         end[0] = end[1] = end[2] = end[3] = false;
         for (int i = 1; i <= flameLength; i++) {
@@ -106,7 +104,6 @@ public class FlameManager extends Entity {
                 }
             }
         }
-
     }
 
     private void killBomber(Bomber bomber) {

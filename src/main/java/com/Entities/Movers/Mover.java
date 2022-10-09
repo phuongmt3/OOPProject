@@ -57,7 +57,7 @@ abstract public class Mover extends Entity {
         return (int) (x / Main.defaultSide);
     }
     protected int nextpos(double x) {
-        if (x == moveToNeareastSquare(x))
+        if (Math.abs(x - moveToNeareastSquare(x)) < 0.1)
             return -1;
         return curpos(x) + 1;
     }

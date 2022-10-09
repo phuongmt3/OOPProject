@@ -17,6 +17,7 @@ public class SpeedItem extends Brick {
     public void useItem() {
         renderer.deleteSpeedItem();
         used = true;
+        hasItem = false;
     }
 
     public boolean isUsed() {

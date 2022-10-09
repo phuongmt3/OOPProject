@@ -70,6 +70,9 @@ public abstract class Entity {
         return x >= 0 && x <= (Main.cols - 1) * Main.defaultSide
                 && y >= 0 && y <= (Main.rows - 1) * Main.defaultSide;
     }
+    public static boolean validCoordination(int x, int y) {
+        return x >= 0 && x <= (Main.cols - 1) && y >= 0 && y <= (Main.rows - 1);
+    }
     public boolean availableAreaInMap(Entity tile) {
         if (this instanceof Doria || this instanceof Ovape)
             return tile instanceof Grass || tile instanceof Brick;

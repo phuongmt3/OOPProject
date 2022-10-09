@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class Main extends Application {
     static public Stage stage;
-    private ArrayList<ArrayList<Entity>> map = new ArrayList<ArrayList<Entity>>();
+    private ArrayList<ArrayList<Entity>> map = new ArrayList<>();
     private Bomber bomber;
     private BomberAI bomberAi;
     private BombManager bombManager;

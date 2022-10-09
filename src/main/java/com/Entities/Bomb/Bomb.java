@@ -39,9 +39,6 @@ public class Bomb extends Entity {
         return timer >= BombManager.timeLimit;
     }
 
-    /*public void explode() {
-        timer = BombManager.timeLimit - 15;
-    }*/
     public void setConsecutiveTimer(Bomb otherBomb) {
         timer = BombManager.timeLimit - otherBomb.countdown() - 15;
     }
@@ -55,13 +52,4 @@ public class Bomb extends Entity {
         return BombManager.timeLimit - timer;
     }
 
-    public Flame getFlame(int id) {
-        if (id >= flame.countFlames())
-            return null;
-        return flame.getFlame(id);
-    }
-
-    public int countFlames() {
-        return flame.countFlames();
-    }
 }

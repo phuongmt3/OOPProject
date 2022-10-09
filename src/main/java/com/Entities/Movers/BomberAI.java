@@ -18,14 +18,16 @@ import javafx.util.Pair;
 import kotlin.Triple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class BomberAI extends Bomber {
     private Random random = new Random();
     private ArrayList<ArrayList<Integer>> mapAI = new ArrayList<>();
+    private ArrayList<Brick> items = new ArrayList<>();
+    private boolean constructItemList = false;
     private MovementType direction = MovementType.RIGHT;
     private int escapeTime, stepTime;
-    private int steps;
 
     public BomberAI(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                   BombManager bombManager, EnemyManager enemyManager) {
@@ -39,8 +41,8 @@ public class BomberAI extends Bomber {
     }
 
     public void updateTiming() {
-        stepTime = (int) Math.round(Main.defaultSide / speed);
-        escapeTime = FlameManager.getFlameLength() * stepTime + stepTime;
+        stepTime = (int) (Main.defaultSide / speed) + 2;
+        escapeTime = FlameManager.getFlameLength() * stepTime + 1;//+ stepTime
     }
 
     private void checkCollisionEnemy() {
@@ -128,7 +130,7 @@ public class BomberAI extends Bomber {
             }
     }
     private void updateMapAI() {
-        //-1 can't go; -2 enemy pos; 0 safe; 1 enemy will come need to avoid; 2 should put bomb
+        //-1 can't go; -2 enemy pos; -3 flame can be there; 0 safe; 1 enemy will come need to avoid; 2 should put bomb
         System.out.println("in update mapAI");
         for (int y = 0; y < Main.rows; y++)
             for (int x = 0; x < Main.cols; x++) {
@@ -136,7 +138,11 @@ public class BomberAI extends Bomber {
                     mapAI.get(y).set(x, -1);
                 else
                     mapAI.get(y).set(x, 0);
+                if (!constructItemList && map.get(y).get(x) instanceof Brick
+                        && ((Brick) map.get(y).get(x)).isHasItem())
+                    items.add((Brick) map.get(y).get(x));
             }
+        constructItemList = true;
 
         for (int i = 0; i < enemyManager.countEnemies(); i++) {
             Enemy enemy = enemyManager.getEnemy(i);
@@ -157,7 +163,7 @@ public class BomberAI extends Bomber {
 
             System.out.println("Enemy " + curx + " " + cury + ":" + enemy.getX() + " " + enemy.getY());
 
-            if (enemy.getY() == moveToNeareastSquare(enemy.getY())) {
+            if (Math.abs(enemy.getY() - moveToNeareastSquare(enemy.getY())) < 0.1) {
                 //left then up, down
                 for (int leftcnt = 0; leftcnt <= stepTime * 3; leftcnt++) {
                     double newX = roundCoordinate(enemy.getX() - enemyspeed * leftcnt);
@@ -169,7 +175,7 @@ public class BomberAI extends Bomber {
                             mapAI.get(cury).set(posx, 1);
                         else mapAI.get(cury).set(posx, 2);
                     }
-                    if (newX == moveToNeareastSquare(newX))
+                    if (Math.abs(newX - moveToNeareastSquare(newX)) < 0.1)
                         moveUpDownAfterLeftRight(leftcnt, enemy, cury, posx, enemyspeed);
                 }
                 //right then up, down
@@ -183,7 +189,7 @@ public class BomberAI extends Bomber {
                             mapAI.get(cury).set(posx, 1);
                         else mapAI.get(cury).set(posx, 2);
                     }
-                    if (newX == moveToNeareastSquare(newX))
+                    if (Math.abs(newX - moveToNeareastSquare(newX)) < 0.1)
                         moveUpDownAfterLeftRight(rightcnt, enemy, cury, posx, enemyspeed);
                 }
             } else {
@@ -198,7 +204,7 @@ public class BomberAI extends Bomber {
                             mapAI.get(posy).set(curx, 1);
                         else mapAI.get(posy).set(curx, 2);
                     }
-                    if (newY == moveToNeareastSquare(newY))
+                    if (Math.abs(newY - moveToNeareastSquare(newY)) < 0.1)
                         moveLeftRightAfterUpDown(upcnt, enemy, curx, posy, enemyspeed);
                 }
                 //down then left, right
@@ -212,7 +218,7 @@ public class BomberAI extends Bomber {
                             mapAI.get(posy).set(curx, 1);
                         else mapAI.get(posy).set(curx, 2);
                     }
-                    if (newY == moveToNeareastSquare(newY))
+                    if (Math.abs(newY - moveToNeareastSquare(newY)) < 0.1)
                         moveLeftRightAfterUpDown(downcnt, enemy, curx, posy, enemyspeed);
                 }
             }
@@ -220,8 +226,6 @@ public class BomberAI extends Bomber {
 
         for (int i = 0; i < bombManager.countBomb(); i++) {
             Bomb curbomb = bombManager.getBomb(i);
-            if (curbomb.countdown() >= escapeTime)
-                continue;
             int idx = (int) Math.round(curbomb.getX() / Main.defaultSide);
             int idy = (int) Math.round(curbomb.getY() / Main.defaultSide);
             for (MovementType type : MovementType.values())
@@ -230,7 +234,10 @@ public class BomberAI extends Bomber {
                     int flamex = idx + type.x * len;
                     if (mapAI.get(flamey).get(flamex) == -1)
                         break;
-                    mapAI.get(flamey).set(flamex, -1);
+                    if (curbomb.countdown() < escapeTime)
+                        mapAI.get(flamey).set(flamex, -1);
+                    else if (mapAI.get(flamey).get(flamex) == 0 || mapAI.get(flamey).get(flamex) == 2)
+                        mapAI.get(flamey).set(flamex, -3);
                 }
         }
     }
@@ -253,9 +260,11 @@ public class BomberAI extends Bomber {
         ArrayList<MovementType> safeWay = new ArrayList<>();
         ArrayList<Triple<Integer, Integer, MovementType>> loang = new ArrayList<>();
         ArrayList<Pair<Integer, Integer>> tracking = new ArrayList<>();
+        tracking.add(new Pair<>(curx, cury));
         for (MovementType type : MovementType.values())
-            if (type != MovementType.STILL && validCoordination((curx + type.x) * Main.defaultSide, (cury + type.y) * Main.defaultSide)
-                    && (mapAI.get(cury + type.y).get(curx + type.x) == 0 || mapAI.get(cury + type.y).get(curx + type.x) == 2)) {
+            if (type != MovementType.STILL && validCoordination(curx + type.x, cury + type.y)
+                    && (mapAI.get(cury + type.y).get(curx + type.x) == 0 || mapAI.get(cury + type.y).get(curx + type.x) == 2
+                    || mapAI.get(cury + type.y).get(curx + type.x) == -3)) {
                 loang.add(new Triple<>(curx + type.x, cury + type.y, type));
                 tracking.add(new Pair<>(curx + type.x, cury + type.y));
             }
@@ -264,16 +273,19 @@ public class BomberAI extends Bomber {
             loang.remove(0);
             if (safeWay.contains(cur.getThird()))
                 continue;
-            if (ifInBombPos && !(cur.getSecond() == cury && Math.abs(cur.getFirst() - curx) <= FlameManager.getFlameLength())
+            if (ifInBombPos && mapAI.get(cur.getSecond()).get(cur.getFirst()) != -3
+                    && !(cur.getSecond() == cury && Math.abs(cur.getFirst() - curx) <= FlameManager.getFlameLength())
                     && !(cur.getFirst() == curx && Math.abs(cur.getSecond() - cury) <= FlameManager.getFlameLength()))
                 safeWay.add(cur.getThird());
-            if (!ifInBombPos)
+            if (!ifInBombPos && mapAI.get(cur.getSecond()).get(cur.getFirst()) != -3)
                 safeWay.add(cur.getThird());
+
             for (MovementType type : MovementType.values()) {
                 Triple<Integer, Integer, MovementType> next = new Triple<>(cur.getFirst() + type.x, cur.getSecond() + type.y, cur.getThird());
-                if (type != MovementType.STILL && validCoordination(next.getFirst() * Main.defaultSide, next.getSecond() * Main.defaultSide)
+                if (type != MovementType.STILL && validCoordination(next.getFirst(), next.getSecond())
                         && !tracking.contains(new Pair<>(next.getFirst(), next.getSecond()))
-                        && (mapAI.get(next.getSecond()).get(next.getFirst()) == 0 || mapAI.get(next.getSecond()).get(next.getFirst()) == 2)) {
+                        && (mapAI.get(next.getSecond()).get(next.getFirst()) == 0 || mapAI.get(next.getSecond()).get(next.getFirst()) == 2
+                        || mapAI.get(next.getSecond()).get(next.getFirst()) == -3)) {
                     loang.add(next);
                     tracking.add(new Pair<>(next.getFirst(), next.getSecond()));
                 }
@@ -309,12 +321,12 @@ public class BomberAI extends Bomber {
             int idx = (int) Math.round(curbomb.getX() / Main.defaultSide);
             int idy = (int) Math.round(curbomb.getY() / Main.defaultSide);
             if (curpos(x) == idx && curpos(y) == idy) {
-                ArrayList<MovementType> safeway = chooseSafeWay(curpos(x), curpos(y), true);
+                ArrayList<MovementType> safeway = chooseSafeWay(idx, idy, true);
                 if (safeway.isEmpty())
                     direction = MovementType.STILL;
-                else direction = safeway.get(0);
+                else direction = safeway.get(random.nextInt(safeway.size()));
                 canMoveAndMove(direction);
-                System.out.println(direction);
+                System.out.println(idx + " " + idy + " " + direction);
                 return true;
             }
         }
@@ -329,16 +341,64 @@ public class BomberAI extends Bomber {
         }
         return false;
     }
+    private ArrayList<MovementType> getMoveDirectionToEntity(Entity other) {
+        double deltaX = x - other.getX();
+        double deltaY = y - other.getY();
+        MovementType dirx = MovementType.LEFT, diry = MovementType.UP;
+        if (deltaX < 0)
+            dirx = MovementType.RIGHT;
+        if (deltaY < 0)
+            diry = MovementType.DOWN;
+        ArrayList<MovementType> ans = new ArrayList<>();
+        ans.add(dirx); ans.add(diry);
+        return ans;
+    }
     private MovementType getRandomMoveDirection() {
         ArrayList<MovementType> safeWay = chooseSafeWay(curpos(x), curpos(y), false);
-        System.out.println(safeWay.size());
+        System.out.print("Safe Way: ");
+        for (MovementType dir : safeWay)
+            System.out.print(dir + " ");
+        System.out.println();
+
         int takeRandom = random.nextInt(3);
         MovementType dir = direction;
         if (takeRandom == 1 || !safeWay.contains(dir)) {
             if (safeWay.isEmpty())
                 dir = MovementType.STILL;
-            else
+            else {
+                int choices = items.size() == 1 ? 5 : 6;
+                int way = random.nextInt(choices);
+                if (way == 5 && bombManager.canPutBomb()) {
+                    //chase item, update at the same time.
+                    for (int i = 0; i < items.size(); i++) {
+                        if (!items.get(i).isHasItem()) {
+                            items.remove(i);
+                            i--;
+                        }
+                        else if (items.get(i) instanceof Portal && !enemyManager.allDead());
+                        else {
+                            ArrayList<MovementType> movelist = getMoveDirectionToEntity(items.get(i));
+                            for (MovementType move : movelist)
+                                if (safeWay.contains(move)) {
+                                    System.out.println("curpos: " + curpos(x) + " " + curpos(y) + " " + move + " chase items");
+                                    return move;
+                                }
+                        }
+                    }
+                }
+                if (way == 4 && bombManager.canPutBomb()) {
+                    //chase enemy
+                    for (int i = 0; i < enemyManager.countEnemies(); i++) {
+                        ArrayList<MovementType> moveList = getMoveDirectionToEntity(enemyManager.getEnemy(i));
+                        for (MovementType move : moveList)
+                            if (safeWay.contains(move)) {
+                                System.out.println("curpos: " + curpos(x) + " " + curpos(y) + " " + move + " chase enemy");
+                                return move;
+                            }
+                    }
+                }
                 dir = safeWay.get(random.nextInt(safeWay.size()));
+            }
         }
         System.out.println("curpos: " + curpos(x) + " " + curpos(y) + " " + dir);
         return dir;
@@ -350,19 +410,18 @@ public class BomberAI extends Bomber {
 
         if (y == moveToNeareastSquare(y) && x == moveToNeareastSquare(x)) {
             updateMapAI();
+            chooseSafeWay(0,0,false);
             if (inBombPosition());
-            else if (putBombWhenMeetBrick());
             else if (putBombWhenNearEnemy());
+            else if (putBombWhenMeetBrick());
             else {
                 System.out.println("In random move");
                 direction = getRandomMoveDirection();
                 canMoveAndMove(direction);
             }
-            steps = 0;
         }
         else
             canMoveAndMove(direction);
-        steps++;
 
         try {
             render(direction);
