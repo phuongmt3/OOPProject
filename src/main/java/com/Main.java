@@ -132,6 +132,8 @@ public class Main extends Application {
                     if (t.getCode() == KeyCode.ESCAPE)
                         System.exit(0);
                     else if (t.getCode() == KeyCode.A) {
+                        if (bomberAi.isDead())
+                            return;
                         AIPlayer = false;
                         bomberAi.stopAnimation();
                         bomber.showStartAnimation();
