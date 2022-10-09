@@ -28,6 +28,7 @@ public class BomberAI extends Bomber {
     private boolean constructItemList = false;
     private MovementType direction = MovementType.RIGHT;
     private int escapeTime, stepTime;
+    private final int putbombrange = 3;
 
     public BomberAI(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                   BombManager bombManager, EnemyManager enemyManager) {
@@ -79,7 +80,7 @@ public class BomberAI extends Bomber {
     }
     private void moveUpDownAfterLeftRight(int leftcnt, Enemy enemy, int cury, int posx, double enemyspeed) {
         int remainSteps = stepTime - leftcnt;
-        int remainSteps2 = remainSteps + stepTime * 2;
+        int remainSteps2 = remainSteps + stepTime * (putbombrange - 1);
         //up
         double newY = roundCoordinate(enemy.getY() - enemyspeed * remainSteps);
         double newY2 = roundCoordinate(enemy.getY() - enemyspeed * remainSteps2);
@@ -105,7 +106,7 @@ public class BomberAI extends Bomber {
     }
     private void moveLeftRightAfterUpDown(int upcnt, Enemy enemy, int curx, int posy, double enemyspeed) {
         int remainSteps = stepTime - upcnt;
-        int remainSteps2 = remainSteps + stepTime * 2;
+        int remainSteps2 = remainSteps + stepTime * (putbombrange - 1);
         //left
         double newX = roundCoordinate(enemy.getX() - enemyspeed * remainSteps);
         double newX2 = roundCoordinate(enemy.getX() - enemyspeed * remainSteps2);
@@ -165,7 +166,7 @@ public class BomberAI extends Bomber {
 
             if (Math.abs(enemy.getY() - moveToNeareastSquare(enemy.getY())) < 0.1) {
                 //left then up, down
-                for (int leftcnt = 0; leftcnt <= stepTime * 3; leftcnt++) {
+                for (int leftcnt = 0; leftcnt <= stepTime * putbombrange; leftcnt++) {
                     double newX = roundCoordinate(enemy.getX() - enemyspeed * leftcnt);
                     int posx = curpos(newX);
                     if (posx < 0 || mapAI.get(cury).get(posx) == -1)
@@ -179,7 +180,7 @@ public class BomberAI extends Bomber {
                         moveUpDownAfterLeftRight(leftcnt, enemy, cury, posx, enemyspeed);
                 }
                 //right then up, down
-                for (int rightcnt = 0; rightcnt <= stepTime * 3; rightcnt++) {
+                for (int rightcnt = 0; rightcnt <= stepTime * putbombrange; rightcnt++) {
                     double newX = roundCoordinate(enemy.getX() + enemyspeed * rightcnt);
                     int posx = nextpos(newX) > -1 ? nextpos(newX) : curpos(newX);
                     if (posx >= Main.cols || mapAI.get(cury).get(posx) == -1)
@@ -194,7 +195,7 @@ public class BomberAI extends Bomber {
                 }
             } else {
                 //up then left, right
-                for (int upcnt = 0; upcnt <= stepTime * 3; upcnt++) {
+                for (int upcnt = 0; upcnt <= stepTime * putbombrange; upcnt++) {
                     double newY = roundCoordinate(enemy.getY() - enemyspeed * upcnt);
                     int posy = curpos(newY);
                     if (posy < 0 || mapAI.get(posy).get(curx) == -1)
@@ -208,7 +209,7 @@ public class BomberAI extends Bomber {
                         moveLeftRightAfterUpDown(upcnt, enemy, curx, posy, enemyspeed);
                 }
                 //down then left, right
-                for (int downcnt = 0; downcnt <= stepTime * 3; downcnt++) {
+                for (int downcnt = 0; downcnt <= stepTime * putbombrange; downcnt++) {
                     double newY = roundCoordinate(enemy.getY() + enemyspeed * downcnt);
                     int posy = nextpos(newY) > -1 ? nextpos(newY) : curpos(newY);
                     if (posy >= Main.rows || mapAI.get(posy).get(curx) == -1)
