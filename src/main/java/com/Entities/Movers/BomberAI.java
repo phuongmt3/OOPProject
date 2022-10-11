@@ -367,6 +367,8 @@ public class BomberAI extends Bomber {
 
         int takeRandom = random.nextInt(3);
         MovementType dir = direction;
+        if (enemyManager.allDead() && items.size() == 1)
+            return getMoveDirectionToEntity(items.get(0)).get(random.nextInt(2));
         if (takeRandom == 1 || !safeWay.contains(dir)) {
             if (safeWay.isEmpty())
                 dir = MovementType.STILL;

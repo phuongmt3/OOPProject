@@ -238,4 +238,3 @@ public class Main extends Application {
         }
     }
 }
-//change mode of bomber & bomberAI (relate to aim of other enemies)
