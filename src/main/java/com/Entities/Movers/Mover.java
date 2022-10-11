@@ -62,7 +62,7 @@ abstract public class Mover extends Entity {
         return curpos(x) + 1;
     }
 
-    protected double moveToNeareastSquare(double x) {
+    public double moveToNeareastSquare(double x) {
         long pos = Math.round(x / Main.defaultSide);
         return pos * Main.defaultSide;
     }

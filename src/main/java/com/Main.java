@@ -121,6 +121,10 @@ public class Main extends Application {
                         case A -> {
                             AIPlayer = true;
                             bomber.stopAnimation();
+                            bomber.setX(bomber.moveToNeareastSquare(bomber.getX()));
+                            bomber.setY(bomber.moveToNeareastSquare(bomber.getY()));
+                            bomberAi.setX(bomber.getX());
+                            bomberAi.setY(bomber.getY());
                         }
                         case ESCAPE -> System.exit(0);
                     }
