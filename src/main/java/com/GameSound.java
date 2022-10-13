@@ -4,6 +4,9 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 public class GameSound {
@@ -12,23 +15,12 @@ public class GameSound {
         {
             File musicPath = new File(musicLocation);
             if(musicPath.exists()) {
-                //   for (int i = 0; i < 100; i++) {
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioInput);
                 clip.start();
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-                JOptionPane.showMessageDialog(null, "Press OK to start playing!");
-               // long clipTimePosition = clip.getMicrosecondPosition();
-              //  clip.stop();
-
-                //  JOptionPane.showMessageDialog(null, "Press OK to resume playing!");
-                //  clip.setMicrosecondPosition(clipTimePosition);
-                // clip.start();
-
-
-                //  }
             }
             else {
                 System.out.println("Can't find files!");

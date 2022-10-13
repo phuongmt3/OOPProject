@@ -46,7 +46,7 @@ public class Bomber extends Mover {
                         setY(i * Main.defaultSide);
                     }
                     else if (tile instanceof Portal && enemyManager.allDead()) {
-                        System.out.println("WINNER!!!");
+                        Main.win = true;
                     }
                 }
             }

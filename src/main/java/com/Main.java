@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javax.print.attribute.standard.Media;
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -38,10 +39,12 @@ public class Main extends Application {
     private Group root;
     public static Group rootMap, rootMover, rootBomb;
     public static int level, rows, cols;
+    public static boolean win = false;
     public static final double winWidth = 1000, winHeight = 450;
     public static final double defaultSide = 32.0;
     public static final long timePerFrame = 10000;
     private boolean AIPlayer = false;
+    private int timer;
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -67,7 +70,6 @@ public class Main extends Application {
                 map.get(i).get(j).render();
 
         AnimationTimer timer = new AnimationTimer() {
-
             private long lastTime = 0;
             @Override
             public void handle(long now) {
@@ -85,10 +87,49 @@ public class Main extends Application {
 
         stage.setTitle("Bomberman");
         stage.show();
-        String filepath = "src//main//java//com//playgame.wav";
+        showMessage(0);
+        String filepath = "src/main/java/com/playgame.wav";
         GameSound musicObject = new GameSound();
         musicObject.playMusic(filepath);
+    }
 
+    private void showMessage(int type) throws Exception {
+        String content = "Do you want to start the game?";
+        if (type == 1)
+            content = "Victory!\nDo you want to restart the game?";
+        else if (type == 2)
+            content = "Pity you :(\nDo you want to restart the game?";
+        Object[] options = {"Yes", "Exit game"};
+        int result = JOptionPane.showOptionDialog(null,
+                content,
+                "Confirm",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if(result == JOptionPane.YES_OPTION) {
+            System.out.println("start game");
+            if (type > 0)
+                resetGame();
+        }
+        else
+            System.exit(0);
+    }
+
+    private void resetGame() throws Exception {
+        timer = 0;
+        win = false;
+        rootMap = new Group();
+        rootMover = new Group();
+        rootBomb = new Group();
+        root = new Group(rootMap, rootBomb, rootMover);
+        scene = new Scene(root, winWidth, winHeight, Color.DARKGRAY);
+        stage.setScene(scene);
+        init(stage);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                map.get(i).get(j).render();
     }
 
     private void updateBomber(Mover.MovementType dir) {
@@ -103,15 +144,23 @@ public class Main extends Application {
     }
 
     public void update() throws Exception {
+        if (bomber.isDead() || bomberAi.isDead()) {
+            timer++;
+            if (timer == 60)
+                showMessage(2);
+            return;
+        }
+        if (win) {
+            timer++;
+            //play win sound here
+            if (timer == 60)
+                showMessage(1);
+            return;
+        }
         if (!AIPlayer) {
             scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
-                    if (bomber.isDead()) {
-                        if (event.getCode() == KeyCode.ESCAPE)
-                            System.exit(0);
-                        return;
-                    }
                     switch (event.getCode()) {
                         case UP -> updateBomber(Bomber.MovementType.UP);
                         case DOWN -> updateBomber(Bomber.MovementType.DOWN);
@@ -163,11 +212,6 @@ public class Main extends Application {
             enemyManager.render();
             bomberAi.render();
         }
-    }
-
-    @Override
-    public void stop() {
-        //release resources
     }
 
     public static void main(String[] args) {
