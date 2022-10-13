@@ -120,6 +120,7 @@ public class Main extends Application {
     private void resetGame() throws Exception {
         timer = 0;
         win = false;
+        AIPlayer = false;
         rootMap = new Group();
         rootMover = new Group();
         rootBomb = new Group();
