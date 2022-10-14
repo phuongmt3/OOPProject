@@ -7,10 +7,6 @@ import com.Main;
 
 import java.util.ArrayList;
 
-import static com.GameSound.bomberdie;
-import static com.GameSound.playgame;
-import static com.Main.Playgame;
-
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
     private ArrayList<ArrayList<Entity>> map;
@@ -40,10 +36,9 @@ public class BombManager {
                         bomb.setConsecutiveTimer(curbomb);
                 }
             }
-
         }
         bombs.add(bomb);
-
+        GameSound.playClip(GameSound.NEWBOMB);
     }
     public void removeBomb(Bomb bomb) {
         bombs.remove(bomb);

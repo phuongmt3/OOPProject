@@ -9,8 +9,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import static com.Main.Playgame;
-
 public class RendererBomb extends Renderer {
     private ImageView bomb, bomb2, bomb3;
     private Timeline t = new Timeline();
@@ -57,11 +55,6 @@ public class RendererBomb extends Renderer {
             initBomb();
             firstTime = false;
         }
-        Playgame.stopClip(GameSound.PLAYGAME);
-        Playgame.playClip(GameSound.NEWBOMB);
-        // Playgame.stopClip(GameSound.BOMBBANG);
-        Playgame.playClip(GameSound.PLAYGAME);
-        Playgame.loopClip(GameSound.PLAYGAME);
     }
 
     public void deleteBomb() throws Exception {

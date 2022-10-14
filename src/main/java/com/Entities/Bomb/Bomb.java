@@ -8,8 +8,6 @@ import com.Renderer.RendererBomb;
 
 import java.util.ArrayList;
 
-import static com.Main.Playgame;
-
 public class Bomb extends Entity {
     private RendererBomb renderer = new RendererBomb();
     private int timer = 0;
@@ -26,13 +24,7 @@ public class Bomb extends Entity {
     public void update() throws Exception {
         timer++;
         if (isExploded()) {
-            Playgame.stopClip(GameSound.PLAYGAME);
-            Playgame.playClip(GameSound.BOMBBANG);
-           // Playgame.stopClip(GameSound.BOMBBANG);
-            Playgame.playClip(GameSound.PLAYGAME);
-            Playgame.loopClip(GameSound.PLAYGAME);
-
-
+            GameSound.playClip(GameSound.BOMBBANG);
             renderer.deleteBomb();
             manager.removeBomb(this);
             flame.updateInfluence();

@@ -47,7 +47,7 @@ public class Main extends Application {
     private boolean AIPlayer = false;
     private int timer;
 
-    public static final GameSound Playgame = new GameSound();
+    //public static GameSound Playgame = new GameSound();
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -94,8 +94,8 @@ public class Main extends Application {
         showMessage(0);
 
 
-        Playgame.playClip(GameSound.PLAYGAME);
-        Playgame.loopClip(GameSound.PLAYGAME);
+        GameSound.playClip(GameSound.PLAYGAME);
+        GameSound.loopClip(GameSound.PLAYGAME);
 
     }
 
@@ -155,8 +155,8 @@ public class Main extends Application {
         if (bomber.isDead() || bomberAi.isDead()) {
             GameSound.stopClip(GameSound.PLAYGAME);
             GameSound.playClip(GameSound.BOMBERDIE);
-            Playgame.playClip(GameSound.PLAYGAME);
-            Playgame.loopClip(GameSound.PLAYGAME);
+            GameSound.playClip(GameSound.PLAYGAME);
+            GameSound.loopClip(GameSound.PLAYGAME);
 
             timer++;
             if (timer == 60)

@@ -1,18 +1,9 @@
 package com;
 
-import com.Entities.Movers.Bomber;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Scanner;
 
 public class GameSound {
     public static final String playgame = "src/main/java/res/sound/playgame.wav";
@@ -35,9 +26,6 @@ public class GameSound {
     public static Clip WIN = makeClip(win);
     public static Clip NEWBOMB = makeClip(newbomb);
     public static Clip ENEMYDIE = makeClip(enemydie);
-
-
-
 
 
 
@@ -67,6 +55,7 @@ public class GameSound {
         //Scanner sc = new Scanner(System.in);
         //String res = sc.next();
         clip.start();
+        clip.setFramePosition(0);
     }
 
     public static void loopClip(Clip clip) {
