@@ -35,12 +35,6 @@ public class FlameManager extends Entity {
     public static int getFlameLength() {
         return flameLength;
     }
-    public Flame getFlame(int id) {
-        return flames.get(id);
-    }
-    public int countFlames() {
-        return flames.size();
-    }
 
     @Override
     public void render() throws Exception {
@@ -124,5 +118,9 @@ public class FlameManager extends Entity {
 
     public static void increaseFlameLength() {
         flameLength += 1;
+    }
+
+    public static void resetFlameLength() {
+        flameLength = 1;
     }
 }

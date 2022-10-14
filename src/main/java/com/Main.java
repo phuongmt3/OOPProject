@@ -2,6 +2,7 @@ package com;
 
 import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
+import com.Entities.Bomb.FlameManager;
 import com.Entities.Entity;
 import com.GameSound;
 import com.Entities.Maps.*;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 
 public class Main extends Application {
     static public Stage stage;
-    private ArrayList<ArrayList<Entity>> map = new ArrayList<>();
+    private ArrayList<ArrayList<Entity>> map;
     private Bomber bomber;
     private BomberAI bomberAi;
     private BombManager bombManager;
@@ -50,6 +51,7 @@ public class Main extends Application {
         stage = primaryStage;
         enemyManager = new EnemyManager();
         bombManager = new BombManager();
+        map = new ArrayList<>();
         //read file input -> init map
         readFile("src/main/java/res/levels/Level1.txt");
         bombManager.setMap(map);
@@ -121,6 +123,7 @@ public class Main extends Application {
         timer = 0;
         win = false;
         AIPlayer = false;
+        FlameManager.resetFlameLength();
         rootMap = new Group();
         rootMover = new Group();
         rootBomb = new Group();
@@ -153,7 +156,6 @@ public class Main extends Application {
         }
         if (win) {
             timer++;
-            //play win sound here
             if (timer == 60)
                 showMessage(1);
             return;
