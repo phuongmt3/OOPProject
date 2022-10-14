@@ -2,9 +2,12 @@ package com.Entities.Bomb;
 
 import com.Entities.Entity;
 import com.Entities.Movers.Mover;
+import com.GameSound;
 import com.Main;
 
 import java.util.ArrayList;
+
+import static com.GameSound.playgame;
 
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
@@ -56,6 +59,9 @@ public class BombManager {
     public void render() throws Exception {
         for (Bomb bomb : bombs) {
             bomb.render();
+          /*  Main.Playgame.stopMusic(playgame);
+            GameSound bombExposed = new GameSound();
+            bombExposed.playMusic(GameSound.bomberdie);*/
         }
     }
 

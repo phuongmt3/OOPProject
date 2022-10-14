@@ -35,7 +35,7 @@ public class Main extends Application {
     private BomberAI bomberAi;
     private BombManager bombManager;
     private EnemyManager enemyManager;
-    private Scene scene;
+    public static Scene scene;
     private Group root;
     public static Group rootMap, rootMover, rootBomb;
     public static int level, rows, cols;
@@ -45,6 +45,8 @@ public class Main extends Application {
     public static final long timePerFrame = 10000;
     private boolean AIPlayer = false;
     private int timer;
+
+    public static GameSound Playgame = new GameSound();
 
     public void init(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -88,9 +90,12 @@ public class Main extends Application {
         stage.setTitle("Bomberman");
         stage.show();
         showMessage(0);
-        String filepath = "src/main/java/com/playgame.wav";
-        GameSound musicObject = new GameSound();
-        musicObject.playMusic(filepath);
+       // String filepath = "src/main/java/com/playgame.wav";
+      //  String filepath = "src/main/java/res/sound/playgame.wav";
+       // GameSound Playgame = new GameSound();
+        Playgame.playMusic(GameSound.playgame);
+
+
     }
 
     private void showMessage(int type) throws Exception {
