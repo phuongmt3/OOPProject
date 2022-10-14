@@ -83,9 +83,12 @@ public class Main extends Application {
 
 
         stage.show();
-        String filepath = "src//main//java//com//playgame.wav";
+     /*   String filepath = "src//main//java//com//playgame.wav";
         GameSound musicObject = new GameSound();
-        musicObject.playMusic(filepath);
+        musicObject.playMusic(filepath);*/
+      //  String playgame = "src//main//java//res//sound//playgame.wav";
+        GameSound startSound = new GameSound();
+        startSound.playMusic(GameSound.playgame);
 
     }
 
@@ -103,6 +106,7 @@ public class Main extends Application {
             @Override
             public void handle(KeyEvent event) {
                 if (bomber.isDead()) {
+
                     if (event.getCode() == KeyCode.ESCAPE)
                         System.exit(0);
                     return;

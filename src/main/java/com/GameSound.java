@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.io.File;
 
 public class GameSound {
+    static final String playgame = "src//main//java//res//sound//playgame.wav";
+
     public void playMusic(String musicLocation) {
         try
         {
@@ -38,4 +40,6 @@ public class GameSound {
             ex.printStackTrace();
         }
     }
+
+
 }
