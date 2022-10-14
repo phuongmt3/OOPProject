@@ -22,12 +22,21 @@ public class GameSound {
     public static final String menu = "src/main/java/res/sound/menu.wav";
     public static final String bomb_bang = "src/main/java/res/sound/bomb_bang.wav";
 
+    public static final String win = "src/main/java/res/sound/win.wav";
+    public static final String newbomb = "src/main/java/res/sound/newbomb.wav";
+    public static final String enemydie = "src/main/java/res/sound/enemy_die.wav";
 
     public static Clip PLAYGAME = makeClip(playgame);
     public static Clip BOMBERDIE = makeClip(bomberdie);
     public static Clip LOSE = makeClip(lose);
     public static Clip MENU = makeClip(menu);
+
     public static Clip BOMBBANG = makeClip(bomb_bang);
+    public static Clip WIN = makeClip(win);
+    public static Clip NEWBOMB = makeClip(newbomb);
+    public static Clip ENEMYDIE = makeClip(enemydie);
+
+
 
 
 

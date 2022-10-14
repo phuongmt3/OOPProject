@@ -3,9 +3,12 @@ package com.Entities.Bomb;
 import com.Entities.Entity;
 import com.Entities.Movers.Bomber;
 import com.Entities.Movers.Enemies.EnemyManager;
+import com.GameSound;
 import com.Renderer.RendererBomb;
 
 import java.util.ArrayList;
+
+import static com.Main.Playgame;
 
 public class Bomb extends Entity {
     private RendererBomb renderer = new RendererBomb();
@@ -23,6 +26,13 @@ public class Bomb extends Entity {
     public void update() throws Exception {
         timer++;
         if (isExploded()) {
+            Playgame.stopClip(GameSound.PLAYGAME);
+            Playgame.playClip(GameSound.BOMBBANG);
+           // Playgame.stopClip(GameSound.BOMBBANG);
+            Playgame.playClip(GameSound.PLAYGAME);
+            Playgame.loopClip(GameSound.PLAYGAME);
+
+
             renderer.deleteBomb();
             manager.removeBomb(this);
             flame.updateInfluence();
@@ -33,10 +43,12 @@ public class Bomb extends Entity {
     @Override
     public void render() throws Exception {
         renderer.renderBomb(x, y);
+
     }
 
     public boolean isExploded() {
         return timer >= BombManager.timeLimit;
+
     }
 
     public void setConsecutiveTimer(Bomb otherBomb) {

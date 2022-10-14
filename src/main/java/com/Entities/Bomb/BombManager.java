@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import static com.GameSound.bomberdie;
 import static com.GameSound.playgame;
+import static com.Main.Playgame;
 
 public class BombManager {
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
@@ -39,14 +40,17 @@ public class BombManager {
                         bomb.setConsecutiveTimer(curbomb);
                 }
             }
+
         }
         bombs.add(bomb);
+
     }
     public void removeBomb(Bomb bomb) {
         bombs.remove(bomb);
     }
 
     public void update() throws Exception {
+
         int oldBombsCount = bombs.size();
         for (int i = 0; i < bombs.size(); i++) {
             bombs.get(i).update();
