@@ -15,6 +15,22 @@ import java.io.File;
 import java.util.Scanner;
 
 public class GameSound {
+    public static final String playgame = "src/main/java/res/sound/playgame.wav";
+    public static final String bomberdie = "src/main/java/res/sound/bomber_die.wav";
+
+    public static final String lose = "src/main/java/res/sound/lose.wav";
+    public static final String menu = "src/main/java/res/sound/menu.wav";
+    public static final String bomb_bang = "src/main/java/res/sound/bomb_bang.wav";
+
+
+    public static Clip PLAYGAME = makeClip(playgame);
+    public static Clip BOMBERDIE = makeClip(bomberdie);
+    public static Clip LOSE = makeClip(lose);
+    public static Clip MENU = makeClip(menu);
+    public static Clip BOMBBANG = makeClip(bomb_bang);
+
+
+
 
     public static Clip makeClip(String musicLocation)  {
         try {

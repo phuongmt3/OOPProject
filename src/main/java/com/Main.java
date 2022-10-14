@@ -92,7 +92,8 @@ public class Main extends Application {
         showMessage(0);
 
 
-
+        Playgame.playClip(GameSound.PLAYGAME);
+        Playgame.loopClip(GameSound.PLAYGAME);
 
     }
 
