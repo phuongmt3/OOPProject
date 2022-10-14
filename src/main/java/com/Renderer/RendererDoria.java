@@ -13,7 +13,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class RendererDoria extends Renderer {
-    private ArrayList<ArrayList<ImageView>> doriaviews = new ArrayList<ArrayList<ImageView>>();
+    private ArrayList<ArrayList<ImageView>> doriaviews = new ArrayList<>();
     private Timeline[] t = new Timeline[2];
 
     public RendererDoria() {
@@ -40,7 +40,7 @@ public class RendererDoria extends Renderer {
         initAnimation(1);
     }
 
-    private void initAnimation(int type) {
+    public void initAnimation(int type) {
         t[type] = new Timeline();
         t[type].setCycleCount(1);
         t[type].getKeyFrames().add(new KeyFrame(Duration.millis(300),
@@ -61,7 +61,7 @@ public class RendererDoria extends Renderer {
                 }));
     }
 
-    private void stopAnimation(Mover.MovementType dir) {
+    public void stopAnimation(Mover.MovementType dir) {
         int id = 0;
         if (dir == null)
             id = -1;
@@ -95,7 +95,7 @@ public class RendererDoria extends Renderer {
         oldDir = dir.ordinal() / 2;
     }
 
-    public void renderDoria(double x, double y) throws Exception {
+    public void render(double x, double y) throws Exception {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < doriaviews.get(i).size(); j++) {
                 doriaviews.get(i).get(j).setX(x);
@@ -103,10 +103,14 @@ public class RendererDoria extends Renderer {
             }
     }
 
-    public void deleteDoria() {
+    public void clear() {
         stopAnimation(null);
         Main.rootMover.getChildren().remove(doriaviews.get(0).get(0));
         Main.rootMover.getChildren().remove(doriaviews.get(1).get(0));
+    }
+
+    public void delete() {
+        clear();
         Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),

@@ -14,19 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Doria extends Enemy {
-    private RendererDoria renderer = new RendererDoria();
     private final int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
 
     public Doria(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
         super(x, y, speed, map, bombManager, enemyManager, bomber);
+        renderer = new RendererDoria();
     }
 
     @Override
     public void update() {
         if (isDead()) {
-            renderer.deleteDoria();
+            renderer.delete();
             enemyManager.removeEnemy(this);
         }
 
@@ -49,10 +49,4 @@ public class Doria extends Enemy {
         if (colllideOtherEnemy())
             renderer.pauseAnimation(direction);
     }
-
-    @Override
-    public void render() throws Exception {
-        renderer.renderDoria(x, y);
-    }
-
 }

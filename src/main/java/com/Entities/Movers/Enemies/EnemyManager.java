@@ -40,4 +40,10 @@ public class EnemyManager {
     public Enemy getEnemy(int index) {
         return enemies.get(index);
     }
+
+    public void clear() {
+        for (Enemy enemy : enemies) {
+            enemy.clear();
+        }
+    }
 }

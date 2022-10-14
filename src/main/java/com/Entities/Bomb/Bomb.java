@@ -32,15 +32,17 @@ public class Bomb extends Entity {
         }
     }
 
+    public void clear() throws Exception {
+        renderer.deleteBomb();
+    }
+
     @Override
     public void render() throws Exception {
         renderer.renderBomb(x, y);
-
     }
 
     public boolean isExploded() {
         return timer >= BombManager.timeLimit;
-
     }
 
     public void setConsecutiveTimer(Bomb otherBomb) {

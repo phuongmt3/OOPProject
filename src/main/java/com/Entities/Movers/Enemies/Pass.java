@@ -9,19 +9,19 @@ import com.Renderer.RendererPass;
 import java.util.ArrayList;
 
 public class Pass extends Enemy {
-    private RendererPass renderer = new RendererPass();
     private final int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
 
     public Pass(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
         super(x, y, speed, map, bombManager, enemyManager, bomber);
+        renderer = new RendererPass();
     }
 
     @Override
     public void update() {
         if (isDead()) {
-            renderer.deletePass();
+            renderer.delete();
             enemyManager.removeEnemy(this);
         }
 
@@ -43,10 +43,5 @@ public class Pass extends Enemy {
             renderer.startAnimation(direction);
         if (colllideOtherEnemy())
             renderer.pauseAnimation(direction);
-    }
-
-    @Override
-    public void render() throws Exception {
-        renderer.renderPass(x, y);
     }
 }

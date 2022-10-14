@@ -5,6 +5,7 @@ import com.Entities.Entity;
 import com.Entities.Movers.Bomber;
 import com.Entities.Movers.Mover;
 import com.Main;
+import com.Renderer.Renderer;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public abstract class Enemy extends Mover {
     protected MovementType direction = MovementType.UP;
     protected Bomber bomber;
     protected ArrayList<MovementType> way = new ArrayList<MovementType>();
+    protected Renderer renderer;
 
     public Enemy(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
@@ -134,6 +136,16 @@ public abstract class Enemy extends Mover {
             return dir;
         }
         return getRandomMoveDirection();
+    }
+
+    public void clear() {
+        if (renderer != null)
+            renderer.clear();
+    }
+
+    @Override
+    public void render() throws Exception {
+        renderer.render(x, y);
     }
 
     @Override

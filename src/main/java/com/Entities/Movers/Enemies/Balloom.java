@@ -10,19 +10,19 @@ import com.Renderer.RendererBalloom;
 import java.util.ArrayList;
 
 public class Balloom extends Enemy {
-    private RendererBalloom renderer = new RendererBalloom();
     private final int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
 
     public Balloom(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                    BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
         super(x, y, speed, map, bombManager, enemyManager, bomber);
+        renderer = new RendererBalloom();
     }
 
     @Override
     public void update() {
         if (isDead()) {
-            renderer.deleteBalloom();
+            renderer.delete();
             enemyManager.removeEnemy(this);
         }
 
@@ -39,10 +39,5 @@ public class Balloom extends Enemy {
             renderer.startAnimation(direction);
         if (colllideOtherEnemy())
             renderer.pauseAnimation(direction);
-    }
-
-    @Override
-    public void render() throws Exception {
-        renderer.renderBallom(x, y);
     }
 }

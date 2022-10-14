@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class Dahl extends Enemy {
-    private RendererDahl renderer = new RendererDahl();
     private int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
     private int steps;
     public final double normSpeed, fastSpeed = 10;
@@ -21,17 +20,13 @@ public class Dahl extends Enemy {
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
         super(x, y, speed, map, bombManager, enemyManager, bomber);
         normSpeed = speed;
-    }
-
-    @Override
-    public void render() throws Exception {
-        renderer.renderDahl(x, y);
+        renderer = new RendererDahl();
     }
 
     @Override
     public void update() {
         if (isDead()) {
-            renderer.deleteDahl();
+            renderer.delete();
             enemyManager.removeEnemy(this);
         }
 

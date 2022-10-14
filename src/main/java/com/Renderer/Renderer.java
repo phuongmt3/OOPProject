@@ -1,5 +1,6 @@
 package com.Renderer;
 
+import com.Entities.Movers.Mover;
 import javafx.scene.image.Image;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ public abstract class Renderer {
     protected final double scale = 2.0;
     protected final double side = 16 * scale;
     protected int oldDir = -1;
-    public static enum Direction {
+    public enum Direction {
         center, left, right, up, down, middlerow, middlecol
     };
 
@@ -24,4 +25,11 @@ public abstract class Renderer {
         }
     }
 
+    protected void initAnimation(int type) {}
+    protected void stopAnimation(Mover.MovementType dir) {}
+    public void pauseAnimation(Mover.MovementType dir) {}
+    public void startAnimation(Mover.MovementType dir) {}
+    public void render(double x, double y) throws Exception {}
+    public void clear() {}
+    public void delete() {}
 }

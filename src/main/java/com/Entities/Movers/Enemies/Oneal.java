@@ -9,7 +9,6 @@ import com.Renderer.RendererOneal;
 import java.util.ArrayList;
 
 public class Oneal extends Enemy {
-    private RendererOneal renderer = new RendererOneal();
     public final double fastSpeed = 2.5, normSpeed;
     private final int nearLimit = 5;
     private int stepsPerSquare = (int) Math.round(Main.defaultSide / speed);
@@ -18,17 +17,13 @@ public class Oneal extends Enemy {
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {
         super(x, y, speed, map, bombManager, enemyManager, bomber);
         normSpeed = speed;
-    }
-
-    @Override
-    public void render() throws Exception {
-        renderer.renderOneal(x, y);
+        renderer = new RendererOneal();
     }
 
     @Override
     public void update() {
         if (isDead()) {
-            renderer.deleteOneal();
+            renderer.delete();
             enemyManager.removeEnemy(this);
         }
 

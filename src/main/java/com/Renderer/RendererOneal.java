@@ -13,7 +13,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class RendererOneal extends Renderer {
-    private ArrayList<ArrayList<ImageView>> onealviews = new ArrayList<ArrayList<ImageView>>();
+    private ArrayList<ArrayList<ImageView>> onealviews = new ArrayList<>();
     private Timeline[] t = new Timeline[2];
     public RendererOneal() {
         super();
@@ -39,7 +39,7 @@ public class RendererOneal extends Renderer {
         initAnimation(1);
     }
 
-    private void initAnimation(int type) {
+    public void initAnimation(int type) {
         t[type] = new Timeline();
         t[type].setCycleCount(1);
         t[type].getKeyFrames().add(new KeyFrame(Duration.millis(300),
@@ -60,7 +60,7 @@ public class RendererOneal extends Renderer {
                 }));
     }
 
-    private void stopAnimation(Mover.MovementType dir) {
+    public void stopAnimation(Mover.MovementType dir) {
         int id = 0;
         if (dir == null)
             id = -1;
@@ -94,7 +94,7 @@ public class RendererOneal extends Renderer {
         oldDir = dir.ordinal() / 2;
     }
 
-    public void renderOneal(double x, double y) throws Exception {
+    public void render(double x, double y) throws Exception {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < onealviews.get(i).size(); j++) {
                 onealviews.get(i).get(j).setX(x);
@@ -102,10 +102,13 @@ public class RendererOneal extends Renderer {
             }
     }
 
-    public void deleteOneal() {
+    public void clear() {
         stopAnimation(null);
         Main.rootMover.getChildren().remove(onealviews.get(0).get(0));
         Main.rootMover.getChildren().remove(onealviews.get(1).get(0));
+    }
+    public void delete() {
+        clear();
         Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),

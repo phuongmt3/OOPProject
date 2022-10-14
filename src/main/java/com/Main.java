@@ -36,7 +36,7 @@ public class Main extends Application {
     private BomberAI bomberAi;
     private BombManager bombManager;
     private EnemyManager enemyManager;
-    public static Scene scene;
+    public Scene scene;
     private Group root;
     public static Group rootMap, rootMover, rootBomb;
     public static int level, rows, cols;
@@ -49,8 +49,7 @@ public class Main extends Application {
 
     //public static GameSound Playgame = new GameSound();
 
-    public void init(Stage primaryStage) throws Exception {
-        stage = primaryStage;
+    public void init() throws Exception {
         enemyManager = new EnemyManager();
         bombManager = new BombManager();
         map = new ArrayList<>();
@@ -66,8 +65,9 @@ public class Main extends Application {
         rootBomb = new Group();
         root = new Group(rootMap, rootBomb, rootMover);
         scene = new Scene(root, winWidth, winHeight, Color.DARKGRAY);
-        primaryStage.setScene(scene);
-        init(primaryStage);
+        stage = new Stage();
+        stage.setScene(scene);
+        init();
 
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
@@ -92,7 +92,6 @@ public class Main extends Application {
         stage.setTitle("Bomberman");
         stage.show();
         showMessage(0);
-
 
         GameSound.playClip(GameSound.PLAYGAME);
         GameSound.loopClip(GameSound.PLAYGAME);
@@ -128,13 +127,10 @@ public class Main extends Application {
         win = false;
         AIPlayer = false;
         FlameManager.resetFlameLength();
-        rootMap = new Group();
-        rootMover = new Group();
-        rootBomb = new Group();
-        root = new Group(rootMap, rootBomb, rootMover);
-        scene = new Scene(root, winWidth, winHeight, Color.DARKGRAY);
-        stage.setScene(scene);
-        init(stage);
+        enemyManager.clear();
+        bombManager.clear();
+        rootMap.getChildren().clear();
+        init();
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
                 map.get(i).get(j).render();
@@ -230,8 +226,10 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch();
-
     }
+
+    @Override
+    public void stop() {}
 
     private void readFile(String path) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {

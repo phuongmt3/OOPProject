@@ -96,53 +96,6 @@ abstract public class Mover extends Entity {
         return availableAreaInMap(map.get(y).get(x));
     }
 
-    public boolean canMove(MovementType type) {
-        boolean inBombPosition = collideBomb();
-        double newX = roundCoordinate(x + type.x * speed);
-        newX = Math.max(0, Math.min(newX, (Main.cols - 1) * Main.defaultSide));
-        double newY = roundCoordinate(y + type.y * speed);
-        newY = Math.max(0, Math.min(newY, (Main.rows - 1) * Main.defaultSide));
-        Entity tile0 = null, tile1 = null;
-        int newidXmap = (int) (newX / Main.defaultSide);
-        int newidYmap = (int) (newY / Main.defaultSide);
-
-        if (type == MovementType.LEFT) {
-            tile0 = map.get(newidYmap).get(newidXmap);
-            tile1 = map.get(newidYmap + 1).get(newidXmap);
-        }
-        else if (type == MovementType.RIGHT) {
-            newidXmap ++;
-            tile0 = map.get(newidYmap).get(newidXmap);
-            tile1 = map.get(newidYmap + 1).get(newidXmap);
-        }
-        else if (type == MovementType.UP) {
-            tile0 = map.get(newidYmap).get(newidXmap);
-            tile1 = map.get(newidYmap).get(newidXmap + 1);
-        }
-        else if (type == MovementType.DOWN) {
-            newidYmap ++;
-            tile0 = map.get(newidYmap).get(newidXmap);
-            tile1 = map.get(newidYmap).get(newidXmap + 1);
-        }
-
-        double oldX = x, oldY = y;
-        setX(newX); setY(newY);
-        if (!inBombPosition && collideBomb()) {
-            setX(oldX); setY(oldY);
-            return false;
-        }
-        else if (tile0 instanceof Wall || (tile0 instanceof Brick && !((Brick) tile0).isExposed())) {
-            setX(oldX); setY(oldY);
-            return false;
-        }
-        else if (checkCollision(tile1) && (tile1 instanceof Wall || (tile1 instanceof Brick && !((Brick) tile1).isExposed()))) {
-            setX(oldX); setY(oldY);
-            return false;
-        }
-        setX(oldX); setY(oldY);
-        return true;
-    }
-
     public boolean canMoveAndMove(MovementType type) {
         boolean inBombPosition = collideBomb();
         double newX = roundCoordinate(x + type.x * speed);

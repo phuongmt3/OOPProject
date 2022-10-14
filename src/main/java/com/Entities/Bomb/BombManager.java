@@ -43,7 +43,10 @@ public class BombManager {
     public void removeBomb(Bomb bomb) {
         bombs.remove(bomb);
     }
-
+    public void clear() throws Exception {
+        for (Bomb bomb : bombs)
+            bomb.clear();
+    }
     public void update() throws Exception {
 
         int oldBombsCount = bombs.size();
