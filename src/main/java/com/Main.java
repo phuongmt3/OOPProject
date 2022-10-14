@@ -90,10 +90,8 @@ public class Main extends Application {
         stage.setTitle("Bomberman");
         stage.show();
         showMessage(0);
-       // String filepath = "src/main/java/com/playgame.wav";
-      //  String filepath = "src/main/java/res/sound/playgame.wav";
-       // GameSound Playgame = new GameSound();
-        Playgame.playMusic(GameSound.playgame);
+
+
 
 
     }
@@ -157,6 +155,7 @@ public class Main extends Application {
             return;
         }
         if (win) {
+
             timer++;
             //play win sound here
             if (timer == 60)

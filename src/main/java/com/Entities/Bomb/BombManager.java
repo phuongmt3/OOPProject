@@ -7,6 +7,7 @@ import com.Main;
 
 import java.util.ArrayList;
 
+import static com.GameSound.bomberdie;
 import static com.GameSound.playgame;
 
 public class BombManager {
@@ -59,9 +60,7 @@ public class BombManager {
     public void render() throws Exception {
         for (Bomb bomb : bombs) {
             bomb.render();
-          /*  Main.Playgame.stopMusic(playgame);
-            GameSound bombExposed = new GameSound();
-            bombExposed.playMusic(GameSound.bomberdie);*/
+
         }
     }
 
