@@ -12,7 +12,6 @@ import com.Renderer.RendererBomber;
 import java.util.ArrayList;
 
 public class Bomber extends Mover {
-    private RendererBomber renderer;
     private boolean renderDead = false;
     private BomberAI bomberAI;
     public Bomber(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
@@ -75,11 +74,11 @@ public class Bomber extends Mover {
     }
 
     public void stopAnimation() {
-        renderer.stopAnimation(null);
+        ((RendererBomber)renderer).stopAnimation(null);
     }
 
     public void showStartAnimation() {
-        renderer.showStartAnimation();
+        ((RendererBomber)renderer).showStartAnimation();
     }
 
     @Override
@@ -90,10 +89,14 @@ public class Bomber extends Mover {
     @Override
     public void render() throws Exception {
         if (isDead() && !renderDead) {
-            renderer.deleteBomber();
+            renderer.delete();
             renderDead = true;
         }
         else if (!isDead())
-            renderer.renderBomber(x, y);
+            renderer.render(x, y);
+    }
+
+    public void clear() {
+        renderer.clear();
     }
 }

@@ -4,7 +4,6 @@ import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
 import com.Entities.Bomb.FlameManager;
 import com.Entities.Entity;
-import com.GameSound;
 import com.Entities.Maps.*;
 import com.Entities.Maps.Items.*;
 import com.Entities.Movers.Bomber;
@@ -13,19 +12,15 @@ import com.Entities.Movers.Enemies.*;
 import com.Entities.Movers.Mover;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.media.AudioClip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import javax.print.attribute.standard.Media;
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -95,7 +90,6 @@ public class Main extends Application {
 
         GameSound.playClip(GameSound.PLAYGAME);
         GameSound.loopClip(GameSound.PLAYGAME);
-
     }
 
     private void showMessage(int type) throws Exception {
@@ -129,11 +123,15 @@ public class Main extends Application {
         FlameManager.resetFlameLength();
         enemyManager.clear();
         bombManager.clear();
+        bomber.clear();
+        bomberAi.clear();
         rootMap.getChildren().clear();
         init();
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
                 map.get(i).get(j).render();
+        GameSound.playClip(GameSound.PLAYGAME);
+        GameSound.loopClip(GameSound.PLAYGAME);
     }
 
     private void updateBomber(Mover.MovementType dir) {
@@ -151,9 +149,6 @@ public class Main extends Application {
         if (bomber.isDead() || bomberAi.isDead()) {
             GameSound.stopClip(GameSound.PLAYGAME);
             GameSound.playClip(GameSound.BOMBERDIE);
-            GameSound.playClip(GameSound.PLAYGAME);
-            GameSound.loopClip(GameSound.PLAYGAME);
-
             timer++;
             if (timer == 60)
                 showMessage(2);

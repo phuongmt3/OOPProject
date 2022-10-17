@@ -5,10 +5,7 @@ import com.Entities.Bomb.BombManager;
 import com.Entities.Bomb.FlameManager;
 import com.Entities.Entity;
 import com.Entities.Maps.Brick;
-import com.Entities.Maps.Items.BombItem;
-import com.Entities.Maps.Items.FlameItem;
 import com.Entities.Maps.Items.Portal;
-import com.Entities.Maps.Items.SpeedItem;
 import com.Entities.Movers.Enemies.Dahl;
 import com.Entities.Movers.Enemies.Enemy;
 import com.Entities.Movers.Enemies.EnemyManager;
@@ -18,7 +15,6 @@ import javafx.util.Pair;
 import kotlin.Triple;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class BomberAI extends Bomber {

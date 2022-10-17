@@ -4,9 +4,9 @@ import com.Entities.Bomb.Bomb;
 import com.Entities.Bomb.BombManager;
 import com.Entities.Bomb.FlameManager;
 import com.Entities.Entity;
-import com.Entities.Maps.*;
 import com.Entities.Movers.Enemies.*;
 import com.Main;
+import com.Renderer.Renderer;
 
 import java.util.ArrayList;
 abstract public class Mover extends Entity {
@@ -15,6 +15,8 @@ abstract public class Mover extends Entity {
     protected ArrayList<ArrayList<Entity>> map;
     protected BombManager bombManager;
     protected EnemyManager enemyManager;
+    protected Renderer renderer;
+
     public static enum MovementType {
         LEFT(-1, 0), UP(0, -1), RIGHT(1, 0), DOWN(0, 1), STILL(0, 0);
         public final int x, y;

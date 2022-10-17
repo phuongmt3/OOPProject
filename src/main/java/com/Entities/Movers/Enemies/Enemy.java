@@ -17,8 +17,7 @@ public abstract class Enemy extends Mover {
     protected Random random = new Random();
     protected MovementType direction = MovementType.UP;
     protected Bomber bomber;
-    protected ArrayList<MovementType> way = new ArrayList<MovementType>();
-    protected Renderer renderer;
+    protected ArrayList<MovementType> way = new ArrayList<>();
 
     public Enemy(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                  BombManager bombManager, EnemyManager enemyManager, Bomber bomber) {

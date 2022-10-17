@@ -38,11 +38,7 @@ public class GameSound {
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioInput);
-               // clip.start();
-                //  clip.loop(Clip.LOOP_CONTINUOUSLY);
-                //   clip.stop();
                 return clip;
-
 
             } else {
                 System.out.println("Can't find files!");
@@ -54,8 +50,6 @@ public class GameSound {
     }
 
     public static void playClip(Clip clip) {
-        //Scanner sc = new Scanner(System.in);
-        //String res = sc.next();
         clip.start();
         clip.setFramePosition(0);
     }
@@ -69,61 +63,3 @@ public class GameSound {
     }
 
 }
-
-   /* public void playMusic(String musicLocation) {
-        try
-        {
-            File musicPath = new File(musicLocation);
-            if(musicPath.exists()) {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInput);
-                clip.start();
-              //  clip.loop(Clip.LOOP_CONTINUOUSLY);
-             //   clip.stop();
-
-
-
-            }
-            else {
-                System.out.println("Can't find files!");
-            }
-        }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void BomberDieMusic(String musicLocation) {
-        try
-        {
-            File musicPath = new File(musicLocation);
-            if(musicPath.exists()) {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInput);
-                clip.start();
-               // clip.loop(Clip.LOOP_CONTINUOUSLY);
-                clip.stop();
-
-
-
-            }
-            else {
-                System.out.println("Can't find files!");
-            }
-        }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
-    }*/
-
-
-
-
-
-
-

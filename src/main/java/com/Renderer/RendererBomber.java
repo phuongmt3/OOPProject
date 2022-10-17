@@ -100,7 +100,7 @@ public class RendererBomber extends Renderer {
     public void showStartAnimation() {
         isFirstTime = true;
     }
-    public void renderBomber(double x, double y) throws Exception {
+    public void render(double x, double y) throws Exception {
         for (int i = 0; i < 5; i++)
             for (int j = 0; j < 3; j++) {
                 bomberviews.get(i).get(j).setX(x);
@@ -114,8 +114,12 @@ public class RendererBomber extends Renderer {
         }
     }
 
-    public void deleteBomber() {
+    public void clear() {
         stopAnimation(null);
+    }
+
+    public void delete() {
+        clear();
         Timeline t = new Timeline();
         t.setCycleCount(1);
         t.getKeyFrames().add(new KeyFrame(Duration.millis(0),
