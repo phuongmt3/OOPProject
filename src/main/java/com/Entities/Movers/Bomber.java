@@ -14,19 +14,24 @@ import java.util.ArrayList;
 public class Bomber extends Mover {
     private RendererBomber renderer;
     private boolean renderDead = false;
+    private BomberAI bomberAI;
     public Bomber(double x, double y, double speed, ArrayList<ArrayList<Entity>> map,
                   BombManager bombManager, EnemyManager enemyManager) {
         super(x, y, speed, map, bombManager, enemyManager);
         renderer = new RendererBomber(x, y);
     }
 
-    private void checkCollisionEnemy() {
+    public void setBomberAI(BomberAI ai) {
+        bomberAI = ai;
+    }
+
+    protected void checkCollisionEnemy() {
         for (int i = 0; i < enemyManager.countEnemies(); i++)
             if (enemyManager.getEnemy(i).checkCollision(this))
                 setDead(true);
     }
 
-    private void checkTakeItem() {
+    protected void checkTakeItem() {
         for (int i = 0; i < Main.rows; i++)
             for (int j = 0; j < Main.cols; j++) {
                 Entity tile = map.get(i).get(j);
@@ -38,10 +43,12 @@ public class Bomber extends Mover {
                     else if (tile instanceof FlameItem && !((FlameItem) tile).isUsed()) {
                         ((FlameItem) tile).useItem();
                         FlameManager.increaseFlameLength();
+                        bomberAI.updateTiming();
                     }
                     else if (tile instanceof SpeedItem && !((SpeedItem) tile).isUsed()) {
                         ((SpeedItem) tile).useItem();
-                        speed = Main.defaultSide / 4;
+                        speed = 6.4;
+                        bomberAI.updateTiming();
                         setX(j * Main.defaultSide);
                         setY(i * Main.defaultSide);
                     }

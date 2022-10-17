@@ -46,38 +46,6 @@ public class BomberAI extends Bomber {
         escapeTime = FlameManager.getFlameLength() * stepTime + 1;//+ stepTime
     }
 
-    private void checkCollisionEnemy() {
-        for (int i = 0; i < enemyManager.countEnemies(); i++)
-            if (enemyManager.getEnemy(i).checkCollision(this))
-                setDead(true);
-    }
-    private void checkTakeItem() {
-        for (int i = 0; i < Main.rows; i++)
-            for (int j = 0; j < Main.cols; j++) {
-                Entity tile = map.get(i).get(j);
-                if (checkCollision(tile) && tile instanceof Brick && ((Brick) tile).isHasItem()) {
-                    if (tile instanceof BombItem && !((BombItem) tile).isUsed()) {
-                        ((BombItem) tile).useItem();
-                        bombManager.increaseCntLimit();
-                    }
-                    else if (tile instanceof FlameItem && !((FlameItem) tile).isUsed()) {
-                        ((FlameItem) tile).useItem();
-                        FlameManager.increaseFlameLength();
-                        updateTiming();
-                    }
-                    else if (tile instanceof SpeedItem && !((SpeedItem) tile).isUsed()) {
-                        ((SpeedItem) tile).useItem();
-                        speed = 6.4;
-                        updateTiming();
-                        setX(j * Main.defaultSide);
-                        setY(i * Main.defaultSide);
-                    }
-                    else if (tile instanceof Portal && enemyManager.allDead()) {
-                        Main.win = true;
-                    }
-                }
-            }
-    }
     private void moveUpDownAfterLeftRight(int leftcnt, Enemy enemy, int cury, int posx, double enemyspeed) {
         int remainSteps = stepTime - leftcnt;
         int remainSteps2 = remainSteps + stepTime * (putbombrange - 1);

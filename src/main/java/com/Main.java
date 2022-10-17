@@ -257,6 +257,8 @@ public class Main extends Application {
                             case 'p' -> {
                                 bomber = new Bomber(i * defaultSide, (cntLines - 1) * defaultSide, defaultSide / 5, map, bombManager, enemyManager);
                                 bomberAi = new BomberAI(i * defaultSide, (cntLines - 1) * defaultSide, 4, map, bombManager, enemyManager);
+                                bomber.setBomberAI(bomberAi);
+                                bomberAi.setBomberAI(bomberAi);
                                 map.get(cntLines - 1).add(new Grass(i * defaultSide, (cntLines - 1) * defaultSide));
                             }
                             case '1' -> {
