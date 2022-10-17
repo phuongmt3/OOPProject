@@ -17,15 +17,17 @@ public class GameSound {
     public static final String newbomb = "src/main/java/res/sound/newbomb.wav";
     public static final String enemydie = "src/main/java/res/sound/enemy_die.wav";
 
+    public static final String item = "src/main/java/res/sound/item.wav";
+
     public static Clip PLAYGAME = makeClip(playgame);
     public static Clip BOMBERDIE = makeClip(bomberdie);
     public static Clip LOSE = makeClip(lose);
     public static Clip MENU = makeClip(menu);
-
     public static Clip BOMBBANG = makeClip(bomb_bang);
     public static Clip WIN = makeClip(win);
     public static Clip NEWBOMB = makeClip(newbomb);
     public static Clip ENEMYDIE = makeClip(enemydie);
+    public static Clip ITEM = makeClip(item);
 
 
 

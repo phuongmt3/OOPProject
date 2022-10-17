@@ -1,5 +1,7 @@
 package com.Entities.Movers.Enemies;
 
+import com.GameSound;
+
 import java.util.ArrayList;
 
 public class EnemyManager {
@@ -10,6 +12,9 @@ public class EnemyManager {
     }
     public void removeEnemy(Enemy enemy) {
         enemies.remove(enemy);
+        GameSound.playClip(GameSound.ENEMYDIE);
+
+
     }
 
     public void render() throws Exception {
@@ -27,6 +32,7 @@ public class EnemyManager {
                 i--;
             }
         }
+
     }
 
     public boolean allDead() {

@@ -1,6 +1,7 @@
 package com.Entities.Maps.Items;
 
 import com.Entities.Maps.Brick;
+import com.GameSound;
 
 public class SpeedItem extends Brick {
     private boolean used = false;
@@ -16,6 +17,7 @@ public class SpeedItem extends Brick {
 
     public void useItem() {
         renderer.deleteSpeedItem();
+        GameSound.playClip(GameSound.ITEM);
         used = true;
         hasItem = false;
     }

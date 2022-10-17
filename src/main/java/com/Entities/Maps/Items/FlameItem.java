@@ -1,6 +1,7 @@
 package com.Entities.Maps.Items;
 
 import com.Entities.Maps.Brick;
+import com.GameSound;
 
 public class FlameItem extends Brick {
     private boolean used = false;
@@ -16,6 +17,7 @@ public class FlameItem extends Brick {
 
     public void useItem() {
         renderer.deleteFlameItem();
+        GameSound.playClip(GameSound.ITEM);
         used = true;
         hasItem = false;
     }
