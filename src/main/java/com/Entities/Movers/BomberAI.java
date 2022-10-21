@@ -406,7 +406,7 @@ public class BomberAI extends Bomber {
         try {
             render(direction);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
 

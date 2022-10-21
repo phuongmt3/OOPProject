@@ -38,11 +38,9 @@ public class Main extends Application {
     public static boolean win = false;
     public static final double winWidth = 1000, winHeight = 450;
     public static final double defaultSide = 32.0;
-    public static final long timePerFrame = 10000;
+    private static final long timePerFrame = 10000;
     private boolean AIPlayer = false;
     private int timer;
-
-    //public static GameSound Playgame = new GameSound();
 
     public void init() throws Exception {
         enemyManager = new EnemyManager();
